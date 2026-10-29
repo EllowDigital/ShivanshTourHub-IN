@@ -1,15 +1,14 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Send } from "lucide-react";
 import LocationAutocomplete from "@/components/LocationAutocomplete";
-import { openWhatsAppMessage } from "@/lib/whatsapp";
+import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 const carTypes = ["Swift Dzire", "Ertiga", "Toyota Innova", "Tempo Traveller"];
 const tripTypes = ["One Way", "Round Trip", "Local", "Airport"];
 
-const WHATSAPP_NUMBER = "918865038345";
 
 const getDayPeriodLabel = (hour24: number) => {
   if (hour24 >= 5 && hour24 < 12) return "Morning";
@@ -105,7 +104,7 @@ const BookingForm = ({
 
     const opened = openWhatsAppMessage(WHATSAPP_NUMBER, text);
     if (opened) {
-      toast.success("Opening WhatsApp with your booking details...");
+      // Shared widget preserves the full message and offers recovery actions.
     } else {
       toast.error("Popup blocked. Please allow popups and try again.");
     }
@@ -114,30 +113,31 @@ const BookingForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card rounded-xl shadow-2xl p-5 sm:p-6 w-full max-w-md"
+      className="bg-card rounded-lg shadow-xl border border-border p-4 sm:p-6 w-full min-w-0"
     >
       <h3 className="font-heading text-lg font-bold text-foreground text-center">
         Book Your Taxi
       </h3>
       <p className="text-xs text-muted-foreground text-center mb-4">
-        Fill the form & get instant confirmation
+        Your next journey starts here.
       </p>
 
       {/* Trip Type Tabs */}
       <div className="grid grid-cols-4 gap-1 bg-muted rounded-lg p-1 mb-4">
         {tripTypes.map((t) => (
-          <button
+          <Button
+            variant="ghost"
             key={t}
             type="button"
             onClick={() => setTripType(t)}
-            className={`text-[10px] sm:text-xs font-medium py-2 rounded-md transition-all ${
+            className={`h-10 px-1 text-xs font-medium rounded-md transition-all ${
               tripType === t
                 ? "bg-secondary text-secondary-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {t}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -158,8 +158,8 @@ const BookingForm = ({
           variant="drop"
         />
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
+          <div className="min-w-0 space-y-1">
             <label
               htmlFor="pickup-date"
               className="block text-[11px] font-medium text-muted-foreground"
@@ -171,13 +171,13 @@ const BookingForm = ({
               type="date"
               value={form.date}
               onChange={(e) => update("date", e.target.value)}
-              className={`date-time-input text-sm [color-scheme:light] ${form.date ? "text-foreground" : "date-time-input-empty"}`}
+              className={`date-time-input min-w-0 max-w-full text-base sm:text-sm [color-scheme:light] ${form.date ? "text-foreground" : "date-time-input-empty"}`}
               aria-label="Pickup Date"
               lang="en-IN"
               required
             />
           </div>
-          <div className="space-y-1">
+          <div className="min-w-0 space-y-1">
             <label
               htmlFor="pickup-time"
               className="block text-[11px] font-medium text-muted-foreground"
@@ -189,7 +189,7 @@ const BookingForm = ({
               type="time"
               value={form.time}
               onChange={(e) => update("time", e.target.value)}
-              className={`date-time-input text-sm [color-scheme:light] ${form.time ? "text-foreground" : "date-time-input-empty"}`}
+              className={`date-time-input min-w-0 max-w-full text-base sm:text-sm [color-scheme:light] ${form.time ? "text-foreground" : "date-time-input-empty"}`}
               aria-label="Pickup Time"
               lang="en-IN"
             />
@@ -197,7 +197,8 @@ const BookingForm = ({
         </div>
 
         <select
-          className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          aria-label="Car type"
+          className="w-full min-w-0 h-11 rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           value={form.car}
           onChange={(e) => update("car", e.target.value)}
         >
@@ -209,12 +210,12 @@ const BookingForm = ({
           ))}
         </select>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
           <Input
             placeholder="Your Name *"
             value={form.name}
             onChange={(e) => update("name", e.target.value)}
-            className="text-sm"
+            className="min-w-0 text-base sm:text-sm"
             required
           />
           <Input
@@ -222,12 +223,12 @@ const BookingForm = ({
             type="tel"
             value={form.phone}
             onChange={(e) => update("phone", e.target.value)}
-            className="text-sm"
+            className="min-w-0 text-base sm:text-sm"
             required
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
           <Input
             placeholder="Passengers"
             type="number"
@@ -235,13 +236,13 @@ const BookingForm = ({
             max="20"
             value={form.passengers}
             onChange={(e) => update("passengers", e.target.value)}
-            className="text-sm"
+            className="min-w-0 text-base sm:text-sm"
           />
           <Input
             placeholder="Message (optional)"
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
-            className="text-sm"
+            className="min-w-0 text-base sm:text-sm"
           />
         </div>
       </div>
@@ -250,7 +251,7 @@ const BookingForm = ({
         <Send className="h-4 w-4" /> Book via WhatsApp
       </Button>
       <p className="text-[10px] text-center text-muted-foreground mt-2">
-        ✅ Place search enabled • Manual input also accepted
+        Tap Send in WhatsApp; we’ll reply with availability and fare.
       </p>
     </form>
   );

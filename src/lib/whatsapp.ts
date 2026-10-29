@@ -1,79 +1,66 @@
-﻿import { toast } from "sonner";
-
 const WHATSAPP_NUMBER = "918865038345";
 
+const normalizePhone = (phone: string) => phone.replace(/\D/g, "");
+
 export const buildWhatsAppUrl = (phone: string, message: string) =>
-  `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  `https://wa.me/${normalizePhone(phone)}?text=${encodeURIComponent(message)}`;
 
 export const buildWhatsAppDeepLink = (phone: string, message: string) =>
-  `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
+  `whatsapp://send?phone=${normalizePhone(phone)}&text=${encodeURIComponent(message)}`;
 
-/**
- * Robust WhatsApp message sender with fallback chain:
- * 1. Try whatsapp:// deep link (works best on mobile, bypasses browser blocks)
- * 2. Fallback to wa.me link
- * 3. If both fail, copy message to clipboard and show toast
- */
+export const WHATSAPP_HANDOFF_EVENT = "shivansh:whatsapp-handoff";
+export type WhatsAppHandoff = { phone: string; message: string; popupBlocked: boolean };
+
+/** Launch is not a delivery receipt. Always retain a user-controlled recovery path. */
 export const openWhatsAppMessage = (
   phone: string,
   message: string,
 ): boolean => {
+  if (!normalizePhone(phone) || !message.trim()) return false;
   const waMe = buildWhatsAppUrl(phone, message);
-  const deepLink = buildWhatsAppDeepLink(phone, message);
-
-  // Detect mobile
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
+  let popupBlocked = false;
   if (isMobile) {
-    // On mobile, try deep link first (most reliable, opens app directly)
-    window.location.href = deepLink;
-    // Fallback after short delay if deep link didn't work
-    setTimeout(() => {
-      window.open(waMe, "_blank");
-    }, 1500);
+    let appOpened = false;
+    const onHidden = () => {
+      if (document.hidden) appOpened = true;
+    };
+    const onPageHide = () => { appOpened = true; };
+    document.addEventListener("visibilitychange", onHidden);
+    window.addEventListener("pagehide", onPageHide);
+    try { window.location.assign(buildWhatsAppDeepLink(phone, message)); } catch { /* Recovery remains available. */ }
+    window.setTimeout(() => {
+      document.removeEventListener("visibilitychange", onHidden);
+      window.removeEventListener("pagehide", onPageHide);
+      // Same-tab fallback avoids a delayed popup that browsers usually block.
+      if (!appOpened && !document.hidden) window.location.assign(waMe);
+    }, 1800);
   } else {
-    // On desktop, use wa.me (opens WhatsApp Web or desktop app)
-    const win = window.open(waMe, "_blank");
-    if (!win) {
-      // Popup blocked — try anchor click method
-      const a = document.createElement("a");
-      a.href = waMe;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
+    const popup = window.open(waMe, "_blank");
+    popupBlocked = !popup;
+    if (popup) popup.opener = null;
   }
-
-  // Always copy to clipboard as safety net
-  copyMessageToClipboard(phone, message);
+  window.dispatchEvent(new CustomEvent<WhatsAppHandoff>(WHATSAPP_HANDOFF_EVENT, {
+    detail: { phone: normalizePhone(phone), message, popupBlocked },
+  }));
   return true;
 };
 
-const copyMessageToClipboard = (phone: string, message: string) => {
-  const fallbackText = message;
+export const copyWhatsAppMessage = async (message: string): Promise<boolean> => {
   try {
-    navigator.clipboard.writeText(fallbackText).then(() => {
-      toast.success(
-        "Message copied to clipboard! If WhatsApp didn't open, paste it manually.",
-        {
-          duration: 6000,
-          action: {
-            label: "Open WhatsApp",
-            onClick: () => {
-              window.open(
-                `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`,
-                "_blank",
-              );
-            },
-          },
-        },
-      );
-    });
-  } catch {
-    // Clipboard API not available — silent fail, wa.me should have worked
-  }
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(message);
+      return true;
+    }
+  } catch { /* Try legacy clipboard support before asking for manual selection. */ }
+  const area = document.createElement("textarea");
+  area.value = message;
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.appendChild(area);
+  area.select();
+  try { return document.execCommand("copy"); } catch { return false; }
+  finally { area.remove(); }
 };
 
 export { WHATSAPP_NUMBER };

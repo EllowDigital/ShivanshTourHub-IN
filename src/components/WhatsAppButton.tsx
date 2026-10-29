@@ -1,481 +1,130 @@
-﻿import { useEffect, useMemo, useState } from "react";
-import {
-  MessageCircle,
-  X,
-  Send,
-  ArrowRight,
-  MapPin,
-  Navigation,
-  Car,
-  Calendar,
-  User,
-  Phone,
-  Check,
-  Loader2,
-  Search,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Car, Check, CheckCircle2, Copy, ExternalLink, MapPin, MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { openWhatsAppMessage } from "@/lib/whatsapp";
-import {
-  searchLocationSuggestions,
-  type LocationSuggestion,
-} from "@/lib/locationSearch";
+import { Input } from "@/components/ui/input";
+import LocationAutocomplete from "@/components/LocationAutocomplete";
+import { buildWhatsAppUrl, copyWhatsAppMessage, openWhatsAppMessage, WHATSAPP_HANDOFF_EVENT, WHATSAPP_NUMBER, type WhatsAppHandoff } from "@/lib/whatsapp";
 
-const carOptions = [
-  { name: "Swift Dzire", seats: "4 Seater", price: "Rs 11/km" },
-  { name: "Ertiga", seats: "7 Seater", price: "Rs 14/km" },
-  { name: "Toyota Innova", seats: "7 Seater Premium", price: "Rs 16/km" },
-  { name: "Tempo Traveller", seats: "12 Seater", price: "Rs 22/km" },
+const steps = ["pickup", "drop", "car", "date", "name", "phone", "confirm"] as const;
+type Step = typeof steps[number];
+const emptyBooking = { pickup: "", drop: "", car: "", date: "", name: "", phone: "" };
+const questions: Record<Step, { title: string; label: string }> = {
+  pickup: { title: "Where should we pick you up?", label: "Pickup location" },
+  drop: { title: "Where are you heading?", label: "Drop location" },
+  car: { title: "Choose your ride", label: "Car type" },
+  date: { title: "When are you travelling?", label: "Travel date and time" },
+  name: { title: "Who are we picking up?", label: "Passenger name" },
+  phone: { title: "Your contact number", label: "Phone number" },
+  confirm: { title: "Your trip, at a glance", label: "Booking summary" },
+};
+const cars = [
+  { name: "Swift Dzire", seats: "4 Seater", price: "₹11/km" },
+  { name: "Ertiga", seats: "7 Seater", price: "₹14/km" },
+  { name: "Toyota Innova", seats: "7 Seater Premium", price: "₹16/km" },
+  { name: "Tempo Traveller", seats: "12 Seater", price: "₹22/km" },
 ];
-
-type Step =
-  | "welcome"
-  | "pickup"
-  | "drop"
-  | "car"
-  | "date"
-  | "name"
-  | "phone"
-  | "confirm";
-
-const WHATSAPP_NUMBER = "918865038345";
-
-const getDayPeriodLabel = (hour24: number) => {
-  if (hour24 >= 5 && hour24 < 12) return "Morning";
-  if (hour24 >= 12 && hour24 < 17) return "Afternoon";
-  if (hour24 >= 17 && hour24 < 21) return "Evening";
-  return "Night";
-};
-
-const getReadableDateTimeDetails = (value: string) => {
-  const input = value.trim();
-  if (!input) return "";
-
-  const amPmMatch = input.match(
-    /\b(1[0-2]|0?[1-9])(?::([0-5]\d))?\s*(AM|PM)\b/i,
-  );
-  if (amPmMatch) {
-    const hour12 = Number(amPmMatch[1]);
-    const minute = amPmMatch[2] ?? "00";
-    const period = amPmMatch[3].toUpperCase();
-    const hour24 = period === "PM" ? (hour12 % 12) + 12 : hour12 % 12;
-    return `${hour12}:${minute} ${period} (${getDayPeriodLabel(hour24)})`;
-  }
-
-  const twentyFourHourMatch = input.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
-  if (twentyFourHourMatch) {
-    const hour24 = Number(twentyFourHourMatch[1]);
-    const minute = twentyFourHourMatch[2];
-    const period = hour24 >= 12 ? "PM" : "AM";
-    const hour12 = hour24 % 12 || 12;
-    return `${hour12}:${minute} ${period} (${getDayPeriodLabel(hour24)})`;
-  }
-
-  return "";
-};
 
 const WhatsAppButton = () => {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<Step>("welcome");
-  const [data, setData] = useState({
-    pickup: "",
-    drop: "",
-    car: "",
-    date: "",
-    name: "",
-    phone: "",
-  });
-  const [inputVal, setInputVal] = useState("");
-
-  const [locationSuggestions, setLocationSuggestions] = useState<
-    LocationSuggestion[]
-  >([]);
-  const [searchingLocation, setSearchingLocation] = useState(false);
-
-  const locationStep = step === "pickup" || step === "drop";
+  const [started, setStarted] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [data, setData] = useState(emptyBooking);
+  const [handoff, setHandoff] = useState<WhatsAppHandoff | null>(null);
+  const [copyStatus, setCopyStatus] = useState("");
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const step = steps[stepIndex];
 
   useEffect(() => {
-    if (!locationStep || inputVal.trim().length < 3) {
-      setLocationSuggestions([]);
-      return;
-    }
+    const handleHandoff = (event: Event) => {
+      setHandoff((event as CustomEvent<WhatsAppHandoff>).detail);
+      setCopyStatus("");
+      setOpen(true);
+    };
+    window.addEventListener(WHATSAPP_HANDOFF_EVENT, handleHandoff);
+    return () => window.removeEventListener(WHATSAPP_HANDOFF_EVENT, handleHandoff);
+  }, []);
 
-    const timer = setTimeout(async () => {
-      setSearchingLocation(true);
-      const results = await searchLocationSuggestions(inputVal.trim());
-      setLocationSuggestions(results);
-      setSearchingLocation(false);
-    }, 250);
+  useEffect(() => {
+    if (!open) return;
+    panelRef.current?.focus();
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); launcherRef.current?.focus(); }
+    };
+    window.addEventListener("keydown", escape);
+    return () => window.removeEventListener("keydown", escape);
+  }, [open]);
 
-    return () => clearTimeout(timer);
-  }, [inputVal, locationStep]);
-
-  const reset = () => {
-    setStep("welcome");
-    setData({ pickup: "", drop: "", car: "", date: "", name: "", phone: "" });
-    setInputVal("");
-    setLocationSuggestions([]);
+  const update = (value: string) => setData(previous => ({ ...previous, [step]: value }));
+  const restart = () => {
+    setData(emptyBooking); setStepIndex(0); setStarted(true); setHandoff(null); setCopyStatus("");
   };
-
-  const applyLocationValue = (value: string) => {
-    const finalValue = value.trim();
-    if (!finalValue) return;
-
-    if (step === "pickup") {
-      setData((d) => ({ ...d, pickup: finalValue }));
-      setInputVal("");
-      setLocationSuggestions([]);
-      setStep("drop");
-      return;
-    }
-
-    if (step === "drop") {
-      setData((d) => ({ ...d, drop: finalValue }));
-      setInputVal("");
-      setLocationSuggestions([]);
-      setStep("car");
-    }
-  };
-
-  const handleSubmit = () => {
-    if (step === "welcome") {
-      setStep("pickup");
-      return;
-    }
-    if (step === "pickup") {
-      applyLocationValue(inputVal);
-      return;
-    }
-    if (step === "drop") {
-      applyLocationValue(inputVal);
-      return;
-    }
-    if (step === "date" && inputVal.trim()) {
-      setData((d) => ({ ...d, date: inputVal.trim() }));
-      setInputVal("");
-      setStep("name");
-      return;
-    }
-    if (step === "name" && inputVal.trim()) {
-      setData((d) => ({ ...d, name: inputVal.trim() }));
-      setInputVal("");
-      setStep("phone");
-      return;
-    }
-    if (step === "phone" && inputVal.trim()) {
-      setData((d) => ({ ...d, phone: inputVal.trim() }));
-      setInputVal("");
-      setStep("confirm");
-    }
-  };
-
-  const handleCarSelect = (car: string) => {
-    setData((d) => ({ ...d, car }));
-    setStep("date");
-  };
-
-  const sendToWhatsApp = () => {
-    const timeDetails = getReadableDateTimeDetails(data.date);
-
-    const text = [
-      `TAXI BOOKING REQUEST`,
-      `--------------------`,
-      ``,
-      `Name: ${data.name}`,
-      `Phone: ${data.phone}`,
-      `Pickup: ${data.pickup}`,
-      `Drop: ${data.drop}`,
-      `Car: ${data.car}`,
-      `Date: ${data.date}`,
-      timeDetails ? `Time: ${timeDetails}` : "",
-      ``,
-      `Please confirm availability and fare.`,
-      ``,
-      `--------------------`,
-      `Sent via Shivansh Travels Website`,
+  const send = () => {
+    const message = [
+      "*TAXI BOOKING REQUEST*", "Shivansh Tour & Travels", "",
+      `*Name:* ${data.name.trim()}`, `*Phone:* ${data.phone.trim()}`,
+      `*Pickup:* ${data.pickup.trim()}`, `*Drop:* ${data.drop.trim()}`,
+      `*Car:* ${data.car}`, `*Travel date & time:* ${data.date.trim()}`, "",
+      "Please confirm availability and fare.",
     ].join("\n");
-
-    const opened = openWhatsAppMessage(WHATSAPP_NUMBER, text);
-    if (!opened) {
-      toast.error("Popup blocked. Please allow popups and try again.");
-      return;
-    }
-
-    toast.success("Opening WhatsApp...");
-    setOpen(false);
-    reset();
+    openWhatsAppMessage(WHATSAPP_NUMBER, message);
+  };
+  const copy = async () => {
+    if (!handoff) return;
+    const copied = await copyWhatsAppMessage(handoff.message);
+    setCopyStatus(copied ? "Booking details copied." : "Select and copy the booking details below.");
   };
 
-  const messages = useMemo(() => {
-    const msgs: {
-      from: "bot" | "user";
-      text: string;
-      jsx?: React.ReactNode;
-    }[] = [];
-
-    msgs.push({
-      from: "bot",
-      text: "Hi! Welcome to Shivansh Tour & Travels. I will help you book a taxi in a few steps.",
-    });
-
-    if (step === "welcome") {
-      msgs.push({
-        from: "bot",
-        text: "",
-        jsx: (
-          <Button
-            variant="hero"
-            size="sm"
-            className="w-full gap-2 text-xs mt-1"
-            onClick={() => setStep("pickup")}
-          >
-            Start Booking <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
-        ),
-      });
-      return msgs;
-    }
-
-    msgs.push({ from: "bot", text: "Pickup location?" });
-    if (data.pickup) {
-      msgs.push({ from: "user", text: data.pickup });
-      msgs.push({ from: "bot", text: "Drop location?" });
-    }
-    if (data.drop) {
-      msgs.push({ from: "user", text: data.drop });
-      msgs.push({ from: "bot", text: "Choose your car:" });
-    }
-    if (data.car) {
-      msgs.push({ from: "user", text: data.car });
-      msgs.push({
-        from: "bot",
-        text: "Travel date and time? (e.g., 15 March, 8 AM)",
-      });
-    }
-    if (data.date) {
-      msgs.push({ from: "user", text: data.date });
-      msgs.push({ from: "bot", text: "Your name?" });
-    }
-    if (data.name) {
-      msgs.push({ from: "user", text: data.name });
-      msgs.push({ from: "bot", text: "Phone number?" });
-    }
-    if (data.phone) {
-      msgs.push({ from: "user", text: data.phone });
-      msgs.push({ from: "bot", text: "Great! Confirm this booking:" });
-    }
-
-    return msgs;
-  }, [step, data]);
-
-  return (
-    <>
-      {open && (
-        <div className="fixed bottom-20 right-3 sm:right-5 z-[60] w-[calc(100vw-24px)] max-w-[340px] bg-card rounded-2xl shadow-2xl border border-border overflow-hidden animate-fade-up">
-          <div className="bg-success text-primary-foreground p-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary-foreground/20 rounded-full flex items-center justify-center">
-                <MessageCircle className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="font-semibold text-xs">Shivansh Travels</p>
-                <p className="text-[10px] opacity-80">Online | Quick reply</p>
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                setOpen(false);
-                reset();
-              }}
-              className="hover:bg-primary-foreground/10 p-1 rounded-full transition-colors"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="h-[320px] overflow-y-auto p-3 space-y-2 bg-muted/30">
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`flex ${m.from === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
-                    m.from === "user"
-                      ? "bg-success text-primary-foreground rounded-br-sm"
-                      : "bg-card text-foreground shadow-sm border border-border/50 rounded-bl-sm"
-                  }`}
-                >
-                  {m.jsx || m.text}
-                </div>
-              </div>
-            ))}
-
-            {step === "car" && (
-              <div className="space-y-1.5 mt-1">
-                {carOptions.map((c) => (
-                  <button
-                    key={c.name}
-                    onClick={() => handleCarSelect(c.name)}
-                    className="w-full bg-card rounded-lg p-2.5 border border-border/50 hover:border-secondary shadow-sm text-left flex items-center justify-between gap-2 transition-colors"
-                  >
-                    <div>
-                      <p className="font-semibold text-foreground text-xs">
-                        {c.name}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">
-                        {c.seats}
-                      </p>
-                    </div>
-                    <span className="text-xs font-bold text-secondary shrink-0">
-                      {c.price}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {step === "confirm" && (
-              <div className="bg-card rounded-xl p-3 border border-border/50 shadow-sm space-y-1.5">
-                <div className="text-[10px] text-muted-foreground space-y-1">
-                  <p className="flex items-center gap-1.5">
-                    <MapPin className="h-3 w-3 text-secondary" />{" "}
-                    <strong>Pickup:</strong> {data.pickup}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <Navigation className="h-3 w-3 text-secondary" />{" "}
-                    <strong>Drop:</strong> {data.drop}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <Car className="h-3 w-3 text-secondary" />{" "}
-                    <strong>Car:</strong> {data.car}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <Calendar className="h-3 w-3 text-secondary" />{" "}
-                    <strong>Date:</strong> {data.date}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <User className="h-3 w-3 text-secondary" />{" "}
-                    <strong>Name:</strong> {data.name}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <Phone className="h-3 w-3 text-secondary" />{" "}
-                    <strong>Phone:</strong> {data.phone}
-                  </p>
-                </div>
-                <Button
-                  variant="hero"
-                  size="sm"
-                  className="w-full gap-2 text-xs mt-2 bg-success hover:bg-success/90"
-                  onClick={sendToWhatsApp}
-                >
-                  <Check className="h-3.5 w-3.5" /> Confirm & Send on WhatsApp
-                </Button>
-                <button
-                  onClick={reset}
-                  className="w-full text-center text-[10px] text-muted-foreground hover:text-foreground mt-1 transition-colors"
-                >
-                  Start Over
-                </button>
-              </div>
-            )}
-          </div>
-
-          {["pickup", "drop", "date", "name", "phone"].includes(step) && (
-            <div className="p-2 border-t border-border bg-card">
-              {locationStep && inputVal.trim().length >= 3 && (
-                <div className="max-h-24 overflow-auto mb-2 space-y-1">
-                  {searchingLocation ? (
-                    <div className="text-[10px] text-muted-foreground px-1.5 py-1 inline-flex items-center gap-1.5">
-                      <Loader2 className="h-3 w-3 animate-spin" /> Searching
-                      places...
-                    </div>
-                  ) : (
-                    <>
-                      {locationSuggestions.map((s) => (
-                        <button
-                          type="button"
-                          key={s.id}
-                          onClick={() => applyLocationValue(s.label)}
-                          className="w-full text-left text-[10px] px-2 py-1.5 rounded-md bg-muted hover:bg-accent text-foreground transition-colors"
-                        >
-                          {s.label}
-                        </button>
-                      ))}
-                      <button
-                        type="button"
-                        onClick={() => applyLocationValue(inputVal)}
-                        className="w-full text-left text-[10px] px-2 py-1.5 rounded-md bg-muted hover:bg-accent text-secondary transition-colors"
-                      >
-                        Use typed location: "{inputVal.trim()}"
-                      </button>
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(inputVal.trim())}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-[10px] px-2 py-1.5 rounded-md bg-muted hover:bg-accent text-muted-foreground transition-colors"
-                      >
-                        <span className="inline-flex items-center gap-1">
-                          <Search className="h-3 w-3" /> Search on Google Maps
-                        </span>
-                      </a>
-                    </>
-                  )}
-                </div>
-              )}
-
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-                className="flex items-center gap-2"
-              >
-                <input
-                  type="text"
-                  value={inputVal}
-                  onChange={(e) => setInputVal(e.target.value)}
-                  placeholder={
-                    step === "pickup"
-                      ? "Enter pickup location..."
-                      : step === "drop"
-                        ? "Enter drop location..."
-                        : step === "date"
-                          ? "e.g., 15 March 2026, 8 AM"
-                          : step === "name"
-                            ? "Enter your name..."
-                            : "Enter phone number..."
-                  }
-                  className="flex-1 bg-muted rounded-lg px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground outline-none border-none"
-                  autoFocus
-                />
-                <button
-                  type="submit"
-                  className="w-8 h-8 rounded-full bg-success flex items-center justify-center text-primary-foreground hover:bg-success/90 transition-colors shrink-0"
-                >
-                  <Send className="h-3.5 w-3.5" />
-                </button>
-              </form>
-            </div>
-          )}
+  return <>
+    {open && <div ref={panelRef} tabIndex={-1} role="dialog" aria-label="WhatsApp taxi booking" className="whatsapp-panel fixed z-[60] flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-2xl outline-none animate-fade-up">
+      <header className="flex shrink-0 items-center justify-between gap-3 bg-success p-4 text-success-foreground">
+        <div className="flex items-center gap-3">
+          <MessageCircle className="h-6 w-6" />
+          <div><p className="text-sm font-semibold">Shivansh Travels</p><p className="text-xs opacity-90">Taxi booking enquiry</p></div>
         </div>
-      )}
-
-      <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-5 right-3 sm:right-5 z-50 bg-success text-primary-foreground rounded-full p-3 sm:p-4 shadow-lg hover:scale-110 transition-transform"
-        style={!open ? { animation: "bounce 2s ease-in-out 3" } : undefined}
-        aria-label="Book via WhatsApp"
-      >
-        {open ? (
-          <X className="h-5 w-5 sm:h-6 sm:w-6" />
-        ) : (
-          <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-        )}
-      </button>
-    </>
-  );
+        <Button variant="ghost" size="icon" aria-label="Close booking" className="shrink-0 text-success-foreground hover:bg-success-foreground/10 hover:text-success-foreground" onClick={() => { setOpen(false); launcherRef.current?.focus(); }}><X /></Button>
+      </header>
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5">
+        {handoff ? <div className="space-y-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success"><CheckCircle2 className="h-6 w-6" /></div>
+          <h2 className="text-xl font-semibold">Your enquiry is ready</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">Tap Send in WhatsApp to share your booking. Your trip is confirmed after our reply.</p>
+          {handoff.popupBlocked && <p role="status" className="rounded-md bg-accent p-3 text-sm text-accent-foreground">The browser blocked the new window. Try the link below or copy your details.</p>}
+          <Button asChild className="w-full gap-2 bg-success text-success-foreground hover:bg-success/90"><a href={buildWhatsAppUrl(handoff.phone, handoff.message)} target="_blank" rel="noopener noreferrer"><ExternalLink /> Open WhatsApp</a></Button>
+          <Button variant="outline" className="w-full" onClick={copy}><Copy /> Copy booking details</Button>
+          <p className="text-xs text-muted-foreground">WhatsApp not opening? Your message is saved here.</p>
+          <textarea aria-label="Booking message" readOnly value={handoff.message} className="min-h-40 w-full resize-y rounded-md border border-input bg-muted p-3 text-sm leading-relaxed text-foreground" onFocus={event => event.target.select()} />
+          <p role="status" className="text-sm text-success">{copyStatus}</p>
+          <Button variant="ghost" className="w-full" onClick={restart}><RotateCcw /> New enquiry</Button>
+        </div> : !started ? <div className="space-y-5 py-2">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-success"><Car className="h-7 w-7" /></div>
+          <h2 className="text-2xl font-semibold">Let's plan your ride.</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">A city ride, airport transfer or a journey further afield — where are you going?</p>
+          <Button className="w-full bg-success text-success-foreground hover:bg-success/90" onClick={() => setStarted(true)}>Start Booking <ArrowRight /></Button>
+          <a className="block text-center text-sm font-medium text-primary underline underline-offset-4" href={`tel:+${WHATSAPP_NUMBER}`}>Prefer to call? +91 88650 38345</a>
+        </div> : <div className="space-y-5">
+          <div className="flex items-center justify-between"><p className="text-xs font-medium text-muted-foreground">STEP {stepIndex + 1} OF {steps.length}</p><Button variant="ghost" size="icon" aria-label="Start over" title="Start over" onClick={restart}><RotateCcw /></Button></div>
+          <div className="flex gap-1.5" aria-hidden="true">{steps.map((key, index) => <span key={key} className={`h-1 flex-1 rounded-full ${index <= stepIndex ? "bg-success" : "bg-muted"}`} />)}</div>
+          {(data.pickup || data.drop) && <div className="space-y-2 border-b border-border pb-4 text-sm">
+            {data.pickup && <p className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-success" /><span className="min-w-0 break-words">{data.pickup}</span></p>}
+            {data.drop && <p className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-secondary" /><span className="min-w-0 break-words">{data.drop}</span></p>}
+          </div>}
+          <h2 className="text-xl font-semibold">{questions[step].title}</h2>
+          {step === "car" ? <div className="space-y-2">{cars.map(car => <Button key={car.name} variant="outline" className={`h-auto w-full justify-between gap-3 p-3 text-left ${data.car === car.name ? "border-success bg-success/5" : ""}`} onClick={() => { setData(previous => ({ ...previous, car: car.name })); setStepIndex(3); }}>
+            <span className="min-w-0 whitespace-normal"><span className="block font-semibold">{car.name}</span><span className="block text-xs font-normal text-muted-foreground">{car.seats}</span></span><span className="shrink-0 text-primary">{car.price}</span>
+          </Button>)}</div> : step === "confirm" ? <div className="space-y-4">
+            <dl className="space-y-3 text-sm">{steps.filter(key => key !== "confirm").map(key => <div key={key} className="grid grid-cols-[100px_minmax(0,1fr)] gap-3"><dt className="text-muted-foreground">{questions[key].label}</dt><dd className="break-words font-medium">{data[key as keyof typeof data]}</dd></div>)}</dl>
+            <Button className="w-full bg-success text-success-foreground hover:bg-success/90" onClick={send}><Send /> Continue to WhatsApp</Button>
+          </div> : <form className="space-y-4" onSubmit={event => { event.preventDefault(); if (data[step].trim()) setStepIndex(index => index + 1); }}>
+            <label className="block text-sm font-medium" htmlFor="chat-booking-input">{questions[step].label}</label>
+            {step === "pickup" || step === "drop" ? <LocationAutocomplete value={data[step]} onChange={update} placeholder={`Enter ${step} location`} variant={step === "pickup" ? "pickup" : "drop"} required /> : <Input id="chat-booking-input" aria-label={questions[step].label} value={data[step]} onChange={event => update(event.target.value)} type={step === "phone" ? "tel" : "text"} autoComplete={step === "name" ? "name" : step === "phone" ? "tel" : "off"} placeholder={step === "date" ? "e.g. 30 October 2026, 8 AM" : questions[step].label} required className="h-12 min-w-0 text-base" />}
+            <Button type="submit" disabled={!data[step].trim()} className="w-full bg-success text-success-foreground hover:bg-success/90">Continue <ArrowRight /></Button>
+          </form>}
+          <Button variant="ghost" className="gap-2 px-0" onClick={() => stepIndex > 0 ? setStepIndex(index => index - 1) : setStarted(false)}><ArrowLeft /> Back</Button>
+        </div>}
+      </div>
+    </div>}
+    <Button ref={launcherRef} size="icon" aria-expanded={open} onClick={() => setOpen(previous => !previous)} className="whatsapp-launcher fixed z-50 h-14 w-14 rounded-full bg-success text-success-foreground shadow-lg transition-transform hover:scale-105 hover:bg-success/90" aria-label={open ? "Minimize WhatsApp booking" : "Book via WhatsApp"}>{open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}</Button>
+  </>;
 };
-
 export default WhatsAppButton;

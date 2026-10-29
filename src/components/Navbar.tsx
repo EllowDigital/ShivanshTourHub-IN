@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ const Navbar = () => {
       }`}
     >
       {/* Top bar with phone */}
-      <div className="bg-primary text-primary-foreground text-xs py-1.5 px-4 hidden sm:block">
+      <div className="bg-primary text-primary-foreground text-xs py-1.5 px-4 hidden lg:block">
         <div className="container mx-auto flex items-center justify-between">
           <span>📍 Serving across India from Agra, UP</span>
           <div className="flex items-center gap-4">
@@ -81,12 +81,12 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+        <div className="hidden xl:flex items-center gap-0 2xl:gap-1">
           {navLinks.map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:text-secondary hover:bg-accent ${
+              className={`px-2 py-2 rounded-md text-xs 2xl:text-sm font-medium transition-colors hover:text-secondary hover:bg-accent ${
                 location.pathname === l.to
                   ? "text-secondary bg-accent"
                   : "text-foreground"
@@ -103,24 +103,27 @@ const Navbar = () => {
         </div>
 
         {/* Mobile toggle */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <a href="tel:+918865038345" className="p-2 text-secondary">
+        <div className="flex items-center gap-2 xl:hidden">
+          <a href="tel:+918865038345" aria-label="Call Shivansh Travels" className="p-2 text-secondary">
             <Phone className="h-5 w-5" />
           </a>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-expanded={open}
             className="p-2 -mr-2 text-foreground hover:text-secondary transition-colors"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Mobile menu */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ${
-          open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+        className={`xl:hidden overflow-hidden transition-all duration-300 ${
+          open ? "max-h-[calc(100dvh-100px)] overflow-y-auto opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="bg-card border-t border-border px-4 py-3 space-y-1">

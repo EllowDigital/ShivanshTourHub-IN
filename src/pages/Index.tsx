@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import BookingForm from "@/components/BookingForm";
 import SectionHeading from "@/components/SectionHeading";
@@ -335,7 +335,7 @@ const homeSchema = {
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-border/50 rounded-xl overflow-hidden bg-card">
+    <div className="border border-border/50 rounded-lg overflow-hidden bg-card">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors"
@@ -364,6 +364,7 @@ const Index = () => {
   const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const intervalId = window.setInterval(() => {
       setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
     }, 4500);
@@ -372,7 +373,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div>
+    <div className="homepage">
       <SEO
         title="Shivansh Tour & Travels | Best Taxi Service in Agra | Book Cab Online"
         description="Book affordable taxi & cab services from Agra to Delhi, Jaipur, Varanasi, Ayodhya & 50+ cities. Agra to Delhi one-way taxi service, airport pickup, outstation trips, and tour packages. ₹11/km onwards. Call +91 8865038345."
@@ -381,110 +382,50 @@ const Index = () => {
         schema={homeSchema}
       />
 
-      {/* Hero */}
-      <section className="relative min-h-[100svh] flex items-center overflow-hidden">
+      {/* Image-led introduction with a compact, separate booking band. */}
+      <section className="relative overflow-hidden bg-primary pt-14 sm:pt-16 lg:pt-24">
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
-            <div
-              key={slide.title}
-              className={`absolute inset-0 transition-opacity duration-700 ${
-                index === currentHeroSlide ? "opacity-100" : "opacity-0"
-              }`}
-              aria-hidden={index !== currentHeroSlide}
-            >
-              <picture>
-                <source
-                  media="(min-width: 1024px)"
-                  srcSet={slide.desktopImage}
-                />
-                <source media="(min-width: 640px)" srcSet={slide.tabletImage} />
-                <img
-                  src={slide.mobileImage}
-                  alt={slide.alt}
-                  className="h-full w-full object-cover object-center"
-                  loading={index === 0 ? "eager" : "lazy"}
-                />
-              </picture>
-            </div>
+            <picture key={slide.title} className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`} aria-hidden={index !== currentHeroSlide}>
+              <source media="(min-width: 1024px)" srcSet={slide.desktopImage} />
+              <source media="(min-width: 640px)" srcSet={slide.tabletImage} />
+              <img src={slide.mobileImage} alt={slide.alt} className="h-full w-full object-cover" loading={index === 0 ? "eager" : "lazy"} />
+            </picture>
           ))}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/85 via-primary/65 to-primary/40" />
-        <div className="relative z-10 container mx-auto px-4 py-24 sm:py-28 lg:py-20">
-          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-            <div className="flex-1 text-primary-foreground animate-fade-up text-center lg:text-left">
-              <span className="inline-block bg-secondary/20 text-secondary border border-secondary/30 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium mb-5">
-                🚗 India's Trusted Taxi & Tour Service
-              </span>
-              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
-                Book Your Ride <br className="hidden sm:block" />
-                <span className="text-secondary">Anytime, Anywhere</span>
-              </h1>
-              <p className="mt-4 text-sm sm:text-base lg:text-lg text-primary-foreground/85 max-w-xl mx-auto lg:mx-0">
-                Agra's #1 taxi service — airport pickups, outstation trips &
-                tour packages at unbeatable prices. Book instantly via WhatsApp!
-              </p>
-              <div className="mt-6 sm:mt-8 flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4">
-                <Link to="/contact">
-                  <Button
-                    variant="hero"
-                    size="lg"
-                    className="gap-2 text-sm sm:text-base"
-                  >
-                    Book Taxi <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <a href="tel:+918865038345">
-                  <Button
-                    variant="hero-outline"
-                    size="lg"
-                    className="gap-2 text-sm sm:text-base"
-                  >
-                    <Phone className="h-4 w-4" /> Call Now
-                  </Button>
-                </a>
-              </div>
-              <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 text-primary-foreground/70 text-xs sm:text-sm">
-                <span className="flex items-center gap-1.5">
-                  <BadgeCheck className="h-4 w-4 text-secondary" /> Verified
-                  Drivers
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="h-4 w-4 text-secondary" /> Safe &
-                  Clean Cars
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-secondary" /> 24/7 Available
-                </span>
-              </div>
-              <div className="mt-5 flex items-center justify-center lg:justify-start gap-2">
-                <span className="mr-1 inline-flex items-center rounded-full border border-secondary/40 bg-secondary/15 px-3 py-1 text-[10px] sm:text-xs font-medium text-secondary">
-                  {heroSlides[currentHeroSlide].title}
-                </span>
-                {heroSlides.map((slide, index) => (
-                  <button
-                    key={slide.title}
-                    type="button"
-                    onClick={() => setCurrentHeroSlide(index)}
-                    className={`h-2.5 rounded-full transition-all ${
-                      index === currentHeroSlide
-                        ? "w-7 bg-secondary"
-                        : "w-2.5 bg-primary-foreground/50 hover:bg-primary-foreground/75"
-                    }`}
-                    aria-label={`Show hero image ${index + 1}: ${slide.title}`}
-                  />
-                ))}
-                <span className="ml-1 text-[10px] sm:text-xs text-primary-foreground/80">
-                  {currentHeroSlide + 1}/{heroSlides.length}
-                </span>
-              </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/65 to-primary/25" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:py-20">
+          <div className="max-w-2xl text-primary-foreground">
+            <p className="mb-4 text-sm font-semibold text-secondary">AGRA · AIRPORT · OUTSTATION · TOURS</p>
+            <h1 className="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Shivansh Tour<br />&amp; Travels</h1>
+            <p className="mt-4 text-lg font-medium sm:text-xl">Reliable Taxi &amp; Tour Services Across India</p>
+            <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85 sm:text-base">Comfortable rides, affordable prices, and trusted service.</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button asChild variant="hero" size="lg" className="px-5"><a href="#home-booking">Book Taxi <ArrowRight /></a></Button>
+              <Button asChild variant="hero-outline" size="lg" className="px-5"><a href="tel:+918865038345"><Phone /> Call Now</a></Button>
             </div>
-            <div
-              className="w-full max-w-md lg:max-w-sm xl:max-w-md animate-fade-up"
-              style={{ animationDelay: "0.2s" }}
-            >
-              <BookingForm />
+            <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-xs text-primary-foreground/90 sm:text-sm">
+              <span className="inline-flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-secondary" /> Verified drivers</span>
+              <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-secondary" /> Clean cars</span>
+              <span className="inline-flex items-center gap-2"><Clock className="h-4 w-4 text-secondary" /> 24/7 assistance</span>
+            </div>
+            <div className="mt-6 flex items-center gap-2">
+              {heroSlides.map((slide, index) => <Button key={slide.title} variant="ghost" size="icon" className="h-7 w-7 hover:bg-primary-foreground/10" aria-label={`Show hero image ${index + 1}: ${slide.title}`} aria-pressed={index === currentHeroSlide} onClick={() => setCurrentHeroSlide(index)}><span className={`h-2 w-2 rounded-full ${index === currentHeroSlide ? "bg-secondary" : "bg-primary-foreground/60"}`} /></Button>)}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="home-booking" className="scroll-mt-28 bg-background px-4 py-8 sm:px-8 sm:py-12">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-16">
+          <div className="min-w-0">
+            <p className="mb-3 text-sm font-semibold text-primary">A RIDE FOR EVERY JOURNEY</p>
+            <h2 className="text-2xl font-bold leading-tight sm:text-3xl">Your plans.<br />Our wheels.</h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">From a quick airport drop to a family holiday, find a car that fits your journey.</p>
+            <div className="mt-5 flex items-center gap-3"><Car className="h-5 w-5 text-secondary" /><span className="text-sm font-medium">Sedans, SUVs &amp; group travel</span></div>
+            <img src={swiftDzire} alt="Swift Dzire taxi available with Shivansh Tour and Travels" className="mt-5 hidden max-h-56 w-full max-w-md object-contain md:block" loading="lazy" />
+          </div>
+          <div className="min-w-0"><BookingForm /></div>
         </div>
       </section>
 
@@ -517,7 +458,7 @@ const Index = () => {
             {services.map((s, i) => (
               <div
                 key={i}
-                className="bg-card rounded-xl p-4 sm:p-6 text-center hover-lift shadow-md border border-border/50 group"
+                className="bg-card rounded-lg p-4 sm:p-6 text-center hover-lift shadow-md border border-border/50 group"
               >
                 <div className="mx-auto mb-3 sm:mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
                   <s.icon className="h-6 w-6 sm:h-7 sm:w-7 text-secondary" />
@@ -525,7 +466,7 @@ const Index = () => {
                 <h3 className="font-heading font-semibold text-foreground text-xs sm:text-base">
                   {s.title}
                 </h3>
-                <p className="mt-1 sm:mt-2 text-[10px] sm:text-sm text-muted-foreground">
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
                   {s.desc}
                 </p>
               </div>
@@ -548,14 +489,14 @@ const Index = () => {
             title="Choose Your Ride"
             subtitle="Well-maintained cars for every type of journey."
           />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {fleetCars.map((c, i) => (
               <Link
                 to="/fleet"
                 key={i}
-                className="bg-card rounded-xl overflow-hidden shadow-md hover-lift border border-border/50 group"
+                className="bg-card rounded-lg overflow-hidden shadow-md hover-lift border border-border/50 group"
               >
-                <div className="bg-gradient-to-b from-accent/50 to-muted p-3 sm:p-4 flex items-center justify-center h-28 sm:h-36">
+                <div className="bg-gradient-to-b from-accent/50 to-muted p-3 sm:p-4 flex items-center justify-center h-44 sm:h-40">
                   <img
                     src={c.img}
                     alt={`${c.name} taxi for hire in Agra`}
@@ -613,7 +554,7 @@ const Index = () => {
               <Link
                 to={r.slug}
                 key={i}
-                className="bg-card rounded-xl p-4 text-center hover-lift shadow-sm border border-border/50 group"
+                className="bg-card rounded-lg p-4 text-center hover-lift shadow-sm border border-border/50 group"
               >
                 <div className="text-xs text-muted-foreground">{r.from}</div>
                 <ArrowRight className="h-3 w-3 mx-auto my-1 text-secondary" />
@@ -647,12 +588,12 @@ const Index = () => {
             {destinations.map((d, i) => (
               <div
                 key={i}
-                className="bg-card rounded-xl overflow-hidden hover-lift shadow-sm border border-border/50 group"
+                className="bg-card rounded-lg overflow-hidden hover-lift shadow-sm border border-border/50 group"
               >
                 <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 sm:p-5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-secondary/15 flex items-center justify-center shrink-0 group-hover:bg-secondary/25 transition-colors">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-secondary/15 flex items-center justify-center shrink-0 group-hover:bg-secondary/25 transition-colors">
                         <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-secondary" />
                       </div>
                       <div>
@@ -714,7 +655,7 @@ const Index = () => {
             {whyUs.map((w, i) => (
               <div
                 key={i}
-                className="text-center p-4 sm:p-6 rounded-xl bg-card border border-border/50 shadow-sm"
+                className="text-center p-4 sm:p-6 rounded-lg bg-card border border-border/50 shadow-sm"
               >
                 <div className="mx-auto mb-3 sm:mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent flex items-center justify-center">
                   <w.icon className="h-6 w-6 sm:h-7 sm:w-7 text-secondary" />
@@ -722,7 +663,7 @@ const Index = () => {
                 <h3 className="font-heading font-semibold text-foreground text-xs sm:text-base">
                   {w.title}
                 </h3>
-                <p className="mt-1 sm:mt-2 text-[10px] sm:text-sm text-muted-foreground">
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
                   {w.desc}
                 </p>
               </div>
@@ -748,7 +689,7 @@ const Index = () => {
             {testimonials.map((t, i) => (
               <div
                 key={i}
-                className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-primary-foreground/10"
+                className="bg-primary-foreground/10 backdrop-blur-sm rounded-lg p-4 sm:p-5 border border-primary-foreground/10"
               >
                 <div className="flex gap-0.5 mb-2">
                   {[...Array(t.rating)].map((_, j) => (
@@ -761,7 +702,7 @@ const Index = () => {
                 <p className="text-primary-foreground/90 text-xs sm:text-sm italic leading-relaxed">
                   "{t.text}"
                 </p>
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-secondary/30 flex items-center justify-center text-secondary font-bold text-xs">
                       {t.name[0]}

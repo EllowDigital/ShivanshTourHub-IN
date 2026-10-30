@@ -1,5 +1,5 @@
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -237,11 +237,7 @@ const Reviews = () => (
               Book Now
             </Button>
           </Link>
-          <a
-            href={WHATSAPP_CHAT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={WHATSAPP_CHAT_URL} target="_blank" rel="noopener noreferrer">
             <Button
               variant="hero-outline"
               size="lg"

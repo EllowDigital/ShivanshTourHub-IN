@@ -1,5 +1,5 @@
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
-﻿import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { articleContent, blogPosts } from "@/lib/blogContent";

@@ -1,5 +1,5 @@
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
-﻿import BookingForm from "@/components/BookingForm";
+import BookingForm from "@/components/BookingForm";
 import SEO from "@/components/SEO";
 import { Phone, Mail, MapPin, MessageCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";

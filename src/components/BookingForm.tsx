@@ -9,7 +9,6 @@ import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 const carTypes = ["Swift Dzire", "Ertiga", "Toyota Innova", "Tempo Traveller"];
 const tripTypes = ["One Way", "Round Trip", "Local", "Airport"];
 
-
 const getDayPeriodLabel = (hour24: number) => {
   if (hour24 >= 5 && hour24 < 12) return "Morning";
   if (hour24 >= 12 && hour24 < 17) return "Afternoon";

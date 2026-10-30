@@ -8,6 +8,11 @@ export const buildWhatsAppUrl = (phone: string, message: string) =>
 export const buildWhatsAppDeepLink = (phone: string, message: string) =>
   `whatsapp://send?phone=${normalizePhone(phone)}&text=${encodeURIComponent(message)}`;
 
+export const WHATSAPP_CHAT_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+
+/** Embedded previews block wa.me/api.whatsapp.com inside frames (ERR_BLOCKED_BY_RESPONSE). */
+const isEmbedded = () => { try { return window.self !== window.top; } catch { return true; } };
+
 export const WHATSAPP_HANDOFF_EVENT = "shivansh:whatsapp-handoff";
 export type WhatsAppHandoff = { phone: string; message: string; popupBlocked: boolean };
 
@@ -20,7 +25,7 @@ export const openWhatsAppMessage = (
   const waMe = buildWhatsAppUrl(phone, message);
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   let popupBlocked = false;
-  if (isMobile) {
+  if (isMobile && !isEmbedded()) {
     let appOpened = false;
     const onHidden = () => {
       if (document.hidden) appOpened = true;

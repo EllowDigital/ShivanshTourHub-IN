@@ -15,7 +15,7 @@ describe("whatsapp encoding round-trip", () => {
     const msg = "*नई बुकिंग* 🚕\nPickup: Agra, UP & Taj\nName: Ram's family\n_Note_: 50% advance?";
     const url = buildWhatsAppUrl("918865038345", msg);
     expect(url.startsWith("https://wa.me/918865038345?text=")).toBe(true);
-    expect(decodeURIComponent(new URL(url).searchParams.get("text") === msg ? encodeURIComponent(msg) : "")).toBe(msg);
-    expect(url).not.toContain("%25");
+    expect(new URL(url).searchParams.get("text")).toBe(msg);
+    expect(decodeURIComponent(url.split("?text=")[1])).toBe(msg);
   });
 });

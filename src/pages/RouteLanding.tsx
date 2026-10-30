@@ -1,4 +1,5 @@
-﻿import { Link, useParams } from "react-router-dom";
+import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
+import { Link, useParams } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import {
@@ -213,7 +214,7 @@ const RouteLanding = () => {
             </p>
             <div className="mt-4 flex gap-2 flex-wrap">
               <a
-                href="https://wa.me/918865038345"
+                href={WHATSAPP_CHAT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
               >

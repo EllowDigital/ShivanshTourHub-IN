@@ -104,7 +104,11 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 xl:hidden">
-          <a href="tel:+918865038345" aria-label="Call Shivansh Travels" className="p-2 text-secondary">
+          <a
+            href="tel:+918865038345"
+            aria-label="Call Shivansh Travels"
+            className="p-2 text-secondary"
+          >
             <Phone className="h-5 w-5" />
           </a>
           <Button
@@ -123,7 +127,9 @@ const Navbar = () => {
       {/* Mobile menu */}
       <div
         className={`xl:hidden overflow-hidden transition-all duration-300 ${
-          open ? "max-h-[calc(100dvh-100px)] overflow-y-auto opacity-100" : "max-h-0 opacity-0"
+          open
+            ? "max-h-[calc(100dvh-100px)] overflow-y-auto opacity-100"
+            : "max-h-0 opacity-0"
         }`}
       >
         <div className="bg-card border-t border-border px-4 py-3 space-y-1">

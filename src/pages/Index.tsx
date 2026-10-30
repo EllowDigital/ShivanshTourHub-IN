@@ -386,46 +386,118 @@ const Index = () => {
       <section className="relative overflow-hidden bg-primary pt-14 sm:pt-16 lg:pt-24">
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
-            <picture key={slide.title} className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`} aria-hidden={index !== currentHeroSlide}>
+            <picture
+              key={slide.title}
+              className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`}
+              aria-hidden={index !== currentHeroSlide}
+            >
               <source media="(min-width: 1024px)" srcSet={slide.desktopImage} />
               <source media="(min-width: 640px)" srcSet={slide.tabletImage} />
-              <img src={slide.mobileImage} alt={slide.alt} className="h-full w-full object-cover" loading={index === 0 ? "eager" : "lazy"} />
+              <img
+                src={slide.mobileImage}
+                alt={slide.alt}
+                className="h-full w-full object-cover"
+                loading={index === 0 ? "eager" : "lazy"}
+              />
             </picture>
           ))}
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/65 to-primary/25" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:py-20">
           <div className="max-w-2xl text-primary-foreground">
-            <p className="mb-4 text-sm font-semibold text-secondary">AGRA · AIRPORT · OUTSTATION · TOURS</p>
-            <h1 className="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Shivansh Tour<br />&amp; Travels</h1>
-            <p className="mt-4 text-lg font-medium sm:text-xl">Reliable Taxi &amp; Tour Services Across India</p>
-            <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85 sm:text-base">Comfortable rides, affordable prices, and trusted service.</p>
+            <p className="mb-4 text-sm font-semibold text-secondary">
+              AGRA · AIRPORT · OUTSTATION · TOURS
+            </p>
+            <h1 className="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+              Shivansh Tour
+              <br />
+              &amp; Travels
+            </h1>
+            <p className="mt-4 text-lg font-medium sm:text-xl">
+              Reliable Taxi &amp; Tour Services Across India
+            </p>
+            <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
+              Comfortable rides, affordable prices, and trusted service.
+            </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button asChild variant="hero" size="lg" className="px-5"><a href="#home-booking">Book Taxi <ArrowRight /></a></Button>
-              <Button asChild variant="hero-outline" size="lg" className="px-5"><a href="tel:+918865038345"><Phone /> Call Now</a></Button>
+              <Button asChild variant="hero" size="lg" className="px-5">
+                <a href="#home-booking">
+                  Book Taxi <ArrowRight />
+                </a>
+              </Button>
+              <Button asChild variant="hero-outline" size="lg" className="px-5">
+                <a href="tel:+918865038345">
+                  <Phone /> Call Now
+                </a>
+              </Button>
             </div>
             <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-xs text-primary-foreground/90 sm:text-sm">
-              <span className="inline-flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-secondary" /> Verified drivers</span>
-              <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-secondary" /> Clean cars</span>
-              <span className="inline-flex items-center gap-2"><Clock className="h-4 w-4 text-secondary" /> 24/7 assistance</span>
+              <span className="inline-flex items-center gap-2">
+                <BadgeCheck className="h-4 w-4 text-secondary" /> Verified
+                drivers
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-secondary" /> Clean cars
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Clock className="h-4 w-4 text-secondary" /> 24/7 assistance
+              </span>
             </div>
             <div className="mt-6 flex items-center gap-2">
-              {heroSlides.map((slide, index) => <Button key={slide.title} variant="ghost" size="icon" className="h-7 w-7 hover:bg-primary-foreground/10" aria-label={`Show hero image ${index + 1}: ${slide.title}`} aria-pressed={index === currentHeroSlide} onClick={() => setCurrentHeroSlide(index)}><span className={`h-2 w-2 rounded-full ${index === currentHeroSlide ? "bg-secondary" : "bg-primary-foreground/60"}`} /></Button>)}
+              {heroSlides.map((slide, index) => (
+                <Button
+                  key={slide.title}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 hover:bg-primary-foreground/10"
+                  aria-label={`Show hero image ${index + 1}: ${slide.title}`}
+                  aria-pressed={index === currentHeroSlide}
+                  onClick={() => setCurrentHeroSlide(index)}
+                >
+                  <span
+                    className={`h-2 w-2 rounded-full ${index === currentHeroSlide ? "bg-secondary" : "bg-primary-foreground/60"}`}
+                  />
+                </Button>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section id="home-booking" className="scroll-mt-28 bg-background px-4 py-8 sm:px-8 sm:py-12">
+      <section
+        id="home-booking"
+        className="scroll-mt-28 bg-background px-4 py-8 sm:px-8 sm:py-12"
+      >
         <div className="mx-auto grid max-w-7xl items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-16">
           <div className="min-w-0">
-            <p className="mb-3 text-sm font-semibold text-primary">A RIDE FOR EVERY JOURNEY</p>
-            <h2 className="text-2xl font-bold leading-tight sm:text-3xl">Your plans.<br />Our wheels.</h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">From a quick airport drop to a family holiday, find a car that fits your journey.</p>
-            <div className="mt-5 flex items-center gap-3"><Car className="h-5 w-5 text-secondary" /><span className="text-sm font-medium">Sedans, SUVs &amp; group travel</span></div>
-            <img src={swiftDzire} alt="Swift Dzire taxi available with Shivansh Tour and Travels" className="mt-5 hidden max-h-56 w-full max-w-md object-contain md:block" loading="lazy" />
+            <p className="mb-3 text-sm font-semibold text-primary">
+              A RIDE FOR EVERY JOURNEY
+            </p>
+            <h2 className="text-2xl font-bold leading-tight sm:text-3xl">
+              Your plans.
+              <br />
+              Our wheels.
+            </h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
+              From a quick airport drop to a family holiday, find a car that
+              fits your journey.
+            </p>
+            <div className="mt-5 flex items-center gap-3">
+              <Car className="h-5 w-5 text-secondary" />
+              <span className="text-sm font-medium">
+                Sedans, SUVs &amp; group travel
+              </span>
+            </div>
+            <img
+              src={swiftDzire}
+              alt="Swift Dzire taxi available with Shivansh Tour and Travels"
+              className="mt-5 hidden max-h-56 w-full max-w-md object-contain md:block"
+              loading="lazy"
+            />
           </div>
-          <div className="min-w-0"><BookingForm /></div>
+          <div className="min-w-0">
+            <BookingForm />
+          </div>
         </div>
       </section>
 

@@ -1,3 +1,4 @@
+import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
 ﻿import { useParams, Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -155,7 +156,7 @@ const BlogArticle = () => {
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               <a
-                href="https://wa.me/918865038345"
+                href={WHATSAPP_CHAT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
               >

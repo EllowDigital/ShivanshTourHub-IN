@@ -1,3 +1,4 @@
+import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
 ﻿import BookingForm from "@/components/BookingForm";
 import SEO from "@/components/SEO";
 import { Phone, Mail, MapPin, MessageCircle, Clock } from "lucide-react";
@@ -20,7 +21,7 @@ const contactInfo = [
     icon: MessageCircle,
     title: "WhatsApp",
     content: "Chat on WhatsApp",
-    href: "https://wa.me/918865038345",
+    href: WHATSAPP_CHAT_URL,
   },
   {
     icon: Mail,

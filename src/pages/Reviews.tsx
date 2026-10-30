@@ -1,3 +1,4 @@
+import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
 ﻿import { Link } from "react-router-dom";
 import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
@@ -237,7 +238,7 @@ const Reviews = () => (
             </Button>
           </Link>
           <a
-            href="https://wa.me/918865038345"
+            href={WHATSAPP_CHAT_URL}
             target="_blank"
             rel="noopener noreferrer"
           >

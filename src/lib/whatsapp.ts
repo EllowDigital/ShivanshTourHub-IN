@@ -5,13 +5,8 @@ const normalizePhone = (phone: string) => phone.replace(/\D/g, "");
 export const buildWhatsAppUrl = (phone: string, message: string) =>
   `https://wa.me/${normalizePhone(phone)}?text=${encodeURIComponent(message)}`;
 
-export const buildWhatsAppDeepLink = (phone: string, message: string) =>
-  `whatsapp://send?phone=${normalizePhone(phone)}&text=${encodeURIComponent(message)}`;
-
 export const WHATSAPP_CHAT_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
-/** Embedded previews block wa.me/api.whatsapp.com inside frames (ERR_BLOCKED_BY_RESPONSE). */
-const isEmbedded = () => { try { return window.self !== window.top; } catch { return true; } };
 
 export const WHATSAPP_HANDOFF_EVENT = "shivansh:whatsapp-handoff";
 export type WhatsAppHandoff = { phone: string; message: string; popupBlocked: boolean };
@@ -22,29 +17,10 @@ export const openWhatsAppMessage = (
   message: string,
 ): boolean => {
   if (!normalizePhone(phone) || !message.trim()) return false;
-  const waMe = buildWhatsAppUrl(phone, message);
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  let popupBlocked = false;
-  if (isMobile && !isEmbedded()) {
-    let appOpened = false;
-    const onHidden = () => {
-      if (document.hidden) appOpened = true;
-    };
-    const onPageHide = () => { appOpened = true; };
-    document.addEventListener("visibilitychange", onHidden);
-    window.addEventListener("pagehide", onPageHide);
-    try { window.location.assign(buildWhatsAppDeepLink(phone, message)); } catch { /* Recovery remains available. */ }
-    window.setTimeout(() => {
-      document.removeEventListener("visibilitychange", onHidden);
-      window.removeEventListener("pagehide", onPageHide);
-      // Same-tab fallback avoids a delayed popup that browsers usually block.
-      if (!appOpened && !document.hidden) window.location.assign(waMe);
-    }, 1800);
-  } else {
-    const popup = window.open(waMe, "_blank");
-    popupBlocked = !popup;
-    if (popup) popup.opener = null;
-  }
+  // Only the official wa.me chat link is used. Always a new tab: WhatsApp refuses to load inside frames.
+  const popup = window.open(buildWhatsAppUrl(phone, message), "_blank", "noopener,noreferrer");
+  // With "noopener" some browsers return null even on success, so recovery stays visible either way.
+  const popupBlocked = popup === null && !document.hasFocus();
   window.dispatchEvent(new CustomEvent<WhatsAppHandoff>(WHATSAPP_HANDOFF_EVENT, {
     detail: { phone: normalizePhone(phone), message, popupBlocked },
   }));

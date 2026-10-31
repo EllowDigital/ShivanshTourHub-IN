@@ -1,7 +1,7 @@
 ﻿import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { openWhatsAppMessage } from "@/lib/whatsapp";
+import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import { Link } from "react-router-dom";
 import { Car, ArrowRight, Phone } from "lucide-react";
 
@@ -177,8 +177,6 @@ const delhiRoutes = [
   { to: "Amritsar", distance: "450 km", price: "₹6,500" },
   { to: "Khajuraho", distance: "600 km", price: "₹8,500" },
 ];
-
-const WHATSAPP_NUMBER = "918865038345";
 
 const handleRouteBook = (
   from: string,

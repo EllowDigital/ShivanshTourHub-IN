@@ -26,20 +26,24 @@ const LocationAutocomplete = ({
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
 
   useEffect(() => {
+    let active = true;
     const q = value.trim();
     if (q.length < 3) {
       setSuggestions([]);
+      setLoading(false);
       return;
     }
 
     const timer = setTimeout(async () => {
       setLoading(true);
       const results = await searchLocationSuggestions(q);
-      setSuggestions(results);
-      setLoading(false);
+      if (active) {
+        setSuggestions(results);
+        setLoading(false);
+      }
     }, 280);
 
-    return () => clearTimeout(timer);
+    return () => { active = false; clearTimeout(timer); };
   }, [value]);
 
   const showDropdown = focused && value.trim().length >= 3;
@@ -53,12 +57,13 @@ const LocationAutocomplete = ({
       )}
 
       <Input
+        aria-label={variant === "pickup" ? "Pickup location" : "Drop location"}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setTimeout(() => setFocused(false), 180)}
-        className="text-sm pl-10"
+        className="text-base sm:text-sm pl-10"
         required={required}
       />
 

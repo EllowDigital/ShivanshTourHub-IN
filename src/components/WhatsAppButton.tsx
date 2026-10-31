@@ -29,40 +29,13 @@ import {
   type WhatsAppHandoff,
 } from "@/lib/whatsapp";
 
-const steps = [
-  "pickup",
-  "drop",
-  "car",
-  "date",
-  "name",
-  "phone",
-  "confirm",
-] as const;
-type Step = (typeof steps)[number];
-type Booking = {
-  pickup: string;
-  drop: string;
-  car: string;
-  date: string;
-  time: string;
-  passengers: number;
-  name: string;
-  phone: string;
-  note: string;
-};
-const emptyBooking: Booking = {
-  pickup: "",
-  drop: "",
-  car: "",
-  date: "",
-  time: "",
-  passengers: 1,
-  name: "",
-  phone: "",
-  note: "",
-};
+import {
+  bookingSteps as steps, bookingCars as cars, emptyBooking, todayISO,
+  cleanPhone, formatDate, formatTime, buildChatBookingMessage,
+  validateBookingStep, readBookingDraft,
+  type BookingStep as Step, type ChatBooking as Booking,
+} from "@/lib/chatBooking";
 const DRAFT_KEY = "shivansh-chat-draft";
-
 const prompts: Record<Step, string> = {
   pickup: "Hi! 👋 Where should we pick you up?",
   drop: "Great. Where are you going?",
@@ -80,62 +53,9 @@ const quickPlaces = [
   "Mathura",
   "Jaipur",
 ];
-const cars = [
-  { name: "Swift Dzire", seats: 4, price: "₹11/km" },
-  { name: "Ertiga", seats: 7, price: "₹14/km" },
-  { name: "Toyota Innova", seats: 7, price: "₹16/km" },
-  { name: "Tempo Traveller", seats: 12, price: "₹22/km" },
-];
-const todayISO = () => {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
-};
-const cleanPhone = (v: string) =>
-  v.replace(/\D/g, "").replace(/^(91|0)(?=\d{10}$)/, "");
-export const isValidIndianMobile = (v: string) =>
-  /^[6-9]\d{9}$/.test(cleanPhone(v));
-const formatDate = (iso: string) =>
-  iso
-    ? new Date(`${iso}T00:00`).toLocaleDateString("en-IN", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
-    : "";
-const formatTime = (t: string) => {
-  if (!t) return "";
-  const [h, m] = t.split(":").map(Number);
-  return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
-};
-
-export const buildChatBookingMessage = (b: Booking) =>
-  [
-    "*TAXI BOOKING REQUEST*",
-    "Shivansh Tour & Travels",
-    "",
-    `*Name:* ${b.name.trim()}`,
-    `*Phone:* +91 ${cleanPhone(b.phone)}`,
-    `*Pickup:* ${b.pickup.trim()}`,
-    `*Drop:* ${b.drop.trim()}`,
-    `*Car:* ${b.car}`,
-    `*Passengers:* ${b.passengers}`,
-    `*Date:* ${formatDate(b.date)}${b.time ? `, ${formatTime(b.time)}` : ""}`,
-    ...(b.note.trim() ? [`*Note:* ${b.note.trim()}`] : []),
-    "",
-    "Please confirm availability and fare.",
-  ].join("\n");
-
 const loadDraft = (): Booking => {
-  try {
-    return {
-      ...emptyBooking,
-      ...JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}"),
-    };
-  } catch {
-    return emptyBooking;
-  }
+  try { return readBookingDraft(localStorage.getItem(DRAFT_KEY)); }
+  catch { return { ...emptyBooking }; }
 };
 
 const WhatsAppButton = () => {
@@ -193,31 +113,16 @@ const WhatsAppButton = () => {
     setStepIndex(i);
   };
   const next = () => {
-    if (step === "pickup" && data.pickup.trim().length < 2)
-      return setError("Please enter a pickup location.");
-    if (step === "drop") {
-      if (data.drop.trim().length < 2)
-        return setError("Please enter a drop location.");
-      if (data.drop.trim().toLowerCase() === data.pickup.trim().toLowerCase())
-        return setError("Pickup and drop can't be the same place.");
-    }
-    if (step === "car" && !data.car) return setError("Please choose a car.");
-    if (step === "date" && (!data.date || data.date < todayISO()))
-      return setError("Please choose today or a future date.");
-    if (step === "name" && data.name.trim().length < 2)
-      return setError("Please enter the passenger's name.");
-    if (step === "phone" && !isValidIndianMobile(data.phone))
-      return setError(
-        "Enter a valid 10-digit mobile number (starts with 6–9).",
-      );
+    const problem = validateBookingStep(step, data);
+    if (problem) return setError(problem);
     if (returnToConfirm) {
       setReturnToConfirm(false);
       return goTo(steps.length - 1);
     }
-    goTo(stepIndex + 1);
+    goTo(Math.min(stepIndex + 1, steps.length - 1));
   };
   const edit = (s: Step) => {
-    setReturnToConfirm(true);
+    setReturnToConfirm(stepIndex === steps.length - 1);
     goTo(steps.indexOf(s));
   };
   const restart = () => {
@@ -228,7 +133,18 @@ const WhatsAppButton = () => {
     goTo(0);
   };
   const message = useMemo(() => buildChatBookingMessage(data), [data]);
-  const send = () => openWhatsAppMessage(WHATSAPP_NUMBER, message);
+  const send = () => {
+    for (const s of steps) {
+      const problem = validateBookingStep(s, data);
+      if (problem) {
+        setReturnToConfirm(false);
+        goTo(steps.indexOf(s));
+        // Validation is shown on the selected question, not lost during navigation.
+        return;
+      }
+    }
+    openWhatsAppMessage(WHATSAPP_NUMBER, message);
+  };
   const copy = async () => {
     if (!handoff) return;
     setCopyStatus(
@@ -287,7 +203,7 @@ const WhatsAppButton = () => {
               <div>
                 <p className="text-sm font-semibold">Shivansh Travels</p>
                 <p className="text-xs opacity-90">
-                  Usually replies in minutes · 24×7
+                  Taxi booking enquiry
                 </p>
               </div>
             </div>
@@ -335,7 +251,7 @@ const WhatsAppButton = () => {
                   <CheckCircle2 className="mx-auto h-10 w-10 text-success" />
                   <h2 className="mt-2 text-lg font-semibold">Almost done!</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    WhatsApp opened in a new tab with your booking filled in.{" "}
+                    We tried opening WhatsApp in a new tab with your booking filled in.{" "}
                     <b className="text-foreground">Tap Send there</b>. Your trip
                     is confirmed once we reply.
                   </p>
@@ -381,7 +297,7 @@ const WhatsAppButton = () => {
                 </details>
                 <div className="grid grid-cols-2 gap-2">
                   <Button variant="ghost" onClick={() => setHandoff(null)}>
-                    <ArrowLeft /> Edit booking
+                    <ArrowLeft /> Back to booking
                   </Button>
                   <Button variant="ghost" onClick={restart}>
                     <RotateCcw /> New booking
@@ -394,16 +310,17 @@ const WhatsAppButton = () => {
                   <div key={a.s} className="space-y-3">
                     <div className={`${bubble} bg-card`}>{prompts[a.s]}</div>
                     <div className="flex justify-end">
-                      <button
+                      <Button
                         type="button"
                         onClick={() => edit(a.s)}
-                        className={`${bubble} group flex items-start gap-2 bg-success/15 text-left text-foreground`}
+                        variant="ghost"
+                        className={`${bubble} h-auto whitespace-normal group flex items-start gap-2 bg-success/15 text-left text-foreground`}
                         aria-label={`Change ${a.s}`}
                       >
                         <a.icon className="mt-0.5 h-4 w-4 shrink-0 text-success" />
                         <span className="min-w-0 break-words">{a.text}</span>
                         <Pencil className="mt-0.5 h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -435,14 +352,15 @@ const WhatsAppButton = () => {
                         {quickPlaces
                           .filter((p) => step === "pickup" || p !== data.pickup)
                           .map((p) => (
-                            <button
+                            <Button
                               key={p}
                               type="button"
                               onClick={() => set(step, p)}
-                              className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${data[step] === p ? "border-success bg-success/10 text-success" : "border-border hover:border-success"}`}
+                              variant="outline"
+                              className={`h-auto whitespace-normal rounded-full border px-2.5 py-1 text-xs transition-colors ${data[step] === p ? "border-success bg-success/10 text-success" : "border-border hover:border-success"}`}
                             >
                               {p}
-                            </button>
+                            </Button>
                           ))}
                       </div>
                       <Button type="submit" className={primaryBtn}>
@@ -452,7 +370,7 @@ const WhatsAppButton = () => {
                   ) : step === "car" ? (
                     <div className="space-y-2">
                       {cars.map((c) => (
-                        <button
+                        <Button
                           key={c.name}
                           type="button"
                           onClick={() =>
@@ -462,7 +380,9 @@ const WhatsAppButton = () => {
                               passengers: Math.min(p.passengers, c.seats),
                             }))
                           }
-                          className={`flex w-full items-center justify-between gap-3 rounded-lg border p-3 text-left transition-colors ${data.car === c.name ? "border-success bg-success/5 ring-1 ring-success" : "border-border hover:border-success"}`}
+                          variant="outline"
+                          aria-pressed={data.car === c.name}
+                          className={`h-auto flex w-full items-center justify-between gap-3 rounded-lg border p-3 text-left transition-colors ${data.car === c.name ? "border-success bg-success/5 ring-1 ring-success" : "border-border hover:border-success"}`}
                         >
                           <span className="flex items-center gap-3">
                             <Car className="h-5 w-5 text-primary" />
@@ -478,7 +398,7 @@ const WhatsAppButton = () => {
                           <span className="text-sm font-semibold text-primary">
                             {c.price}
                           </span>
-                        </button>
+                        </Button>
                       ))}
                       <div className="flex items-center justify-between pt-1">
                         <span className="text-sm font-medium">Passengers</span>
@@ -530,18 +450,18 @@ const WhatsAppButton = () => {
                       }}
                     >
                       <div className="grid grid-cols-2 gap-2">
-                        <label className="text-xs font-medium">
+                        <label className="min-w-0 text-xs font-medium">
                           Date
                           <Input
                             type="date"
                             min={todayISO()}
                             value={data.date}
                             onChange={(e) => set("date", e.target.value)}
-                            className="mt-1 h-11 text-base"
+                            className="mt-1 h-11 w-full min-w-0 text-base"
                             required
                           />
                         </label>
-                        <label className="text-xs font-medium">
+                        <label className="min-w-0 text-xs font-medium">
                           Time{" "}
                           <span className="text-muted-foreground">
                             (optional)
@@ -550,7 +470,7 @@ const WhatsAppButton = () => {
                             type="time"
                             value={data.time}
                             onChange={(e) => set("time", e.target.value)}
-                            className="mt-1 h-11 text-base"
+                            className="mt-1 h-11 w-full min-w-0 text-base"
                           />
                         </label>
                       </div>
@@ -564,14 +484,15 @@ const WhatsAppButton = () => {
                           t.setMinutes(t.getMinutes() - t.getTimezoneOffset());
                           const iso = t.toISOString().slice(0, 10);
                           return (
-                            <button
+                            <Button
                               key={l}
                               type="button"
                               onClick={() => set("date", iso)}
-                              className={`rounded-full border px-3 py-1 text-xs ${data.date === iso ? "border-success bg-success/10 text-success" : "border-border hover:border-success"}`}
+                              variant="outline"
+                              className={`h-auto rounded-full border px-3 py-1 text-xs ${data.date === iso ? "border-success bg-success/10 text-success" : "border-border hover:border-success"}`}
                             >
                               {l}
-                            </button>
+                            </Button>
                           );
                         })}
                       </div>

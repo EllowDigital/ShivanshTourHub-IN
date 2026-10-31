@@ -21,13 +21,13 @@ export const openWhatsAppMessage = (
 ): boolean => {
   if (!normalizePhone(phone) || !message.trim()) return false;
   // Only the official wa.me chat link is used. Always a new tab: WhatsApp refuses to load inside frames.
-  const popup = window.open(
-    buildWhatsAppUrl(phone, message),
-    "_blank",
-    "noopener,noreferrer",
-  );
-  // With "noopener" some browsers return null even on success, so recovery stays visible either way.
-  const popupBlocked = popup === null && !document.hasFocus();
+  let popupBlocked = false;
+  try {
+    window.open(buildWhatsAppUrl(phone, message), "_blank", "noopener,noreferrer");
+    // A null result with noopener is inconclusive; do not claim a block or success.
+  } catch {
+    popupBlocked = true;
+  }
   window.dispatchEvent(
     new CustomEvent<WhatsAppHandoff>(WHATSAPP_HANDOFF_EVENT, {
       detail: { phone: normalizePhone(phone), message, popupBlocked },

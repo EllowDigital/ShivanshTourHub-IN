@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Send } from "lucide-react";
 import LocationAutocomplete from "@/components/LocationAutocomplete";
 import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
+import { emptyBooking, todayISO, validateBookingStep } from "@/lib/chatBooking";
 
 const carTypes = ["Swift Dzire", "Ertiga", "Toyota Innova", "Tempo Traveller"];
 const tripTypes = ["One Way", "Round Trip", "Local", "Airport"];
@@ -61,6 +62,15 @@ const BookingForm = ({
     if (!form.pickup || !form.drop || !form.name || !form.phone || !form.date) {
       toast.error("Please fill all required fields.");
       return;
+    }
+    const booking = { ...emptyBooking, ...form, passengers: Number(form.passengers || 1) };
+    for (const step of ["pickup", "drop", "date", "name", "phone"] as const) {
+      const problem = validateBookingStep(step, booking);
+      if (problem) { toast.error(problem); return; }
+    }
+    if (form.car) {
+      const problem = validateBookingStep("car", booking);
+      if (problem) { toast.error(problem); return; }
     }
 
     const formattedDate = form.date
@@ -128,6 +138,7 @@ const BookingForm = ({
             variant="ghost"
             key={t}
             type="button"
+            aria-pressed={tripType === t}
             onClick={() => setTripType(t)}
             className={`h-10 px-1 text-xs font-medium rounded-md transition-all ${
               tripType === t
@@ -168,6 +179,7 @@ const BookingForm = ({
             <Input
               id="pickup-date"
               type="date"
+              min={todayISO()}
               value={form.date}
               onChange={(e) => update("date", e.target.value)}
               className={`date-time-input min-w-0 max-w-full text-base sm:text-sm [color-scheme:light] ${form.date ? "text-foreground" : "date-time-input-empty"}`}

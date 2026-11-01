@@ -8,6 +8,8 @@ import swiftDzire from "@/assets/swift-dzire.jpg";
 import ertiga from "@/assets/ertiga.png";
 import innova from "@/assets/innova.png";
 import tempoTraveller from "@/assets/tempo-traveller.png";
+import vrindavanTravel from "@/assets/vrindavan-travel.jpg";
+import prayagrajTravel from "@/assets/prayagraj-travel.jpg";
 import {
   Plane,
   Car,
@@ -670,9 +672,7 @@ const Index = () => {
                 key={i}
                 className="bg-card rounded-lg overflow-hidden hover-lift shadow-sm border border-border/50 group"
               >
-                {[0, 1, 4, 5].includes(i) && (
-                  <img src={`/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.jpg`} alt={d.name} loading="lazy" className="aspect-[16/9] w-full object-cover" />
-                )}
+                <img src={i === 2 ? prayagrajTravel : i === 3 ? vrindavanTravel : `/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.jpg`} alt={`${d.name} destination${i === 2 || i === 3 ? " illustration" : ""}`} width={1024} height={768} loading="lazy" className="aspect-[16/9] w-full object-cover" />
                 <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">

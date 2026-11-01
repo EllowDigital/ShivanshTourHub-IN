@@ -177,7 +177,7 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-2 pb-1">
-            <a href="tel:+918865038345">
+            <a href="tel:+918865038345" tabIndex={open ? 0 : -1}>
               <Button tabIndex={open ? 0 : -1} size="sm" variant="hero" className="w-full gap-1.5">
                 <Phone className="h-3.5 w-3.5" /> Call Now
               </Button>

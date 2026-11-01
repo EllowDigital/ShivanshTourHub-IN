@@ -1,8 +1,8 @@
 # Website improvements
 
-- [ ] Refresh shared styling, navigation, and homepage with an Indian travel character.
-- [ ] Regenerate and validate sitemap coverage without invented modification dates.
-- [ ] Verify updated pages and booking interactions across screen sizes.
+- [x] Refresh shared styling, navigation, and homepage with an Indian travel character.
+- [x] Regenerate and validate sitemap coverage without invented modification dates.
+- [x] Verify updated pages and booking interactions across screen sizes.
 
 - [x] Improve shared WhatsApp handoff and manual fallback without losing booking details.
 - [x] Verify homepage layout, booking form, and navigation for mobile, tablet, and desktop; correct remaining issues.

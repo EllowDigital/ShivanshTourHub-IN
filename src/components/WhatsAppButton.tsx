@@ -30,10 +30,18 @@ import {
 } from "@/lib/whatsapp";
 
 import {
-  bookingSteps as steps, bookingCars as cars, emptyBooking, todayISO,
-  cleanPhone, formatDate, formatTime, buildChatBookingMessage,
-  validateBookingStep, readBookingDraft,
-  type BookingStep as Step, type ChatBooking as Booking,
+  bookingSteps as steps,
+  bookingCars as cars,
+  emptyBooking,
+  todayISO,
+  cleanPhone,
+  formatDate,
+  formatTime,
+  buildChatBookingMessage,
+  validateBookingStep,
+  readBookingDraft,
+  type BookingStep as Step,
+  type ChatBooking as Booking,
 } from "@/lib/chatBooking";
 const DRAFT_KEY = "shivansh-chat-draft";
 const prompts: Record<Step, string> = {
@@ -54,8 +62,11 @@ const quickPlaces = [
   "Jaipur",
 ];
 const loadDraft = (): Booking => {
-  try { return readBookingDraft(localStorage.getItem(DRAFT_KEY)); }
-  catch { return { ...emptyBooking }; }
+  try {
+    return readBookingDraft(localStorage.getItem(DRAFT_KEY));
+  } catch {
+    return { ...emptyBooking };
+  }
 };
 
 const WhatsAppButton = () => {
@@ -202,9 +213,7 @@ const WhatsAppButton = () => {
               </span>
               <div>
                 <p className="text-sm font-semibold">Shivansh Travels</p>
-                <p className="text-xs opacity-90">
-                  Taxi booking enquiry
-                </p>
+                <p className="text-xs opacity-90">Taxi booking enquiry</p>
               </div>
             </div>
             <div className="flex">
@@ -251,9 +260,9 @@ const WhatsAppButton = () => {
                   <CheckCircle2 className="mx-auto h-10 w-10 text-success" />
                   <h2 className="mt-2 text-lg font-semibold">Almost done!</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    We tried opening WhatsApp in a new tab with your booking filled in.{" "}
-                    <b className="text-foreground">Tap Send there</b>. Your trip
-                    is confirmed once we reply.
+                    We tried opening WhatsApp in a new tab with your booking
+                    filled in. <b className="text-foreground">Tap Send there</b>
+                    . Your trip is confirmed once we reply.
                   </p>
                 </div>
                 {handoff.popupBlocked && (

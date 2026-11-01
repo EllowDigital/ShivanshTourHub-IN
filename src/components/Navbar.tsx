@@ -92,29 +92,67 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden xl:flex items-center gap-0 2xl:gap-1">
-          {navLinks.filter((l) => ["/", "/services", "/fleet", "/tours", "/routes", "/contact"].includes(l.to)).map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              aria-current={location.pathname === l.to ? "page" : undefined}
-              className={`px-3 py-3 rounded-md text-sm font-medium transition-colors hover:text-primary hover:bg-accent ${
-                location.pathname === l.to
-                  ? "text-secondary bg-accent"
-                  : "text-foreground"
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
+          {navLinks
+            .filter((l) =>
+              [
+                "/",
+                "/services",
+                "/fleet",
+                "/tours",
+                "/routes",
+                "/contact",
+              ].includes(l.to),
+            )
+            .map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                aria-current={location.pathname === l.to ? "page" : undefined}
+                className={`px-3 py-3 rounded-md text-sm font-medium transition-colors hover:text-primary hover:bg-accent ${
+                  location.pathname === l.to
+                    ? "text-secondary bg-accent"
+                    : "text-foreground"
+                }`}
+              >
+                {l.label}
+              </Link>
+            ))}
           <div className="relative">
-            <Button variant="ghost" aria-expanded={open} aria-controls="desktop-more-menu" onClick={() => setOpen(!open)}>
+            <Button
+              variant="ghost"
+              aria-expanded={open}
+              aria-controls="desktop-more-menu"
+              onClick={() => setOpen(!open)}
+            >
               More {open ? <X /> : <Menu />}
             </Button>
             {open && (
-              <div id="desktop-more-menu" className="absolute right-0 top-full mt-3 w-52 rounded-lg border border-border bg-card p-2 shadow-lg">
-                {navLinks.filter((l) => ["/service-areas", "/reviews", "/blog", "/gallery", "/about"].includes(l.to)).map((l) => (
-                  <Link key={l.to} to={l.to} className="block rounded-md px-3 py-3 text-sm hover:bg-accent" aria-current={location.pathname === l.to ? "page" : undefined}>{l.label}</Link>
-                ))}
+              <div
+                id="desktop-more-menu"
+                className="absolute right-0 top-full mt-3 w-52 rounded-lg border border-border bg-card p-2 shadow-lg"
+              >
+                {navLinks
+                  .filter((l) =>
+                    [
+                      "/service-areas",
+                      "/reviews",
+                      "/blog",
+                      "/gallery",
+                      "/about",
+                    ].includes(l.to),
+                  )
+                  .map((l) => (
+                    <Link
+                      key={l.to}
+                      to={l.to}
+                      className="block rounded-md px-3 py-3 text-sm hover:bg-accent"
+                      aria-current={
+                        location.pathname === l.to ? "page" : undefined
+                      }
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
               </div>
             )}
           </div>
@@ -178,7 +216,12 @@ const Navbar = () => {
           ))}
           <div className="pt-2 pb-1">
             <a href="tel:+918865038345" tabIndex={open ? 0 : -1}>
-              <Button tabIndex={open ? 0 : -1} size="sm" variant="hero" className="w-full gap-1.5">
+              <Button
+                tabIndex={open ? 0 : -1}
+                size="sm"
+                variant="hero"
+                className="w-full gap-1.5"
+              >
                 <Phone className="h-3.5 w-3.5" /> Call Now
               </Button>
             </a>

@@ -43,7 +43,10 @@ const LocationAutocomplete = ({
       }
     }, 280);
 
-    return () => { active = false; clearTimeout(timer); };
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [value]);
 
   const showDropdown = focused && value.trim().length >= 3;

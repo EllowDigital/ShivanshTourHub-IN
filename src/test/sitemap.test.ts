@@ -11,7 +11,9 @@ describe("public sitemap", () => {
     for (const route of routePages) expect(paths).toContain(`/${route.slug}`);
     expect(paths).toContain("/delhi-airport-to-agra-taxi");
     expect(paths.length).toBe(new Set(paths).size);
-    expect(paths.some((path) => path.includes(":") || path.includes("*"))).toBe(false);
+    expect(paths.some((path) => path.includes(":") || path.includes("*"))).toBe(
+      false,
+    );
   });
 
   it("keeps the generated file synchronized without artificial lastmod dates", () => {

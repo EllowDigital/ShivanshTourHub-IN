@@ -35,7 +35,11 @@
     --radius: 0.5rem;
     --heritage: 152 34% 28%;
     --shadow-card: 0 8px 28px hsl(var(--primary) / 0.06);
-    --header-overlay: linear-gradient(90deg, hsl(var(--primary) / .94), hsl(var(--primary) / .73));
+    --header-overlay: linear-gradient(
+      90deg,
+      hsl(var(--primary) / 0.94),
+      hsl(var(--primary) / 0.73)
+    );
 
     --success: 142 70% 40%;
     --success-foreground: 0 0% 100%;
@@ -66,12 +70,19 @@
     outline-offset: 4px;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     letter-spacing: 0;
     text-wrap: balance;
   }
 
-  img { max-width: 100%; }
+  img {
+    max-width: 100%;
+  }
 
   h1,
   h2,
@@ -99,7 +110,8 @@
 
   .page-header {
     @apply bg-primary text-primary-foreground py-12 px-4 sm:py-16 md:py-20;
-    background-image: var(--header-overlay), url('/hero/agra-taj-sunrise-desktop.jpg');
+    background-image:
+      var(--header-overlay), url("/hero/agra-taj-sunrise-desktop.jpg");
     background-size: cover;
     background-position: center 45%;
     border-bottom: 4px solid hsl(var(--secondary));
@@ -191,7 +203,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .heritage-rule {
   height: 3px;
-  background: linear-gradient(90deg, hsl(var(--secondary)) 0% 33%, hsl(var(--card)) 33% 66%, hsl(var(--heritage)) 66% 100%);
+  background: linear-gradient(
+    90deg,
+    hsl(var(--secondary)) 0% 33%,
+    hsl(var(--card)) 33% 66%,
+    hsl(var(--heritage)) 66% 100%
+  );
 }
 .section-heading-mark {
   color: hsl(var(--heritage));
@@ -201,8 +218,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 12px;
   margin-bottom: 12px;
 }
-.section-heading-mark::before, .section-heading-mark::after {
-  content: '';
+.section-heading-mark::before,
+.section-heading-mark::after {
+  content: "";
   width: 36px;
   height: 1px;
   background: hsl(var(--secondary));
@@ -212,11 +230,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   left: 1rem;
   top: -5rem;
   z-index: 100;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
   background: hsl(var(--card));
   color: hsl(var(--primary));
 }
-.skip-link:focus { top: .5rem; }
+.skip-link:focus {
+  top: 0.5rem;
+}
 .homepage .section-padding {
   padding-inline: 1rem;
 }

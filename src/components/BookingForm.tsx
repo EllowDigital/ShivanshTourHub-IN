@@ -63,14 +63,24 @@ const BookingForm = ({
       toast.error("Please fill all required fields.");
       return;
     }
-    const booking = { ...emptyBooking, ...form, passengers: Number(form.passengers || 1) };
+    const booking = {
+      ...emptyBooking,
+      ...form,
+      passengers: Number(form.passengers || 1),
+    };
     for (const step of ["pickup", "drop", "date", "name", "phone"] as const) {
       const problem = validateBookingStep(step, booking);
-      if (problem) { toast.error(problem); return; }
+      if (problem) {
+        toast.error(problem);
+        return;
+      }
     }
     if (form.car) {
       const problem = validateBookingStep("car", booking);
-      if (problem) { toast.error(problem); return; }
+      if (problem) {
+        toast.error(problem);
+        return;
+      }
     }
 
     const formattedDate = form.date

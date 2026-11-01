@@ -371,7 +371,11 @@ const Index = () => {
   const [heroPaused, setHeroPaused] = useState(false);
 
   useEffect(() => {
-    if (heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (
+      heroPaused ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
     const intervalId = window.setInterval(() => {
       setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
     }, 8000);
@@ -424,7 +428,8 @@ const Index = () => {
               Reliable Taxi &amp; Tour Services Across India
             </p>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
-              From the lanes of Agra to the ghats of Kashi and the hills of Uttarakhand. Comfortable rides, at your pace.
+              From the lanes of Agra to the ghats of Kashi and the hills of
+              Uttarakhand. Comfortable rides, at your pace.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild variant="hero" size="lg" className="px-5">
@@ -451,7 +456,17 @@ const Index = () => {
               </span>
             </div>
             <div className="mt-6 flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-foreground/10" aria-label={heroPaused ? "Play travel slideshow" : "Pause travel slideshow"} onClick={() => setHeroPaused(!heroPaused)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 hover:bg-primary-foreground/10"
+                aria-label={
+                  heroPaused
+                    ? "Play travel slideshow"
+                    : "Pause travel slideshow"
+                }
+                onClick={() => setHeroPaused(!heroPaused)}
+              >
                 {heroPaused ? <Play /> : <Pause />}
               </Button>
               {heroSlides.map((slide, index) => (
@@ -485,8 +500,7 @@ const Index = () => {
             </p>
             <h2 className="text-2xl font-bold leading-tight sm:text-3xl">
               A little planning.
-              <br />
-              A beautiful journey.
+              <br />A beautiful journey.
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
               From a quick airport drop to a family holiday, find a car that
@@ -672,7 +686,20 @@ const Index = () => {
                 key={i}
                 className="bg-card rounded-lg overflow-hidden hover-lift shadow-sm border border-border/50 group"
               >
-                <img src={i === 2 ? prayagrajTravel : i === 3 ? vrindavanTravel : `/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.jpg`} alt={`${d.name} destination${i === 2 || i === 3 ? " illustration" : ""}`} width={1024} height={768} loading="lazy" className="aspect-[16/9] w-full object-cover" />
+                <img
+                  src={
+                    i === 2
+                      ? prayagrajTravel
+                      : i === 3
+                        ? vrindavanTravel
+                        : `/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.jpg`
+                  }
+                  alt={`${d.name} destination${i === 2 || i === 3 ? " illustration" : ""}`}
+                  width={1024}
+                  height={768}
+                  loading="lazy"
+                  className="aspect-[16/9] w-full object-cover"
+                />
                 <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">

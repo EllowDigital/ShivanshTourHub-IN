@@ -26,6 +26,8 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
+  Pause,
+  Play,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -336,9 +338,11 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-border/50 rounded-lg overflow-hidden bg-card">
-      <button
+      <Button
+        variant="ghost"
+        aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors"
+        className="h-auto w-full flex items-center justify-between whitespace-normal p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors"
       >
         <span className="font-heading font-semibold text-foreground text-xs sm:text-sm pr-4">
           {q}
@@ -348,7 +352,7 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
         ) : (
           <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
         )}
-      </button>
+      </Button>
       {open && (
         <div className="px-4 sm:px-5 pb-4 sm:pb-5">
           <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
@@ -362,15 +366,16 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
 
 const Index = () => {
   const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const intervalId = window.setInterval(() => {
       setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 4500);
+    }, 8000);
 
     return () => window.clearInterval(intervalId);
-  }, []);
+  }, [heroPaused]);
 
   return (
     <div className="homepage">
@@ -402,13 +407,13 @@ const Index = () => {
             </picture>
           ))}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/65 to-primary/25" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:py-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/10" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-8 sm:py-14 lg:py-16">
           <div className="max-w-2xl text-primary-foreground">
             <p className="mb-4 text-sm font-semibold text-secondary">
-              AGRA · AIRPORT · OUTSTATION · TOURS
+              NAMASTE · WELCOME TO YOUR NEXT JOURNEY
             </p>
-            <h1 className="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+            <h1 className="font-heading text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
               Shivansh Tour
               <br />
               &amp; Travels
@@ -417,7 +422,7 @@ const Index = () => {
               Reliable Taxi &amp; Tour Services Across India
             </p>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
-              Comfortable rides, affordable prices, and trusted service.
+              From the lanes of Agra to the ghats of Kashi and the hills of Uttarakhand. Comfortable rides, at your pace.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild variant="hero" size="lg" className="px-5">
@@ -444,6 +449,9 @@ const Index = () => {
               </span>
             </div>
             <div className="mt-6 flex items-center gap-2">
+              <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-foreground/10" aria-label={heroPaused ? "Play travel slideshow" : "Pause travel slideshow"} onClick={() => setHeroPaused(!heroPaused)}>
+                {heroPaused ? <Play /> : <Pause />}
+              </Button>
               {heroSlides.map((slide, index) => (
                 <Button
                   key={slide.title}
@@ -471,12 +479,12 @@ const Index = () => {
         <div className="mx-auto grid max-w-7xl items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-16">
           <div className="min-w-0">
             <p className="mb-3 text-sm font-semibold text-primary">
-              A RIDE FOR EVERY JOURNEY
+              CHALO, LET’S GO
             </p>
             <h2 className="text-2xl font-bold leading-tight sm:text-3xl">
-              Your plans.
+              A little planning.
               <br />
-              Our wheels.
+              A beautiful journey.
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
               From a quick airport drop to a family holiday, find a car that
@@ -502,15 +510,15 @@ const Index = () => {
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-secondary py-6 sm:py-8">
+      <section className="bg-muted border-y border-border py-6 sm:py-8">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             {stats.map((s, i) => (
               <div key={i}>
-                <p className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-secondary-foreground">
+                <p className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-primary">
                   {s.value}
                 </p>
-                <p className="text-xs sm:text-sm text-secondary-foreground/80 mt-1">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                   {s.label}
                 </p>
               </div>
@@ -653,7 +661,7 @@ const Index = () => {
       <section className="section-padding bg-muted">
         <div className="container mx-auto">
           <SectionHeading
-            title="Popular Tour Packages"
+            title="Discover the heart of India"
             subtitle="All-inclusive tour packages with hotel, car, and sightseeing."
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -662,6 +670,9 @@ const Index = () => {
                 key={i}
                 className="bg-card rounded-lg overflow-hidden hover-lift shadow-sm border border-border/50 group"
               >
+                {[0, 1, 4, 5].includes(i) && (
+                  <img src={`/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.jpg`} alt={d.name} loading="lazy" className="aspect-[16/9] w-full object-cover" />
+                )}
                 <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
@@ -693,7 +704,7 @@ const Index = () => {
                   <span className="text-[10px] sm:text-xs text-muted-foreground">
                     ✅ Hotel + Car + Sightseeing
                   </span>
-                  <Link to="/tours">
+                  <Link to="/tours" aria-label={`View ${d.name} tour details`}>
                     <Button
                       variant="outline"
                       size="sm"

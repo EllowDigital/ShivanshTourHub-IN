@@ -122,7 +122,7 @@ const BookingForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card rounded-lg shadow-xl border border-border p-4 sm:p-6 w-full min-w-0"
+      className="bg-card rounded-lg shadow-xl border border-border border-t-4 border-t-secondary p-4 sm:p-6 w-full min-w-0"
     >
       <h3 className="font-heading text-lg font-bold text-foreground text-center">
         Book Your Taxi
@@ -224,6 +224,8 @@ const BookingForm = ({
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
           <Input
             placeholder="Your Name *"
+            aria-label="Passenger name"
+            autoComplete="name"
             value={form.name}
             onChange={(e) => update("name", e.target.value)}
             className="min-w-0 text-base sm:text-sm"
@@ -232,6 +234,8 @@ const BookingForm = ({
           <Input
             placeholder="Phone *"
             type="tel"
+            aria-label="Phone number"
+            autoComplete="tel"
             value={form.phone}
             onChange={(e) => update("phone", e.target.value)}
             className="min-w-0 text-base sm:text-sm"
@@ -242,6 +246,7 @@ const BookingForm = ({
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
           <Input
             placeholder="Passengers"
+            aria-label="Number of passengers"
             type="number"
             min="1"
             max="20"
@@ -251,6 +256,7 @@ const BookingForm = ({
           />
           <Input
             placeholder="Message (optional)"
+            aria-label="Optional message"
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
             className="min-w-0 text-base sm:text-sm"

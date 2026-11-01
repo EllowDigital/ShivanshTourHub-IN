@@ -31,8 +31,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <a className="skip-link" href="#main-content">Skip to content</a>
         <Navbar />
-        <main>
+        <main id="main-content" tabIndex={-1}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />

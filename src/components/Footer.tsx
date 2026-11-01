@@ -8,6 +8,10 @@ const quickLinks = [
   { to: "/routes", label: "Taxi Routes" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/reviews", label: "Reviews" },
+  { to: "/blog", label: "Travel Blog" },
+  { to: "/service-areas", label: "Service Areas" },
 ];
 
 const popularRoutes = [
@@ -21,6 +25,7 @@ const popularRoutes = [
 
 const Footer = () => (
   <footer className="bg-primary text-primary-foreground">
+    <div className="heritage-rule" />
     <div className="container mx-auto px-4 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
         <Link to="/" className="flex items-center gap-2 mb-3">
@@ -36,7 +41,7 @@ const Footer = () => (
       </div>
 
       <div>
-        <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase tracking-wider">
+        <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase">
           Quick Links
         </h4>
         <ul className="space-y-2 text-sm text-primary-foreground/80">
@@ -54,7 +59,7 @@ const Footer = () => (
       </div>
 
       <div>
-        <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase tracking-wider">
+        <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase">
           Popular Routes
         </h4>
         <ul className="space-y-2 text-sm text-primary-foreground/80">
@@ -72,7 +77,7 @@ const Footer = () => (
       </div>
 
       <div>
-        <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase tracking-wider">
+        <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase">
           Contact Us
         </h4>
         <ul className="space-y-3 text-sm text-primary-foreground/80">

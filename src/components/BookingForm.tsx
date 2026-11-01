@@ -243,7 +243,7 @@ const BookingForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Input
             placeholder="Passengers"
             aria-label="Number of passengers"

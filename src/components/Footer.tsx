@@ -66,7 +66,7 @@ const Footer = () => (
           {popularRoutes.map((r) => (
             <li key={r}>
               <Link
-                to={`/${r.toLowerCase().replaceAll(" ", "-")}-taxi`}
+                to={`/${r.toLowerCase().replace(/ /g, "-")}-taxi`}
                 className="hover:text-secondary transition-colors"
               >
                 {r}

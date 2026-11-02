@@ -37,30 +37,41 @@ const App = () => (
         </a>
         <Navbar />
         <main id="main-content" tabIndex={-1}>
-          <Suspense fallback={<div className="page-loading" role="status" aria-label="Loading page"><span className="page-loading-spinner" />Loading…</div>}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/fleet" element={<Fleet />} />
-            <Route path="/tours" element={<Tours />} />
-            <Route path="/routes" element={<TaxiRoutes />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogArticle />} />
-            <Route path="/service-areas" element={<ServiceAreas />} />
-            <Route
-              path="/:fromSlug-to-:toSlug-taxi"
-              element={<RouteLanding />}
-            />
-            <Route
-              path="/:fromSlug-to-:toSlug-cab-service"
-              element={<RouteLanding />}
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense
+            fallback={
+              <div
+                className="page-loading"
+                role="status"
+                aria-label="Loading page"
+              >
+                <span className="page-loading-spinner" />
+                Loading…
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/fleet" element={<Fleet />} />
+              <Route path="/tours" element={<Tours />} />
+              <Route path="/routes" element={<TaxiRoutes />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/reviews" element={<Reviews />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogArticle />} />
+              <Route path="/service-areas" element={<ServiceAreas />} />
+              <Route
+                path="/:fromSlug-to-:toSlug-taxi"
+                element={<RouteLanding />}
+              />
+              <Route
+                path="/:fromSlug-to-:toSlug-cab-service"
+                element={<RouteLanding />}
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </Suspense>
         </main>
         <Footer />

@@ -4,7 +4,12 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Camera, ArrowLeft, ArrowRight } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 import tajMahal from "@/assets/gallery/taj-mahal.jpg?w=1200&format=webp";
 import happyFamily from "@/assets/gallery/happy-family.jpg?w=1200&format=webp";
@@ -106,7 +111,8 @@ const Gallery = () => {
         <div className="container mx-auto">
           <div className="flex flex-wrap justify-center gap-2 mb-8 sm:mb-10">
             {categories.map((cat) => (
-              <Button variant="ghost"
+              <Button
+                variant="ghost"
                 key={cat}
                 aria-pressed={active === cat}
                 onClick={() => setActive(cat)}
@@ -118,7 +124,8 @@ const Gallery = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
             {filtered.map((g, i) => (
-              <Button variant="ghost"
+              <Button
+                variant="ghost"
                 key={i}
                 aria-label={`View ${g.title} photo`}
                 className="group h-auto block p-0 whitespace-normal text-left rounded-lg overflow-hidden hover-lift border border-border bg-card"
@@ -142,9 +149,7 @@ const Gallery = () => {
                   <h3 className="font-heading font-semibold text-foreground text-base mt-1">
                     {g.title}
                   </h3>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {g.desc}
-                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">{g.desc}</p>
                 </div>
               </Button>
             ))}
@@ -190,7 +195,12 @@ const Gallery = () => {
       </section>
 
       {lightbox !== null && (
-        <Dialog open onOpenChange={(value) => { if (!value) setLightbox(null); }}>
+        <Dialog
+          open
+          onOpenChange={(value) => {
+            if (!value) setLightbox(null);
+          }}
+        >
           <DialogContent className="z-[100] w-[calc(100%-2rem)] max-w-4xl max-h-[90dvh] overflow-y-auto p-4 pt-12">
             <img
               src={galleryItems[lightbox].img}

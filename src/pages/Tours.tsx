@@ -178,7 +178,13 @@ const Tours = () => (
             className="bg-card rounded-lg border border-border overflow-hidden hover-lift"
           >
             <img
-              src={i === 2 ? prayagrajTravel : i === 3 ? vrindavanTravel : `/hero/${["ayodhya-temple", "varanasi-ghats", "", "", "rishikesh-bridge", "agra-taj", "jaipur-hawa-mahal", "manali-mountains"][i]}-tablet.webp`}
+              src={
+                i === 2
+                  ? prayagrajTravel
+                  : i === 3
+                    ? vrindavanTravel
+                    : `/hero/${["ayodhya-temple", "varanasi-ghats", "", "", "rishikesh-bridge", "agra-taj", "jaipur-hawa-mahal", "manali-mountains"][i]}-tablet.webp`
+              }
               alt={t.name}
               width={1024}
               height={576}
@@ -214,7 +220,8 @@ const Tours = () => (
               <details className="group border-b border-border pb-4">
                 <summary className="cursor-pointer font-heading font-semibold text-foreground min-h-11 flex items-center gap-2 text-base">
                   <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />{" "}
-                  Day-by-day itinerary <ArrowRight className="ml-auto h-4 w-4 transition-transform group-open:rotate-90" />
+                  Day-by-day itinerary{" "}
+                  <ArrowRight className="ml-auto h-4 w-4 transition-transform group-open:rotate-90" />
                 </summary>
                 <ul className="space-y-2 mt-3">
                   {t.itinerary.map((day, j) => (
@@ -243,12 +250,15 @@ const Tours = () => (
                     </li>
                   ))}
                 </ul>
-                  <Button asChild
-                    variant="hero"
-                    className="w-full h-11 gap-2 text-sm"
-                  >
-                    <Link to="/contact">Enquire Now <ArrowRight className="h-3.5 w-3.5" /></Link>
-                  </Button>
+                <Button
+                  asChild
+                  variant="hero"
+                  className="w-full h-11 gap-2 text-sm"
+                >
+                  <Link to="/contact">
+                    Enquire Now <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
               </div>
             </div>
           </article>

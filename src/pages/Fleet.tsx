@@ -102,12 +102,13 @@ const Fleet = () => (
               <p className="mt-3 text-lg sm:text-xl font-bold text-secondary">
                 {c.price}
               </p>
-                <Button asChild
-                  variant="hero"
-                  className="w-full mt-auto h-11 text-sm"
-                >
-                  <Link to="/contact">Book Now</Link>
-                </Button>
+              <Button
+                asChild
+                variant="hero"
+                className="w-full mt-auto h-11 text-sm"
+              >
+                <Link to="/contact">Book Now</Link>
+              </Button>
             </div>
           </article>
         ))}

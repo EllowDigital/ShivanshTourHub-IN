@@ -51,7 +51,7 @@
     --chat-canvas: 150 18% 96%;
     --chat-border: 151 20% 84%;
     --navigation-height: 59px;
-    --shadow-booking: 0 12px 36px hsl(var(--primary) / .08);
+    --shadow-booking: 0 12px 36px hsl(var(--primary) / 0.08);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -140,9 +140,15 @@ html {
   scroll-padding-top: calc(var(--navigation-height) + 16px);
 }
 
-main > div:not(.homepage) { padding-top: var(--navigation-height); }
-.home-intro { padding-top: var(--navigation-height); }
-.booking-form { box-shadow: var(--shadow-booking); }
+main > div:not(.homepage) {
+  padding-top: var(--navigation-height);
+}
+.home-intro {
+  padding-top: var(--navigation-height);
+}
+.booking-form {
+  box-shadow: var(--shadow-booking);
+}
 .page-loading {
   min-height: 70vh;
   padding-top: var(--navigation-height);
@@ -158,14 +164,31 @@ main > div:not(.homepage) { padding-top: var(--navigation-height); }
   border: 2px solid hsl(var(--border));
   border-top-color: hsl(var(--heritage));
   border-radius: 50%;
-  animation: loading-spin .8s linear infinite;
+  animation: loading-spin 0.8s linear infinite;
 }
-@keyframes loading-spin { to { transform: rotate(360deg); } }
-@media (min-width: 640px) { :root { --navigation-height: 67px; } }
-@media (min-width: 1024px) { :root { --navigation-height: 95px; } }
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (min-width: 640px) {
+  :root {
+    --navigation-height: 67px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --navigation-height: 95px;
+  }
+}
 @media (max-width: 639px) {
-  .page-header { background-image: var(--header-overlay), url("/hero/agra-taj-sunrise-mobile.webp"); }
-  .homepage .home-intro h1 { font-size: 2.25rem; }
+  .page-header {
+    background-image:
+      var(--header-overlay), url("/hero/agra-taj-sunrise-mobile.webp");
+  }
+  .homepage .home-intro h1 {
+    font-size: 2.25rem;
+  }
 }
 
 /* Smooth scrollbar */
@@ -239,26 +262,42 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   width: min(390px, calc(100vw - 2rem));
   max-height: calc(100dvh - 7rem - env(safe-area-inset-bottom));
 }
-.chat-header { position: relative; padding-bottom: 1rem; }
+.chat-header {
+  position: relative;
+  padding-bottom: 1rem;
+}
 .chat-header::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: auto 0 0;
   height: 4px;
-  background: linear-gradient(90deg, hsl(var(--chat-saffron)) 0% 33.33%, hsl(var(--card)) 33.33% 66.66%, hsl(var(--chat-green)) 66.66% 100%);
+  background: linear-gradient(
+    90deg,
+    hsl(var(--chat-saffron)) 0% 33.33%,
+    hsl(var(--card)) 33.33% 66.66%,
+    hsl(var(--chat-green)) 66.66% 100%
+  );
 }
-.chat-progress { background: hsl(var(--chat-saffron)); }
+.chat-progress {
+  background: hsl(var(--chat-saffron));
+}
 .chat-answer {
   background: hsl(var(--chat-answer));
   color: hsl(var(--chat-answer-foreground));
-  border: 1px solid hsl(var(--chat-saffron) / .3);
+  border: 1px solid hsl(var(--chat-saffron) / 0.3);
 }
-.chat-answer:hover { background: hsl(var(--chat-saffron) / .18); }
-.chat-answer-icon { color: hsl(var(--chat-answer-foreground)); }
+.chat-answer:hover {
+  background: hsl(var(--chat-saffron) / 0.18);
+}
+.chat-answer-icon {
+  color: hsl(var(--chat-answer-foreground));
+}
 .whatsapp-launcher {
   --success: var(--chat-green);
   border: 2px solid hsl(var(--card));
-  box-shadow: 0 0 0 3px hsl(var(--chat-saffron)), var(--shadow-card);
+  box-shadow:
+    0 0 0 3px hsl(var(--chat-saffron)),
+    var(--shadow-card);
 }
 .homepage .container {
   width: 100%;

@@ -396,24 +396,33 @@ const Index = () => {
       {/* Image-led introduction with a compact, separate booking band. */}
       <section className="home-intro relative overflow-hidden bg-primary">
         <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (index === 0 || index === currentHeroSlide) && (
-            <picture
-              key={slide.title}
-              className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`}
-              aria-hidden={index !== currentHeroSlide}
-            >
-              <source media="(min-width: 1024px)" srcSet={slide.desktopImage} />
-              <source media="(min-width: 640px)" srcSet={slide.tabletImage} />
-              <img
-                src={slide.mobileImage}
-                alt={slide.alt}
-                className="h-full w-full object-cover"
-                loading={index === 0 ? "eager" : "lazy"}
-                fetchPriority={index === 0 ? "high" : "auto"}
-                decoding="async"
-              />
-            </picture>
-          ))}
+          {heroSlides.map(
+            (slide, index) =>
+              (index === 0 || index === currentHeroSlide) && (
+                <picture
+                  key={slide.title}
+                  className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`}
+                  aria-hidden={index !== currentHeroSlide}
+                >
+                  <source
+                    media="(min-width: 1024px)"
+                    srcSet={slide.desktopImage}
+                  />
+                  <source
+                    media="(min-width: 640px)"
+                    srcSet={slide.tabletImage}
+                  />
+                  <img
+                    src={slide.mobileImage}
+                    alt={slide.alt}
+                    className="h-full w-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
+                  />
+                </picture>
+              ),
+          )}
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/10" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-9 sm:px-8 sm:py-12 lg:py-14">

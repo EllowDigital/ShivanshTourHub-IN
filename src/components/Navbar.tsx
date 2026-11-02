@@ -43,9 +43,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-card shadow-md"
-          : "bg-card shadow-sm"
+        scrolled ? "bg-card shadow-md" : "bg-card shadow-sm"
       }`}
     >
       <div className="heritage-rule" />
@@ -157,7 +155,7 @@ const Navbar = () => {
             )}
           </div>
           <a href="tel:+918865038345" className="ml-2">
-                <span className="inline-flex h-11 items-center gap-1.5 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground">
+            <span className="inline-flex h-11 items-center gap-1.5 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground">
               <Phone className="h-3.5 w-3.5" /> Call Now
             </span>
           </a>

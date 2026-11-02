@@ -4,12 +4,12 @@ import BookingForm from "@/components/BookingForm";
 import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { heroSlides } from "@/lib/heroSlides";
-import swiftDzire from "@/assets/swift-dzire.jpg";
-import ertiga from "@/assets/ertiga.png";
-import innova from "@/assets/innova.png";
-import tempoTraveller from "@/assets/tempo-traveller.png";
-import vrindavanTravel from "@/assets/vrindavan-travel.jpg";
-import prayagrajTravel from "@/assets/prayagraj-travel.jpg";
+import swiftDzire from "@/assets/swift-dzire.jpg?w=800&format=webp";
+import ertiga from "@/assets/ertiga.png?w=800&format=webp";
+import innova from "@/assets/innova.png?w=800&format=webp";
+import tempoTraveller from "@/assets/tempo-traveller.png?w=800&format=webp";
+import vrindavanTravel from "@/assets/vrindavan-travel.jpg?w=800&format=webp";
+import prayagrajTravel from "@/assets/prayagraj-travel.jpg?w=800&format=webp";
 import {
   Plane,
   Car,
@@ -394,9 +394,9 @@ const Index = () => {
       />
 
       {/* Image-led introduction with a compact, separate booking band. */}
-      <section className="relative overflow-hidden bg-primary pt-14 sm:pt-16 lg:pt-24">
+      <section className="home-intro relative overflow-hidden bg-primary">
         <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
+          {heroSlides.map((slide, index) => (index === 0 || index === currentHeroSlide) && (
             <picture
               key={slide.title}
               className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`}
@@ -409,12 +409,14 @@ const Index = () => {
                 alt={slide.alt}
                 className="h-full w-full object-cover"
                 loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                decoding="async"
               />
             </picture>
           ))}
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/10" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-8 sm:py-14 lg:py-16">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-9 sm:px-8 sm:py-12 lg:py-14">
           <div className="max-w-2xl text-primary-foreground">
             <p className="mb-4 text-sm font-semibold text-secondary">
               NAMASTE · WELCOME TO YOUR NEXT JOURNEY
@@ -459,7 +461,7 @@ const Index = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 hover:bg-primary-foreground/10"
+                className="h-11 w-11 hover:bg-primary-foreground/10"
                 aria-label={
                   heroPaused
                     ? "Play travel slideshow"
@@ -474,7 +476,7 @@ const Index = () => {
                   key={slide.title}
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 hover:bg-primary-foreground/10"
+                  className="h-8 w-8 hover:bg-primary-foreground/10"
                   aria-label={`Show hero image ${index + 1}: ${slide.title}`}
                   aria-pressed={index === currentHeroSlide}
                   onClick={() => setCurrentHeroSlide(index)}
@@ -550,19 +552,19 @@ const Index = () => {
             title="Our Services"
             subtitle="Comprehensive taxi & tour services to make your travel hassle-free."
           />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {services.map((s, i) => (
               <div
                 key={i}
-                className="bg-card rounded-lg p-4 sm:p-6 text-center hover-lift shadow-md border border-border/50 group"
+                className="bg-card rounded-lg p-5 sm:p-6 text-center hover-lift border border-border group"
               >
                 <div className="mx-auto mb-3 sm:mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
                   <s.icon className="h-6 w-6 sm:h-7 sm:w-7 text-secondary" />
                 </div>
-                <h3 className="font-heading font-semibold text-foreground text-xs sm:text-base">
+                <h3 className="font-heading font-semibold text-foreground text-base">
                   {s.title}
                 </h3>
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {s.desc}
                 </p>
               </div>
@@ -592,7 +594,7 @@ const Index = () => {
                 key={i}
                 className="bg-card rounded-lg overflow-hidden shadow-md hover-lift border border-border/50 group"
               >
-                <div className="bg-gradient-to-b from-accent/50 to-muted p-3 sm:p-4 flex items-center justify-center h-44 sm:h-40">
+                <div className="bg-muted p-4 flex items-center justify-center h-44">
                   <img
                     src={c.img}
                     alt={`${c.name} taxi for hire in Agra`}
@@ -692,7 +694,7 @@ const Index = () => {
                       ? prayagrajTravel
                       : i === 3
                         ? vrindavanTravel
-                        : `/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.jpg`
+                        : `/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.webp`
                   }
                   alt={`${d.name} destination${i === 2 || i === 3 ? " illustration" : ""}`}
                   width={1024}
@@ -700,7 +702,7 @@ const Index = () => {
                   loading="lazy"
                   className="aspect-[16/9] w-full object-cover"
                 />
-                <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 sm:p-5">
+                <div className="bg-card p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-secondary/15 flex items-center justify-center shrink-0 group-hover:bg-secondary/25 transition-colors">
@@ -735,7 +737,7 @@ const Index = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-[10px] sm:text-xs h-7 px-3"
+                      className="text-xs h-11 px-3"
                     >
                       View Details
                     </Button>

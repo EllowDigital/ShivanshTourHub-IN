@@ -5,3 +5,5 @@
 - Keep chat draft parsing, validation, and message formatting in `src/lib/chatBooking.ts` so restored and edited bookings use the same checks before handoff.
 - Generate the sitemap with `bun run sitemap:generate` from `src/lib/sitemap.ts`; shared content sources prevent missing blog and route URLs, and modification dates require page-specific editorial evidence.
 - Keep shared travel styling in global CSS and semantic tokens so page headers, navigation, and booking surfaces remain consistent across the website.
+- Lazy-load secondary pages, use build-time WebP transformations for bundled photos and precompressed responsive WebP files for public imagery to keep initial loading light.
+- Use the shared navigation-height token for page offsets and anchor scrolling so content stays visible beneath the fixed header at each breakpoint.

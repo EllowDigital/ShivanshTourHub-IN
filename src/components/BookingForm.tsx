@@ -132,17 +132,15 @@ const BookingForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card rounded-lg shadow-xl border border-border border-t-4 border-t-secondary p-4 sm:p-6 w-full min-w-0"
+      className="booking-form bg-card rounded-lg border border-border border-t-4 border-t-secondary p-4 sm:p-6 w-full min-w-0"
     >
       <h3 className="font-heading text-lg font-bold text-foreground text-center">
         Book Your Taxi
       </h3>
-      <p className="text-xs text-muted-foreground text-center mb-4">
-        Your next journey starts here.
-      </p>
+      <div className="mb-4" />
 
       {/* Trip Type Tabs */}
-      <div className="grid grid-cols-4 gap-1 bg-muted rounded-lg p-1 mb-4">
+      <div className="grid grid-cols-2 min-[360px]:grid-cols-4 gap-1 bg-muted rounded-lg p-1 mb-4">
         {tripTypes.map((t) => (
           <Button
             variant="ghost"
@@ -150,7 +148,7 @@ const BookingForm = ({
             type="button"
             aria-pressed={tripType === t}
             onClick={() => setTripType(t)}
-            className={`h-10 px-1 text-xs font-medium rounded-md transition-all ${
+            className={`h-11 px-1 text-xs font-medium rounded-md transition-colors ${
               tripType === t
                 ? "bg-secondary text-secondary-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -274,7 +272,7 @@ const BookingForm = ({
         </div>
       </div>
 
-      <Button type="submit" variant="hero" className="w-full gap-2 mt-4">
+      <Button type="submit" variant="hero" className="w-full h-12 gap-2 mt-4">
         <Send className="h-4 w-4" /> Book via WhatsApp
       </Button>
       <p className="text-[10px] text-center text-muted-foreground mt-2">

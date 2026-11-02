@@ -50,6 +50,8 @@
     --chat-answer-foreground: 24 64% 24%;
     --chat-canvas: 150 18% 96%;
     --chat-border: 151 20% 84%;
+    --navigation-height: 59px;
+    --shadow-booking: 0 12px 36px hsl(var(--primary) / .08);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -118,7 +120,7 @@
   .page-header {
     @apply bg-primary text-primary-foreground py-12 px-4 sm:py-16 md:py-20;
     background-image:
-      var(--header-overlay), url("/hero/agra-taj-sunrise-desktop.jpg");
+      var(--header-overlay), url("/hero/agra-taj-sunrise-desktop.webp");
     background-size: cover;
     background-position: center 45%;
     border-bottom: 4px solid hsl(var(--secondary));
@@ -135,6 +137,35 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--navigation-height) + 16px);
+}
+
+main > div:not(.homepage) { padding-top: var(--navigation-height); }
+.home-intro { padding-top: var(--navigation-height); }
+.booking-form { box-shadow: var(--shadow-booking); }
+.page-loading {
+  min-height: 70vh;
+  padding-top: var(--navigation-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: hsl(var(--muted-foreground));
+}
+.page-loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid hsl(var(--border));
+  border-top-color: hsl(var(--heritage));
+  border-radius: 50%;
+  animation: loading-spin .8s linear infinite;
+}
+@keyframes loading-spin { to { transform: rotate(360deg); } }
+@media (min-width: 640px) { :root { --navigation-height: 67px; } }
+@media (min-width: 1024px) { :root { --navigation-height: 95px; } }
+@media (max-width: 639px) {
+  .page-header { background-image: var(--header-overlay), url("/hero/agra-taj-sunrise-mobile.webp"); }
+  .homepage .home-intro h1 { font-size: 2.25rem; }
 }
 
 /* Smooth scrollbar */

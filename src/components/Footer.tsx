@@ -26,7 +26,7 @@ const popularRoutes = [
 const Footer = () => (
   <footer className="bg-primary text-primary-foreground">
     <div className="heritage-rule" />
-    <div className="container mx-auto px-4 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="container mx-auto px-4 py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
       <div>
         <Link to="/" className="flex items-center gap-2 mb-3">
           <Car className="h-6 w-6 text-secondary" />
@@ -44,12 +44,12 @@ const Footer = () => (
         <h4 className="font-heading font-semibold mb-4 text-secondary text-sm uppercase">
           Quick Links
         </h4>
-        <ul className="space-y-2 text-sm text-primary-foreground/80">
+        <ul className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm text-primary-foreground/80">
           {quickLinks.map((l) => (
             <li key={l.to}>
               <Link
                 to={l.to}
-                className="hover:text-secondary transition-colors"
+                className="inline-flex min-h-10 items-center hover:text-secondary transition-colors"
               >
                 {l.label}
               </Link>
@@ -66,7 +66,7 @@ const Footer = () => (
           {popularRoutes.map((r) => (
             <li key={r}>
               <Link
-                to="/routes"
+                to={`/${r.toLowerCase().replaceAll(" ", "-")}-taxi`}
                 className="hover:text-secondary transition-colors"
               >
                 {r}

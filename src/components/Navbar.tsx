@@ -24,7 +24,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -44,8 +44,8 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-card/98 backdrop-blur-lg shadow-md"
-          : "bg-card/95 backdrop-blur-md shadow-sm"
+          ? "bg-card shadow-md"
+          : "bg-card shadow-sm"
       }`}
     >
       <div className="heritage-rule" />
@@ -157,9 +157,9 @@ const Navbar = () => {
             )}
           </div>
           <a href="tel:+918865038345" className="ml-2">
-            <Button size="sm" variant="hero" className="gap-1.5">
+                <span className="inline-flex h-11 items-center gap-1.5 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground">
               <Phone className="h-3.5 w-3.5" /> Call Now
-            </Button>
+            </span>
           </a>
         </div>
 

@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
+    --background: 0 0% 100%;
     --foreground: 210 40% 10%;
 
     --card: 0 0% 100%;
@@ -17,10 +17,10 @@
     --primary-foreground: 0 0% 100%;
 
     --secondary: 37 90% 51%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary-foreground: 210 40% 10%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 210 10% 45%;
+    --muted: 160 12% 96%;
+    --muted-foreground: 210 10% 38%;
 
     --accent: 207 80% 95%;
     --accent-foreground: 207 80% 21%;
@@ -32,10 +32,26 @@
     --input: 210 20% 88%;
     --ring: 207 80% 21%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
+    --heritage: 152 34% 28%;
+    --shadow-card: 0 8px 28px hsl(var(--primary) / 0.06);
+    --header-overlay: linear-gradient(
+      90deg,
+      hsl(var(--primary) / 0.94),
+      hsl(var(--primary) / 0.73)
+    );
 
     --success: 142 70% 40%;
     --success-foreground: 0 0% 100%;
+
+    --chat-green: 153 48% 25%;
+    --chat-saffron: 28 92% 53%;
+    --chat-answer: 30 100% 94%;
+    --chat-answer-foreground: 24 64% 24%;
+    --chat-canvas: 150 18% 96%;
+    --chat-border: 151 20% 84%;
+    --navigation-height: 59px;
+    --shadow-booking: 0 12px 36px hsl(var(--primary) / 0.08);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -58,6 +74,25 @@
     overflow-x: hidden;
   }
 
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 4px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
   h1,
   h2,
   h3,
@@ -78,11 +113,17 @@
   }
 
   .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+    @apply transition-all duration-300 hover:-translate-y-1;
+    box-shadow: var(--shadow-card);
   }
 
   .page-header {
     @apply bg-primary text-primary-foreground py-12 px-4 sm:py-16 md:py-20;
+    background-image:
+      var(--header-overlay), url("/hero/agra-taj-sunrise-desktop.webp");
+    background-size: cover;
+    background-position: center 45%;
+    border-bottom: 4px solid hsl(var(--secondary));
   }
 
   .page-header-title {
@@ -96,6 +137,58 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--navigation-height) + 16px);
+}
+
+main > div:not(.homepage) {
+  padding-top: var(--navigation-height);
+}
+.home-intro {
+  padding-top: var(--navigation-height);
+}
+.booking-form {
+  box-shadow: var(--shadow-booking);
+}
+.page-loading {
+  min-height: 70vh;
+  padding-top: var(--navigation-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: hsl(var(--muted-foreground));
+}
+.page-loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid hsl(var(--border));
+  border-top-color: hsl(var(--heritage));
+  border-radius: 50%;
+  animation: loading-spin 0.8s linear infinite;
+}
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (min-width: 640px) {
+  :root {
+    --navigation-height: 67px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --navigation-height: 95px;
+  }
+}
+@media (max-width: 639px) {
+  .page-header {
+    background-image:
+      var(--header-overlay), url("/hero/agra-taj-sunrise-mobile.webp");
+  }
+  .homepage .home-intro h1 {
+    font-size: 2.25rem;
+  }
 }
 
 /* Smooth scrollbar */
@@ -159,15 +252,93 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   bottom: max(1rem, env(safe-area-inset-bottom));
 }
 .whatsapp-panel {
+  --success: var(--chat-green);
+  --ring: var(--chat-green);
+  --border: var(--chat-border);
+  --input: var(--chat-border);
+  --muted: var(--chat-canvas);
   right: max(1rem, env(safe-area-inset-right));
   bottom: calc(5.5rem + env(safe-area-inset-bottom));
   width: min(390px, calc(100vw - 2rem));
   max-height: calc(100dvh - 7rem - env(safe-area-inset-bottom));
 }
+.chat-header {
+  position: relative;
+  padding-bottom: 1rem;
+}
+.chat-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--chat-saffron)) 0% 33.33%,
+    hsl(var(--card)) 33.33% 66.66%,
+    hsl(var(--chat-green)) 66.66% 100%
+  );
+}
+.chat-progress {
+  background: hsl(var(--chat-saffron));
+}
+.chat-answer {
+  background: hsl(var(--chat-answer));
+  color: hsl(var(--chat-answer-foreground));
+  border: 1px solid hsl(var(--chat-saffron) / 0.3);
+}
+.chat-answer:hover {
+  background: hsl(var(--chat-saffron) / 0.18);
+}
+.chat-answer-icon {
+  color: hsl(var(--chat-answer-foreground));
+}
+.whatsapp-launcher {
+  --success: var(--chat-green);
+  border: 2px solid hsl(var(--card));
+  box-shadow:
+    0 0 0 3px hsl(var(--chat-saffron)),
+    var(--shadow-card);
+}
 .homepage .container {
   width: 100%;
   max-width: 1280px;
   padding-inline: 0;
+}
+.heritage-rule {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--secondary)) 0% 33%,
+    hsl(var(--card)) 33% 66%,
+    hsl(var(--heritage)) 66% 100%
+  );
+}
+.section-heading-mark {
+  color: hsl(var(--heritage));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.section-heading-mark::before,
+.section-heading-mark::after {
+  content: "";
+  width: 36px;
+  height: 1px;
+  background: hsl(var(--secondary));
+}
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -5rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: hsl(var(--card));
+  color: hsl(var(--primary));
+}
+.skip-link:focus {
+  top: 0.5rem;
 }
 .homepage .section-padding {
   padding-inline: 1rem;

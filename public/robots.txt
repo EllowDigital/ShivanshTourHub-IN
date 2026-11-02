@@ -1,6 +1,5 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
 
 Sitemap: https://shivansh-tour-hub.netlify.app/sitemap.xml
-Host: https://shivansh-tour-hub.netlify.app
 

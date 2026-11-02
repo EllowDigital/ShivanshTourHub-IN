@@ -4,10 +4,12 @@ import BookingForm from "@/components/BookingForm";
 import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { heroSlides } from "@/lib/heroSlides";
-import swiftDzire from "@/assets/swift-dzire.jpg";
-import ertiga from "@/assets/ertiga.png";
-import innova from "@/assets/innova.png";
-import tempoTraveller from "@/assets/tempo-traveller.png";
+import swiftDzire from "@/assets/swift-dzire.jpg?w=800&format=webp";
+import ertiga from "@/assets/ertiga.png?w=800&format=webp";
+import innova from "@/assets/innova.png?w=800&format=webp";
+import tempoTraveller from "@/assets/tempo-traveller.png?w=800&format=webp";
+import vrindavanTravel from "@/assets/vrindavan-travel.jpg?w=800&format=webp";
+import prayagrajTravel from "@/assets/prayagraj-travel.jpg?w=800&format=webp";
 import {
   Plane,
   Car,
@@ -26,6 +28,8 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
+  Pause,
+  Play,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -336,9 +340,11 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="border border-border/50 rounded-lg overflow-hidden bg-card">
-      <button
+      <Button
+        variant="ghost"
+        aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors"
+        className="h-auto w-full flex items-center justify-between whitespace-normal p-4 sm:p-5 text-left hover:bg-accent/50 transition-colors"
       >
         <span className="font-heading font-semibold text-foreground text-xs sm:text-sm pr-4">
           {q}
@@ -348,7 +354,7 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
         ) : (
           <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
         )}
-      </button>
+      </Button>
       {open && (
         <div className="px-4 sm:px-5 pb-4 sm:pb-5">
           <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
@@ -362,15 +368,20 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
 
 const Index = () => {
   const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (
+      heroPaused ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
     const intervalId = window.setInterval(() => {
       setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 4500);
+    }, 8000);
 
     return () => window.clearInterval(intervalId);
-  }, []);
+  }, [heroPaused]);
 
   return (
     <div className="homepage">
@@ -383,32 +394,43 @@ const Index = () => {
       />
 
       {/* Image-led introduction with a compact, separate booking band. */}
-      <section className="relative overflow-hidden bg-primary pt-14 sm:pt-16 lg:pt-24">
+      <section className="home-intro relative overflow-hidden bg-primary">
         <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
-            <picture
-              key={slide.title}
-              className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`}
-              aria-hidden={index !== currentHeroSlide}
-            >
-              <source media="(min-width: 1024px)" srcSet={slide.desktopImage} />
-              <source media="(min-width: 640px)" srcSet={slide.tabletImage} />
-              <img
-                src={slide.mobileImage}
-                alt={slide.alt}
-                className="h-full w-full object-cover"
-                loading={index === 0 ? "eager" : "lazy"}
-              />
-            </picture>
-          ))}
+          {heroSlides.map(
+            (slide, index) =>
+              (index === 0 || index === currentHeroSlide) && (
+                <picture
+                  key={slide.title}
+                  className={`absolute inset-0 transition-opacity duration-700 motion-reduce:transition-none ${index === currentHeroSlide ? "opacity-100" : "opacity-0"}`}
+                  aria-hidden={index !== currentHeroSlide}
+                >
+                  <source
+                    media="(min-width: 1024px)"
+                    srcSet={slide.desktopImage}
+                  />
+                  <source
+                    media="(min-width: 640px)"
+                    srcSet={slide.tabletImage}
+                  />
+                  <img
+                    src={slide.mobileImage}
+                    alt={slide.alt}
+                    className="h-full w-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
+                  />
+                </picture>
+              ),
+          )}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/65 to-primary/25" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:py-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/55 to-primary/10" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-9 sm:px-8 sm:py-12 lg:py-14">
           <div className="max-w-2xl text-primary-foreground">
             <p className="mb-4 text-sm font-semibold text-secondary">
-              AGRA · AIRPORT · OUTSTATION · TOURS
+              NAMASTE · WELCOME TO YOUR NEXT JOURNEY
             </p>
-            <h1 className="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+            <h1 className="font-heading text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
               Shivansh Tour
               <br />
               &amp; Travels
@@ -417,7 +439,8 @@ const Index = () => {
               Reliable Taxi &amp; Tour Services Across India
             </p>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
-              Comfortable rides, affordable prices, and trusted service.
+              From the lanes of Agra to the ghats of Kashi and the hills of
+              Uttarakhand. Comfortable rides, at your pace.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild variant="hero" size="lg" className="px-5">
@@ -444,12 +467,25 @@ const Index = () => {
               </span>
             </div>
             <div className="mt-6 flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-11 w-11 hover:bg-primary-foreground/10"
+                aria-label={
+                  heroPaused
+                    ? "Play travel slideshow"
+                    : "Pause travel slideshow"
+                }
+                onClick={() => setHeroPaused(!heroPaused)}
+              >
+                {heroPaused ? <Play /> : <Pause />}
+              </Button>
               {heroSlides.map((slide, index) => (
                 <Button
                   key={slide.title}
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 hover:bg-primary-foreground/10"
+                  className="h-8 w-8 hover:bg-primary-foreground/10"
                   aria-label={`Show hero image ${index + 1}: ${slide.title}`}
                   aria-pressed={index === currentHeroSlide}
                   onClick={() => setCurrentHeroSlide(index)}
@@ -471,12 +507,11 @@ const Index = () => {
         <div className="mx-auto grid max-w-7xl items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-16">
           <div className="min-w-0">
             <p className="mb-3 text-sm font-semibold text-primary">
-              A RIDE FOR EVERY JOURNEY
+              CHALO, LET’S GO
             </p>
             <h2 className="text-2xl font-bold leading-tight sm:text-3xl">
-              Your plans.
-              <br />
-              Our wheels.
+              A little planning.
+              <br />A beautiful journey.
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
               From a quick airport drop to a family holiday, find a car that
@@ -502,15 +537,15 @@ const Index = () => {
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-secondary py-6 sm:py-8">
+      <section className="bg-muted border-y border-border py-6 sm:py-8">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             {stats.map((s, i) => (
               <div key={i}>
-                <p className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-secondary-foreground">
+                <p className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-primary">
                   {s.value}
                 </p>
-                <p className="text-xs sm:text-sm text-secondary-foreground/80 mt-1">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                   {s.label}
                 </p>
               </div>
@@ -526,19 +561,19 @@ const Index = () => {
             title="Our Services"
             subtitle="Comprehensive taxi & tour services to make your travel hassle-free."
           />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {services.map((s, i) => (
               <div
                 key={i}
-                className="bg-card rounded-lg p-4 sm:p-6 text-center hover-lift shadow-md border border-border/50 group"
+                className="bg-card rounded-lg p-5 sm:p-6 text-center hover-lift border border-border group"
               >
                 <div className="mx-auto mb-3 sm:mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
                   <s.icon className="h-6 w-6 sm:h-7 sm:w-7 text-secondary" />
                 </div>
-                <h3 className="font-heading font-semibold text-foreground text-xs sm:text-base">
+                <h3 className="font-heading font-semibold text-foreground text-base">
                   {s.title}
                 </h3>
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {s.desc}
                 </p>
               </div>
@@ -568,7 +603,7 @@ const Index = () => {
                 key={i}
                 className="bg-card rounded-lg overflow-hidden shadow-md hover-lift border border-border/50 group"
               >
-                <div className="bg-gradient-to-b from-accent/50 to-muted p-3 sm:p-4 flex items-center justify-center h-44 sm:h-40">
+                <div className="bg-muted p-4 flex items-center justify-center h-44">
                   <img
                     src={c.img}
                     alt={`${c.name} taxi for hire in Agra`}
@@ -653,7 +688,7 @@ const Index = () => {
       <section className="section-padding bg-muted">
         <div className="container mx-auto">
           <SectionHeading
-            title="Popular Tour Packages"
+            title="Discover the heart of India"
             subtitle="All-inclusive tour packages with hotel, car, and sightseeing."
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -662,7 +697,21 @@ const Index = () => {
                 key={i}
                 className="bg-card rounded-lg overflow-hidden hover-lift shadow-sm border border-border/50 group"
               >
-                <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 sm:p-5">
+                <img
+                  src={
+                    i === 2
+                      ? prayagrajTravel
+                      : i === 3
+                        ? vrindavanTravel
+                        : `/hero/${i === 0 ? "ayodhya-temple" : i === 1 ? "varanasi-ghats" : i === 4 ? "rishikesh-bridge" : "jaipur-hawa-mahal"}-tablet.webp`
+                  }
+                  alt={`${d.name} destination${i === 2 || i === 3 ? " illustration" : ""}`}
+                  width={1024}
+                  height={768}
+                  loading="lazy"
+                  className="aspect-[16/9] w-full object-cover"
+                />
+                <div className="bg-card p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-secondary/15 flex items-center justify-center shrink-0 group-hover:bg-secondary/25 transition-colors">
@@ -693,11 +742,11 @@ const Index = () => {
                   <span className="text-[10px] sm:text-xs text-muted-foreground">
                     ✅ Hotel + Car + Sightseeing
                   </span>
-                  <Link to="/tours">
+                  <Link to="/tours" aria-label={`View ${d.name} tour details`}>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-[10px] sm:text-xs h-7 px-3"
+                      className="text-xs h-11 px-3"
                     >
                       View Details
                     </Button>

@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildWhatsAppUrl, openWhatsAppMessage, WHATSAPP_CHAT_URL, WHATSAPP_HANDOFF_EVENT } from "@/lib/whatsapp";
+import {
+  buildWhatsAppUrl,
+  openWhatsAppMessage,
+  WHATSAPP_CHAT_URL,
+  WHATSAPP_HANDOFF_EVENT,
+} from "@/lib/whatsapp";
 
 describe("WhatsApp booking links", () => {
   it("uses wa.me with digits-only number and full encoded booking text", () => {
@@ -26,11 +31,19 @@ describe("whatsapp encoding round-trip", () => {
 });
 
 it("retains the complete message even when the browser launch throws", () => {
-  const launch = vi.spyOn(window, "open").mockImplementation(() => { throw new Error("blocked"); });
+  const launch = vi.spyOn(window, "open").mockImplementation(() => {
+    throw new Error("blocked");
+  });
   const listener = vi.fn();
   window.addEventListener(WHATSAPP_HANDOFF_EVENT, listener);
-  expect(openWhatsAppMessage("918865038345", "Pickup: Agra\nDrop: Delhi")).toBe(true);
-  expect(listener.mock.calls[0][0].detail).toEqual({ phone: "918865038345", message: "Pickup: Agra\nDrop: Delhi", popupBlocked: true });
+  expect(openWhatsAppMessage("918865038345", "Pickup: Agra\nDrop: Delhi")).toBe(
+    true,
+  );
+  expect(listener.mock.calls[0][0].detail).toEqual({
+    phone: "918865038345",
+    message: "Pickup: Agra\nDrop: Delhi",
+    popupBlocked: true,
+  });
   window.removeEventListener(WHATSAPP_HANDOFF_EVENT, listener);
   launch.mockRestore();
 });

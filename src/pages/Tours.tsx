@@ -2,6 +2,8 @@
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import vrindavanTravel from "@/assets/vrindavan-travel.jpg?w=800&format=webp";
+import prayagrajTravel from "@/assets/prayagraj-travel.jpg?w=800&format=webp";
 import {
   MapPin,
   Clock,
@@ -169,14 +171,29 @@ const Tours = () => (
     </section>
 
     <section className="section-padding bg-background">
-      <div className="container mx-auto space-y-6 sm:space-y-8">
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-start">
         {tours.map((t, i) => (
           <article
             key={i}
-            className="bg-card rounded-xl shadow-md border border-border/50 overflow-hidden"
+            className="bg-card rounded-lg border border-border overflow-hidden hover-lift"
           >
+            <img
+              src={
+                i === 2
+                  ? prayagrajTravel
+                  : i === 3
+                    ? vrindavanTravel
+                    : `/hero/${["ayodhya-temple", "varanasi-ghats", "", "", "rishikesh-bridge", "agra-taj", "jaipur-hawa-mahal", "manali-mountains"][i]}-tablet.webp`
+              }
+              alt={t.name}
+              width={1024}
+              height={576}
+              loading="lazy"
+              decoding="async"
+              className="aspect-[16/9] w-full object-cover"
+            />
             <div className="bg-accent/50 p-4 sm:p-6 border-b border-border">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-secondary/15 flex items-center justify-center shrink-0">
                     <MapPin className="h-5 w-5 text-secondary" />
@@ -185,7 +202,7 @@ const Tours = () => (
                     {t.name}
                   </h2>
                 </div>
-                <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> {t.duration}
                   </span>
@@ -199,13 +216,14 @@ const Tours = () => (
                 {t.highlights}
               </p>
             </div>
-            <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <h3 className="font-heading font-semibold text-foreground mb-3 flex items-center gap-2 text-sm sm:text-base">
+            <div className="p-4 sm:p-6 space-y-5">
+              <details className="group border-b border-border pb-4">
+                <summary className="cursor-pointer font-heading font-semibold text-foreground min-h-11 flex items-center gap-2 text-base">
                   <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />{" "}
-                  Itinerary
-                </h3>
-                <ul className="space-y-2">
+                  Day-by-day itinerary{" "}
+                  <ArrowRight className="ml-auto h-4 w-4 transition-transform group-open:rotate-90" />
+                </summary>
+                <ul className="space-y-2 mt-3">
                   {t.itinerary.map((day, j) => (
                     <li
                       key={j}
@@ -215,13 +233,13 @@ const Tours = () => (
                     </li>
                   ))}
                 </ul>
-              </div>
+              </details>
               <div>
                 <h3 className="font-heading font-semibold text-foreground mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />{" "}
                   What's Included
                 </h3>
-                <ul className="space-y-1.5 mb-5">
+                <ul className="flex flex-wrap gap-x-4 gap-y-2 mb-5">
                   {t.included.map((item, j) => (
                     <li
                       key={j}
@@ -232,14 +250,15 @@ const Tours = () => (
                     </li>
                   ))}
                 </ul>
-                <Link to="/contact">
-                  <Button
-                    variant="hero"
-                    className="w-full sm:w-auto gap-2 text-xs sm:text-sm"
-                  >
+                <Button
+                  asChild
+                  variant="hero"
+                  className="w-full h-11 gap-2 text-sm"
+                >
+                  <Link to="/contact">
                     Enquire Now <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </div>
           </article>

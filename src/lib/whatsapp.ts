@@ -23,7 +23,11 @@ export const openWhatsAppMessage = (
   // Only the official wa.me chat link is used. Always a new tab: WhatsApp refuses to load inside frames.
   let popupBlocked = false;
   try {
-    window.open(buildWhatsAppUrl(phone, message), "_blank", "noopener,noreferrer");
+    window.open(
+      buildWhatsAppUrl(phone, message),
+      "_blank",
+      "noopener,noreferrer",
+    );
     // A null result with noopener is inconclusive; do not claim a block or success.
   } catch {
     popupBlocked = true;

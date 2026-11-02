@@ -12,6 +12,7 @@ const navLinks = [
   { to: "/service-areas", label: "Service Areas" },
   { to: "/reviews", label: "Reviews" },
   { to: "/blog", label: "Blog" },
+  { to: "/gallery", label: "Gallery" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
@@ -23,7 +24,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -31,18 +32,25 @@ const Navbar = () => {
     setOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-card/98 backdrop-blur-lg shadow-md"
-          : "bg-card/95 backdrop-blur-md shadow-sm"
+        scrolled ? "bg-card shadow-md" : "bg-card shadow-sm"
       }`}
     >
+      <div className="heritage-rule" />
       {/* Top bar with phone */}
       <div className="bg-primary text-primary-foreground text-xs py-1.5 px-4 hidden lg:block">
         <div className="container mx-auto flex items-center justify-between">
-          <span>📍 Serving across India from Agra, UP</span>
+          <span>Namaste! Your journey starts in Agra.</span>
           <div className="flex items-center gap-4">
             <a
               href="mailto:shivanshtourandtravel.in@gmail.com"
@@ -82,23 +90,74 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden xl:flex items-center gap-0 2xl:gap-1">
-          {navLinks.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={`px-2 py-2 rounded-md text-xs 2xl:text-sm font-medium transition-colors hover:text-secondary hover:bg-accent ${
-                location.pathname === l.to
-                  ? "text-secondary bg-accent"
-                  : "text-foreground"
-              }`}
+          {navLinks
+            .filter((l) =>
+              [
+                "/",
+                "/services",
+                "/fleet",
+                "/tours",
+                "/routes",
+                "/contact",
+              ].includes(l.to),
+            )
+            .map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                aria-current={location.pathname === l.to ? "page" : undefined}
+                className={`px-3 py-3 rounded-md text-sm font-medium transition-colors hover:text-primary hover:bg-accent ${
+                  location.pathname === l.to
+                    ? "text-secondary bg-accent"
+                    : "text-foreground"
+                }`}
+              >
+                {l.label}
+              </Link>
+            ))}
+          <div className="relative">
+            <Button
+              variant="ghost"
+              aria-expanded={open}
+              aria-controls="desktop-more-menu"
+              onClick={() => setOpen(!open)}
             >
-              {l.label}
-            </Link>
-          ))}
-          <a href="tel:+918865038345" className="ml-2">
-            <Button size="sm" variant="hero" className="gap-1.5">
-              <Phone className="h-3.5 w-3.5" /> Call Now
+              More {open ? <X /> : <Menu />}
             </Button>
+            {open && (
+              <div
+                id="desktop-more-menu"
+                className="absolute right-0 top-full mt-3 w-52 rounded-lg border border-border bg-card p-2 shadow-lg"
+              >
+                {navLinks
+                  .filter((l) =>
+                    [
+                      "/service-areas",
+                      "/reviews",
+                      "/blog",
+                      "/gallery",
+                      "/about",
+                    ].includes(l.to),
+                  )
+                  .map((l) => (
+                    <Link
+                      key={l.to}
+                      to={l.to}
+                      className="block rounded-md px-3 py-3 text-sm hover:bg-accent"
+                      aria-current={
+                        location.pathname === l.to ? "page" : undefined
+                      }
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+              </div>
+            )}
+          </div>
+          <a href="tel:+918865038345" className="ml-2">
+            <span className="inline-flex h-11 items-center gap-1.5 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground">
+              <Phone className="h-3.5 w-3.5" /> Call Now
+            </span>
           </a>
         </div>
 
@@ -115,6 +174,7 @@ const Navbar = () => {
             variant="ghost"
             size="icon"
             aria-expanded={open}
+            aria-controls="mobile-navigation"
             className="p-2 -mr-2 text-foreground hover:text-secondary transition-colors"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
@@ -126,6 +186,8 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div
+        id="mobile-navigation"
+        aria-hidden={!open}
         className={`xl:hidden overflow-hidden transition-all duration-300 ${
           open
             ? "max-h-[calc(100dvh-100px)] overflow-y-auto opacity-100"
@@ -138,6 +200,8 @@ const Navbar = () => {
               key={l.to}
               to={l.to}
               onClick={() => setOpen(false)}
+              tabIndex={open ? 0 : -1}
+              aria-current={location.pathname === l.to ? "page" : undefined}
               className={`flex items-center justify-between py-2.5 px-3 rounded-md text-sm font-medium transition-colors ${
                 location.pathname === l.to
                   ? "text-secondary bg-accent"
@@ -149,8 +213,13 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-2 pb-1">
-            <a href="tel:+918865038345">
-              <Button size="sm" variant="hero" className="w-full gap-1.5">
+            <a href="tel:+918865038345" tabIndex={open ? 0 : -1}>
+              <Button
+                tabIndex={open ? 0 : -1}
+                size="sm"
+                variant="hero"
+                className="w-full gap-1.5"
+              >
                 <Phone className="h-3.5 w-3.5" /> Call Now
               </Button>
             </a>

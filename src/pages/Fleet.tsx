@@ -3,10 +3,10 @@ import SEO from "@/components/SEO";
 import { Users, Fuel, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import swiftDzire from "@/assets/swift-dzire.jpg";
-import ertiga from "@/assets/ertiga.png";
-import innova from "@/assets/innova.png";
-import tempoTraveller from "@/assets/tempo-traveller.png";
+import swiftDzire from "@/assets/swift-dzire.jpg?w=800&format=webp";
+import ertiga from "@/assets/ertiga.png?w=800&format=webp";
+import innova from "@/assets/innova.png?w=800&format=webp";
+import tempoTraveller from "@/assets/tempo-traveller.png?w=800&format=webp";
 
 const cars = [
   {
@@ -69,9 +69,9 @@ const Fleet = () => (
         {cars.map((c, i) => (
           <article
             key={i}
-            className="bg-card rounded-xl overflow-hidden shadow-md hover-lift border border-border/50"
+            className="bg-card rounded-lg overflow-hidden hover-lift border border-border flex flex-col"
           >
-            <div className="bg-muted p-4 flex items-center justify-center h-36 sm:h-44">
+            <div className="bg-muted p-4 flex items-center justify-center h-48">
               <img
                 src={c.img}
                 alt={`${c.name} for hire in Agra - ${c.type}`}
@@ -79,7 +79,7 @@ const Fleet = () => (
                 loading="lazy"
               />
             </div>
-            <div className="p-4 sm:p-5">
+            <div className="p-5 flex flex-1 flex-col">
               <span className="inline-block text-[10px] sm:text-xs font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
                 {c.type}
               </span>
@@ -102,15 +102,13 @@ const Fleet = () => (
               <p className="mt-3 text-lg sm:text-xl font-bold text-secondary">
                 {c.price}
               </p>
-              <Link to="/contact">
-                <Button
-                  variant="hero"
-                  size="sm"
-                  className="w-full mt-3 text-xs sm:text-sm"
-                >
-                  Book Now
-                </Button>
-              </Link>
+              <Button
+                asChild
+                variant="hero"
+                className="w-full mt-auto h-11 text-sm"
+              >
+                <Link to="/contact">Book Now</Link>
+              </Button>
             </div>
           </article>
         ))}

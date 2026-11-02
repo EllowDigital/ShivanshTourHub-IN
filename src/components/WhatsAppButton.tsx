@@ -30,10 +30,18 @@ import {
 } from "@/lib/whatsapp";
 
 import {
-  bookingSteps as steps, bookingCars as cars, emptyBooking, todayISO,
-  cleanPhone, formatDate, formatTime, buildChatBookingMessage,
-  validateBookingStep, readBookingDraft,
-  type BookingStep as Step, type ChatBooking as Booking,
+  bookingSteps as steps,
+  bookingCars as cars,
+  emptyBooking,
+  todayISO,
+  cleanPhone,
+  formatDate,
+  formatTime,
+  buildChatBookingMessage,
+  validateBookingStep,
+  readBookingDraft,
+  type BookingStep as Step,
+  type ChatBooking as Booking,
 } from "@/lib/chatBooking";
 const DRAFT_KEY = "shivansh-chat-draft";
 const prompts: Record<Step, string> = {
@@ -54,8 +62,11 @@ const quickPlaces = [
   "Jaipur",
 ];
 const loadDraft = (): Booking => {
-  try { return readBookingDraft(localStorage.getItem(DRAFT_KEY)); }
-  catch { return { ...emptyBooking }; }
+  try {
+    return readBookingDraft(localStorage.getItem(DRAFT_KEY));
+  } catch {
+    return { ...emptyBooking };
+  }
 };
 
 const WhatsAppButton = () => {
@@ -194,7 +205,7 @@ const WhatsAppButton = () => {
           aria-label="WhatsApp taxi booking"
           className="whatsapp-panel fixed z-[60] flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl outline-none animate-fade-up"
         >
-          <header className="flex shrink-0 items-center justify-between gap-3 bg-success px-4 py-3 text-success-foreground">
+          <header className="chat-header flex shrink-0 items-center justify-between gap-3 bg-success px-4 py-3 text-success-foreground">
             <div className="flex items-center gap-3">
               <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-success-foreground/15">
                 <MessageCircle className="h-5 w-5" />
@@ -202,9 +213,7 @@ const WhatsAppButton = () => {
               </span>
               <div>
                 <p className="text-sm font-semibold">Shivansh Travels</p>
-                <p className="text-xs opacity-90">
-                  Taxi booking enquiry
-                </p>
+                <p className="text-xs opacity-90">Taxi booking enquiry</p>
               </div>
             </div>
             <div className="flex">
@@ -235,7 +244,7 @@ const WhatsAppButton = () => {
           {!handoff && (
             <div className="h-1 shrink-0 bg-muted" aria-hidden="true">
               <div
-                className="h-full bg-success transition-all duration-300"
+                className="chat-progress h-full transition-all duration-300"
                 style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }}
               />
             </div>
@@ -251,9 +260,9 @@ const WhatsAppButton = () => {
                   <CheckCircle2 className="mx-auto h-10 w-10 text-success" />
                   <h2 className="mt-2 text-lg font-semibold">Almost done!</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    We tried opening WhatsApp in a new tab with your booking filled in.{" "}
-                    <b className="text-foreground">Tap Send there</b>. Your trip
-                    is confirmed once we reply.
+                    We tried opening WhatsApp in a new tab with your booking
+                    filled in. <b className="text-foreground">Tap Send there</b>
+                    . Your trip is confirmed once we reply.
                   </p>
                 </div>
                 {handoff.popupBlocked && (
@@ -314,10 +323,10 @@ const WhatsAppButton = () => {
                         type="button"
                         onClick={() => edit(a.s)}
                         variant="ghost"
-                        className={`${bubble} h-auto whitespace-normal group flex items-start gap-2 bg-success/15 text-left text-foreground`}
+                        className={`${bubble} chat-answer h-auto whitespace-normal group flex items-start gap-2 text-left`}
                         aria-label={`Change ${a.s}`}
                       >
-                        <a.icon className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                        <a.icon className="chat-answer-icon mt-0.5 h-4 w-4 shrink-0" />
                         <span className="min-w-0 break-words">{a.text}</span>
                         <Pencil className="mt-0.5 h-3.5 w-3.5 shrink-0 opacity-50 group-hover:opacity-100" />
                       </Button>

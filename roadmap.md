@@ -1,7 +1,7 @@
 # Website improvements
 
-- [ ] Improve website loading, shared layouts, navigation, and responsive browsing.
-- [ ] Verify refreshed pages and booking on mobile, tablet, and desktop.
+- [x] Improve website loading, shared layouts, navigation, and responsive browsing.
+- [x] Verify refreshed pages and booking on mobile, tablet, and desktop.
 
 - [x] Refresh shared styling, navigation, and homepage with an Indian travel character.
 - [x] Regenerate and validate sitemap coverage without invented modification dates.

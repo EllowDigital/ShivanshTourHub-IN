@@ -1,9 +1,9 @@
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import {
-  findRouteByCities,
+  findRouteBySlug,
   getAirportToAgraRoute,
   getFareOptions,
   getRelatedRoutes,
@@ -32,17 +32,12 @@ function titleCase(value: string) {
 }
 
 const RouteLanding = () => {
-  const { fromSlug, toSlug } = useParams<{
-    fromSlug: string;
-    toSlug: string;
-  }>();
-
+  const { pathname } = useLocation();
+  const slug = pathname.slice(1).replace(/-cab-service$/, "-taxi");
   const route =
-    fromSlug === "delhi-airport" && toSlug === "agra"
+    slug === "delhi-airport-to-agra-taxi"
       ? getAirportToAgraRoute()
-      : fromSlug && toSlug
-        ? findRouteByCities(fromSlug, toSlug)
-        : undefined;
+      : findRouteBySlug(slug);
 
   if (!route) {
     return (

@@ -8,6 +8,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import Preloader, { LoadingJourney } from "./components/Preloader";
 import Index from "./pages/Index";
 import { routePages, getAirportToAgraRoute } from "./lib/routeSeo";
 const Services = lazy(() => import("./pages/Services"));
@@ -32,6 +33,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Preloader />
         <ScrollToTop />
         <a className="skip-link" href="#main-content">
           Skip to content
@@ -40,14 +42,7 @@ const App = () => (
         <main id="main-content" tabIndex={-1}>
           <Suspense
             fallback={
-              <div
-                className="page-loading"
-                role="status"
-                aria-label="Loading page"
-              >
-                <span className="page-loading-spinner" />
-                Loading…
-              </div>
+              <LoadingJourney compact />
             }
           >
             <Routes>

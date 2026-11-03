@@ -1,7 +1,7 @@
 # Website improvements
 
-- [ ] Synchronize sitemap and robots rules and add URL integrity checks.
-- [ ] Verify served crawler files and every sitemap page with matching canonical links.
+- [x] Synchronize sitemap and robots rules and add URL integrity checks.
+- [x] Verify served crawler files and every sitemap page with matching canonical links.
 
 - [x] Improve website loading, shared layouts, navigation, and responsive browsing.
 - [x] Verify refreshed pages and booking on mobile, tablet, and desktop.

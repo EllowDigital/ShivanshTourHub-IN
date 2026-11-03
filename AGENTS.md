@@ -8,3 +8,4 @@
 - Lazy-load secondary pages, use build-time WebP transformations for bundled photos and precompressed responsive WebP files for public imagery to keep initial loading light.
 - Use the shared navigation-height token for page offsets and anchor scrolling so content stays visible beneath the fixed header at each breakpoint.
 - Register taxi URLs and legacy aliases explicitly from route data; React Router does not support partial dynamic parameters within a path segment.
+- Share the travel loading visual between startup and lazy routes; dismiss startup on first image readiness with a bounded safety timeout and respect reduced motion without artificial minimum delays.

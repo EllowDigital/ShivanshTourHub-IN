@@ -1,3 +1,4 @@
+import PageCta from "@/components/PageCta";
 ﻿import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -99,6 +100,7 @@ const Blog = () => (
         </div>
       </div>
     </section>
+    <PageCta title="Read enough? Let us plan your trip." text="Ask us for the best route, car and fare for your journey." />
   </div>
 );
 

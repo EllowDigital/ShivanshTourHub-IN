@@ -1,3 +1,4 @@
+import PageCta from "@/components/PageCta";
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
 import BookingForm from "@/components/BookingForm";
 import SEO from "@/components/SEO";
@@ -168,6 +169,7 @@ const Contact = () => (
         </div>
       </div>
     </section>
+    <PageCta title="Prefer a quick chat?" text="Message us on WhatsApp or call — we reply 24/7." />
   </div>
 );
 

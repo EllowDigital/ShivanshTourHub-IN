@@ -3,6 +3,9 @@ import SEO from "@/components/SEO";
 import { Users, Fuel, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import PageCta from "@/components/PageCta";
+import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import swiftDzire from "@/assets/swift-dzire.jpg?w=800&format=webp";
 import ertiga from "@/assets/ertiga.png?w=800&format=webp";
 import innova from "@/assets/innova.png?w=800&format=webp";
@@ -47,7 +50,18 @@ const cars = [
   },
 ];
 
-const Fleet = () => (
+const filters = [
+  { label: "All cars", min: 0 },
+  { label: "4 seats", min: 4, max: 4 },
+  { label: "7 seats", min: 7, max: 7 },
+  { label: "Groups 8+", min: 8 },
+];
+
+const Fleet = () => {
+  const [active, setActive] = useState(0);
+  const f = filters[active];
+  const shown = cars.filter((c) => c.seats >= f.min && (f.max === undefined || c.seats <= f.max));
+  return (
   <div className="pt-14 sm:pt-16 lg:pt-[88px]">
     <SEO
       title="Our Fleet | Book Swift Dzire, Innova, Ertiga, Tempo Traveller in Agra"
@@ -65,17 +79,24 @@ const Fleet = () => (
       </div>
     </section>
     <section className="section-padding bg-background">
+      <div className="container mx-auto mb-6 flex flex-wrap justify-center gap-2" role="group" aria-label="Filter cars by seats">
+        {filters.map((x, i) => (
+          <Button key={x.label} size="sm" variant={i === active ? "default" : "outline"} aria-pressed={i === active} onClick={() => setActive(i)} className="rounded-full">
+            {x.label}
+          </Button>
+        ))}
+      </div>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {cars.map((c, i) => (
+        {shown.map((c) => (
           <article
-            key={i}
-            className="bg-card rounded-lg overflow-hidden hover-lift border border-border flex flex-col"
+            key={c.name}
+            className="group animate-fade-in bg-card rounded-lg overflow-hidden hover-lift border border-border flex flex-col"
           >
             <div className="bg-muted p-4 flex items-center justify-center h-48">
               <img
                 src={c.img}
                 alt={`${c.name} for hire in Agra - ${c.type}`}
-                className="max-h-full object-contain"
+                className="max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
             </div>
@@ -102,19 +123,22 @@ const Fleet = () => (
               <p className="mt-3 text-lg sm:text-xl font-bold text-secondary">
                 {c.price}
               </p>
-              <Button
-                asChild
-                variant="hero"
-                className="w-full mt-auto h-11 text-sm"
-              >
-                <Link to="/contact">Book Now</Link>
-              </Button>
+              <div className="mt-auto grid grid-cols-2 gap-2">
+                <Button variant="hero" className="h-11 text-sm" onClick={() => openWhatsAppMessage(WHATSAPP_NUMBER, `Namaste! I want to book a ${c.name} (${c.seats} seats, ${c.price}). Please share availability.`)}>
+                  Book Now
+                </Button>
+                <Button asChild variant="outline" className="h-11 text-sm">
+                  <a href="tel:+918865038345">Call</a>
+                </Button>
+              </div>
             </div>
           </article>
         ))}
       </div>
     </section>
+    <PageCta title="Not sure which car fits?" text="Tell us your group size and trip — we'll suggest the best car and fare." />
   </div>
-);
+  );
+};
 
 export default Fleet;

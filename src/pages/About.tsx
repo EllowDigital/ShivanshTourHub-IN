@@ -1,3 +1,4 @@
+import PageCta from "@/components/PageCta";
 ﻿import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { ShieldCheck, Heart, Users, Award, Target, Globe } from "lucide-react";
@@ -143,6 +144,7 @@ const About = () => (
         </div>
       </div>
     </section>
+    <PageCta title="Travel with a family-run Agra team" text="Tell us your plan and we will suggest the right car, route and fare." />
   </div>
 );
 

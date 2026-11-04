@@ -1,3 +1,4 @@
+import PageCta from "@/components/PageCta";
 ﻿import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -265,6 +266,7 @@ const Tours = () => (
         ))}
       </div>
     </section>
+    <PageCta title="Want a custom tour package?" text="Share your dates and places — we will build a day-by-day plan with a clear price." message="Namaste! I would like a custom tour package from Shivansh Tour and Travels." />
   </div>
 );
 

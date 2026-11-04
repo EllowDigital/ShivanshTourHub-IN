@@ -1,3 +1,4 @@
+import PageCta from "@/components/PageCta";
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
 import { Link } from "react-router-dom";
 import SectionHeading from "@/components/SectionHeading";
@@ -249,6 +250,7 @@ const Reviews = () => (
         </div>
       </div>
     </section>
+    <PageCta title="Join our happy travellers" text="Book your next taxi or tour with a team families trust." />
   </div>
 );
 

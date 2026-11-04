@@ -9,7 +9,7 @@ export function LoadingJourney({ compact = false }: { compact?: boolean }) {
         <CarFront className="journey-car" strokeWidth={1.5} />
         <div className="journey-road"><span /></div>
       </div>
-      <p className="font-heading text-2xl font-bold text-primary">Shivansh</p>
+      <p className="font-heading text-xl font-bold text-primary sm:text-2xl md:text-3xl">Shivansh</p>
       <p className="mt-1 text-xs font-semibold uppercase text-muted-foreground">Tour &amp; Travels</p>
       <div className="journey-loading-line" aria-hidden="true"><span /></div>
       <span className="sr-only">Loading your journey</span>

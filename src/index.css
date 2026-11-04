@@ -190,7 +190,10 @@ main > div:not(.homepage) {
 .site-preloader::before { top: 0; background: hsl(var(--secondary)); }
 .site-preloader::after { bottom: 0; background: hsl(var(--heritage)); }
 .site-preloader-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
-.journey-loader { width: min(280px, calc(100vw - 48px)); text-align: center; }
+.journey-loader { width: min(320px, calc(100vw - 48px)); text-align: center; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+.site-preloader { min-height: 100dvh; background: radial-gradient(circle at 50% 40%, hsl(var(--secondary) / .1), transparent 60%), hsl(var(--background)); }
+.site-preloader .journey-loader { animation: journey-enter .4s ease-out both; }
+@keyframes journey-enter { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
 .journey-loader-compact {
   width: 100%;
   min-height: 65vh;
@@ -200,20 +203,21 @@ main > div:not(.homepage) {
   align-items: center;
   justify-content: center;
 }
-.journey-scene { position: relative; width: 168px; height: 110px; margin: 0 auto 24px; }
+.journey-scene { position: relative; width: clamp(128px, 40vw, 200px); height: clamp(84px, 26vw, 130px); margin: 0 auto clamp(14px, 4vw, 24px); }
 .journey-car {
   position: absolute;
-  left: 48px;
-  bottom: 22px;
-  width: 72px;
-  height: 72px;
+  left: 28%;
+  bottom: 20%;
+  width: 44%;
+  height: auto;
+  aspect-ratio: 1;
   color: hsl(var(--primary));
   animation: journey-drive 1.1s ease-in-out infinite;
 }
 .journey-pin { position: absolute; right: 7px; top: 0; width: 22px; height: 22px; color: hsl(var(--heritage)); }
 .journey-road { position: absolute; bottom: 12px; width: 100%; height: 2px; background: hsl(var(--border)); overflow: hidden; }
 .journey-road span { display: block; width: 40px; height: 2px; background: hsl(var(--secondary)); animation: journey-road 1.25s linear infinite; }
-.journey-loading-line { margin: 28px auto 0; width: 120px; height: 3px; overflow: hidden; background: hsl(var(--muted)); border-radius: 3px; }
+.journey-loading-line { margin: clamp(16px, 5vw, 28px) auto 0; width: 120px; height: 3px; overflow: hidden; background: hsl(var(--muted)); border-radius: 3px; }
 .journey-loading-line span { display: block; width: 48px; height: 100%; background: hsl(var(--heritage)); animation: journey-progress 1.3s ease-in-out infinite; }
 @keyframes journey-drive { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 @keyframes journey-road { from { transform: translateX(170px); } to { transform: translateX(-40px); } }
@@ -411,3 +415,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     transition-duration: 0.01ms !important;
   }
 }
+
+@media (max-height: 420px) { .journey-scene { height: 70px; width: 120px; margin-bottom: 8px; } .journey-loading-line { margin-top: 12px; } }
+@media (prefers-reduced-motion: reduce) { .journey-car, .journey-road span, .journey-loading-line span, .site-preloader .journey-loader { animation: none; } }

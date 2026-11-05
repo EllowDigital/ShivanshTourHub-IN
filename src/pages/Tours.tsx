@@ -1,14 +1,15 @@
 import PageCta from "@/components/PageCta";
-﻿import SectionHeading from "@/components/SectionHeading";
+import BookingActions from "@/components/BookingActions";
+import { useState } from "react";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+
 import vrindavanTravel from "@/assets/vrindavan-travel.jpg?w=800&format=webp";
 import prayagrajTravel from "@/assets/prayagraj-travel.jpg?w=800&format=webp";
 import {
   MapPin,
   Clock,
-  IndianRupee,
+  Search,
   Calendar,
   CheckCircle,
   ArrowRight,
@@ -153,8 +154,13 @@ const tours = [
   },
 ];
 
-const Tours = () => (
-  <div className="pt-14 sm:pt-16 lg:pt-[88px]">
+const Tours = () => {
+  const [category, setCategory] = useState("All tours");
+  const categories = ["All tours", "Pilgrimage", "Heritage", "Hill escapes"];
+  const categoryFor = (name: string) => ["Uttarakhand Tour", "Shimla Manali Tour"].includes(name) ? "Hill escapes" : ["Agra Tour", "Rajasthan Tour"].includes(name) ? "Heritage" : "Pilgrimage";
+  const shown = tours.filter(t => category === "All tours" || categoryFor(t.name) === category);
+  return (
+  <div>
     <SEO
       title="Tour Packages from Agra | Ayodhya, Varanasi, Rajasthan, Shimla Manali"
       description="Book all-inclusive tour packages from Agra. Ayodhya ₹4,999, Varanasi ₹6,999, Rajasthan ₹19,999, Shimla Manali ₹15,999. Hotel + Car + Sightseeing included. Call +91 8865038345."
@@ -168,15 +174,23 @@ const Tours = () => (
           Explore India's best destinations with our curated all-inclusive
           packages from Agra.
         </p>
+        <div className="mt-6"><BookingActions onDark message="Namaste! I would like to plan a tour from Agra." /></div>
       </div>
     </section>
 
     <section className="section-padding bg-background">
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-start">
-        {tours.map((t, i) => (
+      <div className="container mx-auto">
+        <div className="travel-toolbar" role="group" aria-label="Filter tour packages">
+          {categories.map(c => <Button key={c} variant={c === category ? "default" : "outline"} className="h-11" aria-pressed={c === category} onClick={() => setCategory(c)}>{c}</Button>)}
+          <p className="text-sm text-muted-foreground sm:ml-auto" role="status">{shown.length} packages</p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-start">
+        {shown.map((t) => {
+          const i = tours.indexOf(t);
+          return (
           <article
-            key={i}
-            className="bg-card rounded-lg border border-border overflow-hidden hover-lift"
+            key={t.name}
+            className="travel-card"
           >
             <img
               src={
@@ -212,7 +226,7 @@ const Tours = () => (
                   </span>
                 </div>
               </div>
-              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
+              <p className="mt-2 text-sm text-muted-foreground">
                 <strong className="text-foreground">Highlights:</strong>{" "}
                 {t.highlights}
               </p>
@@ -228,7 +242,7 @@ const Tours = () => (
                   {t.itinerary.map((day, j) => (
                     <li
                       key={j}
-                      className="text-xs sm:text-sm text-muted-foreground pl-3 sm:pl-4 border-l-2 border-secondary/30 py-1"
+                      className="text-sm text-muted-foreground pl-3 sm:pl-4 border-l-2 border-secondary/30 py-1"
                     >
                       {day}
                     </li>
@@ -244,30 +258,24 @@ const Tours = () => (
                   {t.included.map((item, j) => (
                     <li
                       key={j}
-                      className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2"
+                      className="text-sm text-muted-foreground flex items-center gap-2"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-secondary shrink-0" />{" "}
                       {item}
                     </li>
                   ))}
                 </ul>
-                <Button
-                  asChild
-                  variant="hero"
-                  className="w-full h-11 gap-2 text-sm"
-                >
-                  <Link to="/contact">
-                    Enquire Now <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </Button>
+                <BookingActions compact message={`Namaste! I would like to enquire about the ${t.name} (${t.duration}, listed price ${t.price}). Please confirm availability and fare inclusions.`} />
               </div>
             </div>
           </article>
-        ))}
+        ); })}
+        </div>
       </div>
     </section>
     <PageCta title="Want a custom tour package?" text="Share your dates and places — we will build a day-by-day plan with a clear price." message="Namaste! I would like a custom tour package from Shivansh Tour and Travels." />
   </div>
-);
+  );
+};
 
 export default Tours;

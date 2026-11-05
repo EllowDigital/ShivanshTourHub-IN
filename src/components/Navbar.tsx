@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BUSINESS_CALL_URL, BUSINESS_PHONE_LABEL } from "@/lib/contact";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -59,10 +60,10 @@ const Navbar = () => {
               ✉ shivanshtourandtravel.in@gmail.com
             </a>
             <a
-              href="tel:+918865038345"
+              href={BUSINESS_CALL_URL}
               className="hover:text-secondary transition-colors font-medium"
             >
-              📞 +91 8865038345
+              📞 {BUSINESS_PHONE_LABEL}
             </a>
             <a
               href="tel:+917505075626"
@@ -154,17 +155,17 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          <a href="tel:+918865038345" className="ml-2">
-            <span className="inline-flex h-11 items-center gap-1.5 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground">
+          <Button asChild variant="hero" className="ml-2 h-11">
+            <a href={BUSINESS_CALL_URL}>
               <Phone className="h-3.5 w-3.5" /> Call Now
-            </span>
-          </a>
+            </a>
+          </Button>
         </div>
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 xl:hidden">
           <a
-            href="tel:+918865038345"
+            href={BUSINESS_CALL_URL}
             aria-label="Call Shivansh Travels"
             className="p-2 text-secondary"
           >
@@ -213,16 +214,15 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-2 pb-1">
-            <a href="tel:+918865038345" tabIndex={open ? 0 : -1}>
               <Button
+                asChild
                 tabIndex={open ? 0 : -1}
                 size="sm"
                 variant="hero"
                 className="w-full gap-1.5"
               >
-                <Phone className="h-3.5 w-3.5" /> Call Now
+                <a href={BUSINESS_CALL_URL} tabIndex={open ? 0 : -1}><Phone className="h-3.5 w-3.5" /> Call Now</a>
               </Button>
-            </a>
           </div>
         </div>
       </div>

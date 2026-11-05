@@ -149,6 +149,31 @@ main > div:not(.homepage) {
 .booking-form {
   box-shadow: var(--shadow-booking);
 }
+.travel-card {
+  border: 1px solid hsl(var(--border));
+  border-top: 3px solid hsl(var(--secondary));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+@media (hover: hover) {
+  .travel-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-booking); }
+}
+.travel-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 2rem;
+}
+.travel-eyebrow {
+  color: hsl(var(--heritage));
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
 .page-loading {
   min-height: 70vh;
   padding-top: var(--navigation-height);

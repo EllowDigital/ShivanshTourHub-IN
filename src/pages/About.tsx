@@ -1,7 +1,8 @@
 import PageCta from "@/components/PageCta";
-﻿import SectionHeading from "@/components/SectionHeading";
+import BookingActions from "@/components/BookingActions";
+import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
-import { ShieldCheck, Heart, Users, Award, Target, Globe } from "lucide-react";
+import { ShieldCheck, Heart, Users, Award, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -29,123 +30,49 @@ const values = [
 ];
 
 const About = () => (
-  <div className="pt-14 sm:pt-16 lg:pt-[88px]">
-    <SEO
-      title="About Shivansh Tour & Travels | Trusted Taxi Service in Agra Since Years"
-      description="Shivansh Tour and Travels is Agra's trusted taxi and tour service provider. Professional drivers, well-maintained fleet, 24/7 support. Serving 50+ cities across India."
-      keywords="about shivansh travels, taxi company agra, trusted cab service agra, travel agency agra, tour operator uttar pradesh"
-      canonical="https://shivansh-tour-hub.netlify.app/about"
-    />
+  <div>
+    <SEO title="About Shivansh Tour & Travels | Trusted Taxi Service in Agra" description="Meet Shivansh Tour and Travels, an Agra-based taxi and tour team for local rides, airport transfers and journeys across India." canonical="https://shivansh-tour-hub.netlify.app/about" />
     <section className="page-header">
       <div className="container mx-auto text-center">
         <h1 className="page-header-title">About Shivansh Tour & Travels</h1>
-        <p className="page-header-subtitle">
-          Agra's trusted taxi and tour service — serving thousands of happy
-          customers across India.
-        </p>
+        <p className="page-header-subtitle">Rooted in Agra. Ready for your next journey across India.</p>
+        <div className="mt-6"><BookingActions onDark /></div>
       </div>
     </section>
-
     <section className="section-padding bg-background">
-      <div className="container mx-auto">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-heading text-xl sm:text-2xl font-bold text-foreground mb-4">
-            Who We Are
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
-            <strong className="text-foreground">
-              Shivansh Tour and Travels
-            </strong>{" "}
-            is a leading taxi and tour service provider based in{" "}
-            <strong>Agra, Uttar Pradesh</strong>. We specialize in airport
-            pickups, outstation trips, local city rides, and curated tour
-            packages across India. With a fleet of well-maintained vehicles and
-            professional drivers, we ensure every journey is safe, comfortable,
-            and memorable.
-          </p>
-          <p className="mt-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
-            Whether you're a family heading to a pilgrimage, a tourist exploring
-            India's heritage, or a corporate traveler needing reliable transport
-            — we are here for you, 24 hours a day, 7 days a week.
-          </p>
+      <div className="container mx-auto grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+        <div className="overflow-hidden rounded-lg">
+          <img src="/hero/agra-taj-tablet.webp" alt="The Taj Mahal in Agra, our home city" width="1024" height="576" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-10 sm:mt-12 max-w-3xl mx-auto">
-          <div className="bg-card rounded-xl p-5 sm:p-6 border border-border/50 shadow-sm text-center">
-            <div className="mx-auto mb-3 w-12 h-12 rounded-full bg-accent flex items-center justify-center">
-              <Target className="h-6 w-6 text-secondary" />
-            </div>
-            <h3 className="font-heading font-semibold text-foreground text-sm sm:text-base">
-              Our Mission
-            </h3>
-            <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
-              To provide safe, reliable, and affordable travel services that
-              exceed customer expectations every single time.
-            </p>
-          </div>
-          <div className="bg-card rounded-xl p-5 sm:p-6 border border-border/50 shadow-sm text-center">
-            <div className="mx-auto mb-3 w-12 h-12 rounded-full bg-accent flex items-center justify-center">
-              <Globe className="h-6 w-6 text-secondary" />
-            </div>
-            <h3 className="font-heading font-semibold text-foreground text-sm sm:text-base">
-              Our Vision
-            </h3>
-            <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
-              To become India's most trusted travel partner by connecting people
-              to their dream destinations.
-            </p>
+        <div className="min-w-0">
+          <p className="travel-eyebrow flex items-center gap-2"><MapPin className="h-4 w-4" /> Agra, Uttar Pradesh</p>
+          <h2 className="mt-3 text-2xl font-bold sm:text-3xl">Your journey, our responsibility</h2>
+          <p className="mt-5 text-muted-foreground leading-relaxed">Shivansh Tour and Travels connects travellers with local city rides, airport pickups, outstation taxis and curated tours across India. Our home is Agra; our journeys take you much further.</p>
+          <p className="mt-4 text-muted-foreground leading-relaxed">From a family pilgrimage to a heritage holiday or a business trip, we help match your route and group size with the right vehicle.</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button asChild variant="outline" className="h-12"><Link to="/fleet">Explore our cars <ArrowRight /></Link></Button>
+            <Button asChild variant="outline" className="h-12"><Link to="/tours">Discover our tours <ArrowRight /></Link></Button>
           </div>
         </div>
       </div>
     </section>
-
     <section className="section-padding bg-muted">
       <div className="container mx-auto">
-        <SectionHeading title="Our Values" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {values.map((v, i) => (
-            <div
-              key={i}
-              className="bg-card rounded-xl p-5 sm:p-6 text-center hover-lift shadow-sm border border-border/50"
-            >
-              <div className="mx-auto mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent flex items-center justify-center">
-                <v.icon className="h-6 w-6 sm:h-7 sm:w-7 text-secondary" />
-              </div>
-              <h3 className="font-heading font-semibold text-foreground text-sm sm:text-base">
-                {v.title}
-              </h3>
-              <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
-                {v.desc}
-              </p>
-            </div>
-          ))}
+        <SectionHeading title="What Matters on Every Journey" />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {values.map((v) => <article key={v.title} className="travel-card p-6"><div className="mb-5 inline-flex rounded-lg bg-accent p-3"><v.icon className="h-6 w-6 text-secondary" /></div><h3 className="text-lg font-semibold">{v.title}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{v.desc}</p></article>)}
         </div>
       </div>
     </section>
-
-    <section className="section-padding bg-secondary text-center">
+    <section className="section-padding bg-background">
       <div className="container mx-auto">
-        <h2 className="font-heading text-2xl sm:text-3xl font-bold text-secondary-foreground">
-          Let's Plan Your Next Trip
-        </h2>
-        <p className="mt-2 text-secondary-foreground/90 text-sm sm:text-base">
-          Contact us today for bookings and custom tour packages.
-        </p>
-        <div className="mt-6">
-          <Link to="/contact">
-            <Button
-              variant="default"
-              size="lg"
-              className="text-sm sm:text-base"
-            >
-              Contact Us
-            </Button>
-          </Link>
-        </div>
+        <SectionHeading title="From Your First Message to Your Pickup" />
+        <ol className="grid gap-8 md:grid-cols-3">
+          {[{title: "Share your plans", text: "Tell us your pickup, destination, dates and passenger count."}, {title: "Choose your ride", text: "Discuss the vehicle, itinerary and fare inclusions with our team."}, {title: "Confirm your journey", text: "Agree on the trip details with us before your travel day."}].map((step, i) => <li key={step.title} className="border-l-2 border-secondary pl-5"><p className="travel-eyebrow">0{i + 1}</p><h3 className="mt-2 text-lg font-semibold">{step.title}</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.text}</p></li>)}
+        </ol>
       </div>
     </section>
-    <PageCta title="Travel with a family-run Agra team" text="Tell us your plan and we will suggest the right car, route and fare." />
+    <PageCta title="Chalo, let's plan your next journey" text="Share your route and travel dates with our Agra team." />
   </div>
 );
-
 export default About;

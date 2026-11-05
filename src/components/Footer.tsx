@@ -1,5 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Car } from "lucide-react";
+import { BUSINESS_CALL_URL, BUSINESS_PHONE_LABEL } from "@/lib/contact";
 
 const quickLinks = [
   { to: "/services", label: "Services" },
@@ -84,10 +85,10 @@ const Footer = () => (
           <li className="flex items-center gap-2">
             <Phone className="h-4 w-4 text-secondary shrink-0" />
             <a
-              href="tel:+918865038345"
+              href={BUSINESS_CALL_URL}
               className="hover:text-secondary transition-colors"
             >
-              +91 8865038345
+              {BUSINESS_PHONE_LABEL}
             </a>
           </li>
           <li className="flex items-center gap-2">

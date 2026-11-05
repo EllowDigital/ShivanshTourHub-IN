@@ -1,0 +1,3 @@
+export const BUSINESS_PHONE = "+918865038345";
+export const BUSINESS_PHONE_LABEL = "+91 88650 38345";
+export const BUSINESS_CALL_URL = `tel:${BUSINESS_PHONE}`;

@@ -161,33 +161,42 @@ export function getRouteFAQs(route: RouteSEOData) {
   ];
 }
 
+const cityBookingNotes: Record<string, string> = {
+  agra: "For a Taj Mahal visit, share whether your drop is a hotel or a sightseeing stop, and ask the team to confirm the vehicle-access point before travelling.",
+  delhi: "Specify your Delhi locality rather than only the city name. If the journey connects with a flight or train, include the airport terminal or station and your reporting time.",
+  "delhi-airport": "Share the arrival flight number, terminal, expected landing time and luggage count. Agree on the meeting point and waiting charges before confirming the pickup.",
+  noida: "Include the sector, building name and entrance or gate for your Noida pickup or drop so the driver can identify the correct location.",
+  gurgaon: "Share the hotel, office or residential address and its entrance. Mention a meeting or flight deadline when discussing pickup timing.",
+  mathura: "If your Mathura journey includes temple visits, list the stops and time you want to spend at each, rather than requesting only a city drop.",
+  jaipur: "For Jaipur sightseeing, list the monuments you want to visit and ask for a separate quote for waiting time and additional stops.",
+  lucknow: "For a Lucknow station, airport or hotel transfer, provide the exact drop point and any onward departure time before agreeing on pickup timing.",
+  chandigarh: "Include the sector and exact address for Chandigarh. If your trip continues beyond the city, request that onward leg in the same enquiry.",
+  haridwar: "If your Haridwar visit includes an aarti or a temple stop, share your planned arrival time and ask where the car can wait or collect you afterwards.",
+  rishikesh: "Share the exact Rishikesh hotel, ashram or activity meeting point. Discuss any onward hill journey separately before confirming the itinerary.",
+  vrindavan: "List your Vrindavan temple stops and ask the team to confirm suitable drop and collection points, particularly when travelling with children or older relatives.",
+};
+
 export function getRouteWordySections(
   route: RouteSEOData,
 ): Array<{ heading: string; body: string }> {
+  const pickupNote = cityBookingNotes[route.from.slug] || "Share your full pickup address and a nearby landmark.";
+  const dropNote = cityBookingNotes[route.to.slug] || "Share your full destination address and any onward travel plans.";
   return [
     {
-      heading: `Book ${route.from.name} to ${route.to.name} Taxi at the Best Price`,
-      body: `${route.from.name} to ${route.to.name} taxi booking is one of the most searched intercity travel services in North India, especially for travelers who want comfort, door-to-door pickup, and predictable pricing. This route covers approximately ${route.distanceKm} km and usually takes about ${route.travelTimeHours} hours. Instead of managing bus transfers, train delays, and local transport hassles, a private cab gives complete flexibility in pickup timing, short refreshment halts, luggage handling, and family-friendly comfort. Shivansh Tour and Travels provides clean AC cabs, verified drivers, and upfront fare sharing before trip confirmation. Whether you are traveling for business meetings, family functions, tourism, religious visits, or airport transfers, this service is planned for punctuality and safety. Customers can choose one-way cab, round trip, or multi-city plan with custom stoppages based on their itinerary and budget goals.`,
+      heading: `Plan your pickup in ${route.from.name}`,
+      body: pickupNote,
     },
     {
-      heading: `${route.from.name} to ${route.to.name} Route, Distance, and Travel Time`,
-      body: `The recommended ${route.from.name} to ${route.to.name} cab route is planned according to traffic flow, expressway conditions, toll convenience, and passenger comfort. On most days, the practical route distance stays close to ${route.distanceKm} km, and average road travel remains around ${route.travelTimeHours} hours. Morning departures usually reduce city congestion and help passengers reach destination on schedule. For corporate users and airport drop customers, drivers can keep extra time buffer to avoid last-minute delays. Families often request breakfast or tea halts, and those stops are accommodated without confusion. During festivals or long weekends, route load can increase, so advance booking is recommended. If passengers prefer specific intermediate cities, temple stops, sightseeing points, or food break preferences, the route plan can be adjusted before departure and shared on WhatsApp so everyone has clarity before the trip starts.`,
+      heading: `Arrange your arrival in ${route.to.name}`,
+      body: dropNote,
     },
     {
-      heading: `${route.from.name} to ${route.to.name} Taxi Fare Estimate and Car Options`,
-      body: `Affordable pricing is a major reason travelers choose private taxi booking for ${route.from.name} to ${route.to.name}. Estimated sedan fare starts near Rs ${getFareOptions(route.oneWayFare).dzire}, which suits solo travelers and small families. Ertiga option around Rs ${getFareOptions(route.oneWayFare).ertiga} is useful for larger groups with additional luggage. Innova category near Rs ${getFareOptions(route.oneWayFare).innova} is preferred for premium comfort and smoother long-distance experience. Tempo Traveller around Rs ${getFareOptions(route.oneWayFare).tempo} works well for group tours, weddings, and corporate movement. Fare can vary with pickup timing, waiting request, holiday traffic, and local authority tax changes, but the team shares the final quote before confirming your trip. This transparent quotation method helps avoid hidden costs and makes budgeting easier for both one-way and return journeys.`,
+      heading: `Confirm your ${route.from.name}–${route.to.name} quote`,
+      body: `Request a written quote for the exact pickup and drop addresses on your ${route.from.name} to ${route.to.name} journey. Include the date, passenger count and luggage. Ask whether tolls, parking, driver allowance, waiting time and any extra stops are included. The prices shown on this page are estimates, not a confirmed booking price.`,
     },
     {
-      heading: `Why Choose Shivansh Tour and Travels for ${route.from.name} to ${route.to.name} Cab Service`,
-      body: `A reliable intercity taxi service is defined by driver behavior, vehicle condition, punctuality, and support responsiveness. Shivansh Tour and Travels focuses on each of these points for every ${route.from.name} to ${route.to.name} booking. Drivers are experienced with highway driving and customer handling. Cars are cleaned regularly and checked for AC, brakes, lights, and tire condition before dispatch. Booking confirmation includes route, fare, and contact details so passengers have complete visibility. The support team remains active to coordinate if pickup landmark changes or live location support is needed. This service is especially suitable for women travelers, senior citizens, and families traveling with children because comfort and safety are treated as non-negotiable standards. Many repeat users book directly through WhatsApp because the process is quick, straightforward, and dependable across weekdays and peak travel seasons.`,
-    },
-    {
-      heading: `Local SEO Travel Coverage and Service Areas`,
-      body: `Apart from the ${route.from.name} to ${route.to.name} route, Shivansh Tour and Travels offers extensive local and outstation service from Agra, Delhi, Noida, Gurgaon, Mathura, Jaipur, Lucknow, Chandigarh, Haridwar, Rishikesh, and Vrindavan. This broad coverage helps travelers plan onward journeys without changing operators at every stop. For example, after reaching ${route.to.name}, you can continue toward nearby destinations with the same booking support model. Airport pickup and drop requests, hotel pickup, railway station pickup, and temple-tour combination plans are supported with prior confirmation. Since many users search route-specific keywords like "${route.from.name.toLowerCase()} to ${route.to.name.toLowerCase()} taxi" or "${route.from.name.toLowerCase()} to ${route.to.name.toLowerCase()} cab service", this page is built to provide all practical details in one place: fare guidance, distance estimate, booking steps, route clarity, and support assurance.`,
-    },
-    {
-      heading: `How to Book ${route.from.name} to ${route.to.name} Taxi Online`,
-      body: `Booking is intentionally simple. Share journey date, pickup location, passenger count, and destination on WhatsApp or call directly. The team responds with car options, fare estimate, and travel timeline. Once you confirm, booking details are locked and dispatch communication is shared before pickup. If you need round trip, multi-day hold, or custom halts, mention those points during confirmation so pricing remains transparent. For business travelers, invoice-friendly details can be shared in advance. For families, suitable car category is recommended based on luggage and seat requirement. This quick process saves time compared to app-based surge fluctuations and avoids confusion at the last minute. With clear pre-trip communication and route planning, passengers can focus on their travel purpose while the operations team handles the logistics end-to-end.`,
+      heading: `Stops and return travel on this journey`,
+      body: `If you need stops between ${route.from.name} and ${route.to.name}, name each stop when requesting your quote; do not assume it is included in a direct transfer. For a return to ${route.from.name}, share the return date and pickup address in ${route.to.name}. Confirm both legs and any waiting charges with the team before booking.`,
     },
   ];
 }

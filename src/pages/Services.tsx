@@ -89,28 +89,11 @@ const Services = () => (
                 ))}
               </ul>
               <div className="mt-5 grid grid-cols-2 gap-2">
-                <Button
-                  variant="hero"
-                  size="sm"
-                  className="text-xs sm:text-sm"
-                  onClick={() =>
-                    openWhatsAppMessage(
-                      WHATSAPP_NUMBER,
-                      `Namaste! I want to enquire about ${s.title}.`,
-                    )
-                  }
-                >
+                <Button variant="hero" size="sm" className="text-xs sm:text-sm" onClick={() => openWhatsAppMessage(WHATSAPP_NUMBER, `Namaste! I want to enquire about ${s.title}.`)}>
                   WhatsApp
                 </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="gap-1 text-xs sm:text-sm"
-                >
-                  <Link to="/contact">
-                    Details <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+                <Button asChild variant="outline" size="sm" className="gap-1 text-xs sm:text-sm">
+                  <Link to="/contact">Details <ArrowRight className="h-3.5 w-3.5" /></Link>
                 </Button>
               </div>
             </div>

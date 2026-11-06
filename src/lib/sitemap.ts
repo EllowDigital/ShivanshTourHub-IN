@@ -34,11 +34,7 @@ export function sitemapPaths() {
 
 export function sitemapUrls() {
   return sitemapPaths().map((path) => {
-    if (
-      !/^\/(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*)?$/.test(
-        path,
-      )
-    ) {
+    if (!/^\/(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*)?$/.test(path)) {
       throw new Error(`Invalid public sitemap path: ${path}`);
     }
     return new URL(path, SITE_ORIGIN).href;
@@ -46,12 +42,7 @@ export function sitemapUrls() {
 }
 
 function escapeXml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 
 export function buildRobots() {

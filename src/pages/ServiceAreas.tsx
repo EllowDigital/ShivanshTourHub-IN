@@ -1,5 +1,5 @@
 import PageCta from "@/components/PageCta";
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { cities, routePages } from "@/lib/routeSeo";
@@ -91,10 +91,7 @@ const ServiceAreas = () => {
           </div>
         </div>
       </section>
-      <PageCta
-        title="Travelling from your city?"
-        text="We cover Agra, Delhi, Mathura, Jaipur and many more cities. Ask for your route fare."
-      />
+      <PageCta title="Travelling from your city?" text="We cover Agra, Delhi, Mathura, Jaipur and many more cities. Ask for your route fare." />
     </div>
   );
 };

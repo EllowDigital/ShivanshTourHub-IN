@@ -2,14 +2,7 @@ import { describe, expect, it } from "vitest";
 import generatedXml from "../../public/sitemap.xml?raw";
 import generatedRobots from "../../public/robots.txt?raw";
 import appSource from "../App.tsx?raw";
-import {
-  buildRobots,
-  buildSitemap,
-  publicPagePaths,
-  sitemapPaths,
-  sitemapUrls,
-  SITE_ORIGIN,
-} from "../lib/sitemap";
+import { buildRobots, buildSitemap, publicPagePaths, sitemapPaths, sitemapUrls, SITE_ORIGIN } from "../lib/sitemap";
 import { blogPosts } from "../lib/blogContent";
 import { routePages } from "../lib/routeSeo";
 
@@ -33,9 +26,7 @@ describe("public sitemap", () => {
   });
 
   it("includes all fixed public application routes", () => {
-    const fixedRoutes = [...appSource.matchAll(/path="([^":*]+)"/g)].map(
-      (match) => match[1],
-    );
+    const fixedRoutes = [...appSource.matchAll(/path="([^":*]+)"/g)].map((match) => match[1]);
     expect([...publicPagePaths].sort()).toEqual(fixedRoutes.sort());
   });
 
@@ -53,16 +44,10 @@ describe("public sitemap", () => {
 
   it("keeps wildcard crawler access open and points at the canonical sitemap", () => {
     expect(generatedRobots).toBe(buildRobots());
-    const directives = generatedRobots
-      .split("\n")
-      .filter((line) => line && !line.startsWith("#"));
+    const directives = generatedRobots.split("\n").filter((line) => line && !line.startsWith("#"));
     expect(directives).toContain("User-agent: *");
     expect(directives).toContain("Allow: /");
-    expect(
-      directives.filter((line) => line.startsWith("Disallow:")).length,
-    ).toBe(0);
-    expect(directives.filter((line) => line.startsWith("Sitemap:"))).toEqual([
-      `Sitemap: ${SITE_ORIGIN}/sitemap.xml`,
-    ]);
+    expect(directives.filter((line) => line.startsWith("Disallow:")).length).toBe(0);
+    expect(directives.filter((line) => line.startsWith("Sitemap:"))).toEqual([`Sitemap: ${SITE_ORIGIN}/sitemap.xml`]);
   });
 });

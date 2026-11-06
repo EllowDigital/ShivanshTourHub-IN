@@ -132,148 +132,43 @@ const Reviews = () => {
   const [filter, setFilter] = useState("All trips");
   const filters = ["All trips", "Taxi rides", "Tours"];
   const isTour = (trip: string) => /tour|manali/i.test(trip);
-  const shown = allReviews.filter(
-    (r) =>
-      filter === "All trips" ||
-      (filter === "Tours" ? isTour(r.trip) : !isTour(r.trip)),
-  );
+  const shown = allReviews.filter(r => filter === "All trips" || (filter === "Tours" ? isTour(r.trip) : !isTour(r.trip)));
   return (
-    <div>
-      <SEO
-        title="Customer Reviews | Shivansh Tour & Travels"
-        description="Read traveller feedback on taxi rides and tour packages with Shivansh Tour and Travels in Agra."
-        canonical="https://shivansh-tour-hub.netlify.app/reviews"
-        schema={localBusinessSchema}
-      />
-      <section className="page-header">
-        <div className="container mx-auto text-center">
-          <h1 className="page-header-title">Customer Reviews</h1>
-          <p className="page-header-subtitle">
-            Journeys to remember, in our travellers' own words.
-          </p>
-          <div className="mt-6">
-            <BookingActions onDark />
-          </div>
+  <div>
+    <SEO title="Customer Reviews | Shivansh Tour & Travels" description="Read traveller feedback on taxi rides and tour packages with Shivansh Tour and Travels in Agra." canonical="https://shivansh-tour-hub.netlify.app/reviews" schema={localBusinessSchema} />
+    <section className="page-header">
+      <div className="container mx-auto text-center">
+        <h1 className="page-header-title">Customer Reviews</h1>
+        <p className="page-header-subtitle">Journeys to remember, in our travellers' own words.</p>
+        <div className="mt-6"><BookingActions onDark /></div>
+      </div>
+    </section>
+    <section className="bg-muted px-4 py-8 sm:px-6">
+      <div className="container mx-auto flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-10">
+        <div className="flex items-center gap-4">
+          <p className="font-heading text-5xl font-bold">{avgRating}<span className="ml-1 text-lg text-muted-foreground">/5</span></p>
+          <div><div className="flex gap-1" aria-label={`${avgRating} out of 5 stars`}>{[1,2,3,4,5].map(s => <Star key={s} className="h-5 w-5 fill-secondary text-secondary" aria-hidden="true" />)}</div><p className="mt-2 text-sm text-muted-foreground">Across {allReviews.length} displayed reviews</p></div>
         </div>
-      </section>
-      <section className="bg-muted px-4 py-8 sm:px-6">
-        <div className="container mx-auto flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-10">
-          <div className="flex items-center gap-4">
-            <p className="font-heading text-5xl font-bold">
-              {avgRating}
-              <span className="ml-1 text-lg text-muted-foreground">/5</span>
-            </p>
-            <div>
-              <div
-                className="flex gap-1"
-                aria-label={`${avgRating} out of 5 stars`}
-              >
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <Star
-                    key={s}
-                    className="h-5 w-5 fill-secondary text-secondary"
-                    aria-hidden="true"
-                  />
-                ))}
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Across {allReviews.length} displayed reviews
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-border pt-4 text-center sm:border-l sm:border-t-0 sm:pl-10 sm:pt-0 sm:text-left">
-            <h2 className="text-lg font-semibold">Every trip has a story</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Family holidays, temple visits and everyday rides.
-            </p>
-          </div>
+        <div className="border-t border-border pt-4 text-center sm:border-l sm:border-t-0 sm:pl-10 sm:pt-0 sm:text-left"><h2 className="text-lg font-semibold">Every trip has a story</h2><p className="mt-1 text-sm text-muted-foreground">Family holidays, temple visits and everyday rides.</p></div>
+      </div>
+    </section>
+    <section className="section-padding bg-background">
+      <div className="container mx-auto">
+        <div className="travel-toolbar" role="group" aria-label="Filter reviews by trip">
+          {filters.map(f => <Button key={f} variant={filter === f ? "default" : "outline"} className="h-11" aria-pressed={filter === f} onClick={() => setFilter(f)}>{f}</Button>)}
+          <p className="text-sm text-muted-foreground sm:ml-auto" role="status">{shown.length} reviews</p>
         </div>
-      </section>
-      <section className="section-padding bg-background">
-        <div className="container mx-auto">
-          <div
-            className="travel-toolbar"
-            role="group"
-            aria-label="Filter reviews by trip"
-          >
-            {filters.map((f) => (
-              <Button
-                key={f}
-                variant={filter === f ? "default" : "outline"}
-                className="h-11"
-                aria-pressed={filter === f}
-                onClick={() => setFilter(f)}
-              >
-                {f}
-              </Button>
-            ))}
-            <p
-              className="text-sm text-muted-foreground sm:ml-auto"
-              role="status"
-            >
-              {shown.length} reviews
-            </p>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {shown.map((r) => (
-              <article
-                key={r.name}
-                className="travel-card flex flex-col p-5 sm:p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <div
-                    className="flex gap-1"
-                    aria-label={`${r.rating} out of 5 stars`}
-                  >
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        aria-hidden="true"
-                        className={`h-4 w-4 ${s <= r.rating ? "fill-secondary text-secondary" : "text-muted-foreground/30"}`}
-                      />
-                    ))}
-                  </div>
-                  <Quote
-                    className="h-6 w-6 text-secondary/40"
-                    aria-hidden="true"
-                  />
-                </div>
-                <p className="mt-5 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  “{r.text}”
-                </p>
-                <div className="mt-6 border-t border-border pt-4">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground"
-                      aria-hidden="true"
-                    >
-                      {r.name[0]}
-                    </span>
-                    <div className="min-w-0">
-                      <h2 className="font-body text-sm font-semibold">
-                        {r.name}
-                      </h2>
-                      <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3" />
-                        {r.city}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="font-medium text-primary">{r.trip}</span>
-                    <span className="text-muted-foreground">{r.date}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map(r => <article key={r.name} className="travel-card flex flex-col p-5 sm:p-6">
+            <div className="flex items-center justify-between"><div className="flex gap-1" aria-label={`${r.rating} out of 5 stars`}>{[1,2,3,4,5].map(s => <Star key={s} aria-hidden="true" className={`h-4 w-4 ${s <= r.rating ? "fill-secondary text-secondary" : "text-muted-foreground/30"}`} />)}</div><Quote className="h-6 w-6 text-secondary/40" aria-hidden="true" /></div>
+            <p className="mt-5 flex-1 text-sm leading-relaxed text-muted-foreground">“{r.text}”</p>
+            <div className="mt-6 border-t border-border pt-4"><div className="flex items-center gap-3"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground" aria-hidden="true">{r.name[0]}</span><div className="min-w-0"><h2 className="font-body text-sm font-semibold">{r.name}</h2><p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3 w-3" />{r.city}</p></div></div><div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs"><span className="font-medium text-primary">{r.trip}</span><span className="text-muted-foreground">{r.date}</span></div></div>
+          </article>)}
         </div>
-      </section>
-      <PageCta
-        title="Your next travel story starts here"
-        text="Discuss your taxi or tour plans with our team."
-      />
-    </div>
+      </div>
+    </section>
+    <PageCta title="Your next travel story starts here" text="Discuss your taxi or tour plans with our team." />
+  </div>
   );
 };
 export default Reviews;

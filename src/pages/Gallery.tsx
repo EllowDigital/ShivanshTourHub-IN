@@ -1,5 +1,5 @@
 import PageCta from "@/components/PageCta";
-import { useState } from "react";
+﻿import { useState } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -248,10 +248,7 @@ const Gallery = () => {
           </DialogContent>
         </Dialog>
       )}
-      <PageCta
-        title="Want memories like these?"
-        text="Plan your own Indian journey with a trusted driver and comfortable car."
-      />
+      <PageCta title="Want memories like these?" text="Plan your own Indian journey with a trusted driver and comfortable car." />
     </div>
   );
 };

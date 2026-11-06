@@ -40,7 +40,11 @@ const App = () => (
         </a>
         <Navbar />
         <main id="main-content" tabIndex={-1}>
-          <Suspense fallback={<LoadingJourney compact />}>
+          <Suspense
+            fallback={
+              <LoadingJourney compact />
+            }
+          >
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/services" element={<Services />} />
@@ -55,16 +59,8 @@ const App = () => (
               <Route path="/blog/:slug" element={<BlogArticle />} />
               <Route path="/service-areas" element={<ServiceAreas />} />
               {[...routePages, getAirportToAgraRoute()].flatMap((route) => [
-                <Route
-                  key={route.slug}
-                  path={`/${route.slug}`}
-                  element={<RouteLanding />}
-                />,
-                <Route
-                  key={`${route.slug}-alias`}
-                  path={`/${route.slug.replace(/-taxi$/, "-cab-service")}`}
-                  element={<RouteLanding />}
-                />,
+                <Route key={route.slug} path={`/${route.slug}`} element={<RouteLanding />} />,
+                <Route key={`${route.slug}-alias`} path={`/${route.slug.replace(/-taxi$/, "-cab-service")}`} element={<RouteLanding />} />,
               ])}
               <Route path="*" element={<NotFound />} />
             </Routes>

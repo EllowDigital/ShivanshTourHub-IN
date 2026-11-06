@@ -1,7 +1,7 @@
 # Website improvements
 
-- [ ] Redesign About, Tours, Contact, Reviews and Blog with shared booking actions.
-- [ ] Verify business call destinations and page interactions across screen sizes.
+- [x] Redesign About, Tours, Contact, Reviews and Blog with shared booking actions.
+- [x] Verify business call destinations and page interactions across screen sizes.
 
 - [x] Synchronize sitemap and robots rules and add URL integrity checks.
 - [x] Verify served crawler files and every sitemap page with matching canonical links.

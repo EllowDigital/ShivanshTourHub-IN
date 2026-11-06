@@ -214,15 +214,17 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-2 pb-1">
-              <Button
-                asChild
-                tabIndex={open ? 0 : -1}
-                size="sm"
-                variant="hero"
-                className="w-full gap-1.5"
-              >
-                <a href={BUSINESS_CALL_URL} tabIndex={open ? 0 : -1}><Phone className="h-3.5 w-3.5" /> Call Now</a>
-              </Button>
+            <Button
+              asChild
+              tabIndex={open ? 0 : -1}
+              size="sm"
+              variant="hero"
+              className="w-full gap-1.5"
+            >
+              <a href={BUSINESS_CALL_URL} tabIndex={open ? 0 : -1}>
+                <Phone className="h-3.5 w-3.5" /> Call Now
+              </a>
+            </Button>
           </div>
         </div>
       </div>

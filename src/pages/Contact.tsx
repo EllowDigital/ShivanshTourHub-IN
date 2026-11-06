@@ -1,6 +1,10 @@
 import PageCta from "@/components/PageCta";
 import BookingActions from "@/components/BookingActions";
-import { BUSINESS_PHONE, BUSINESS_PHONE_LABEL, BUSINESS_CALL_URL } from "@/lib/contact";
+import {
+  BUSINESS_PHONE,
+  BUSINESS_PHONE_LABEL,
+  BUSINESS_CALL_URL,
+} from "@/lib/contact";
 import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
 import BookingForm from "@/components/BookingForm";
 import SEO from "@/components/SEO";
@@ -116,7 +120,9 @@ const Contact = () => (
         <p className="page-header-subtitle">
           Get in touch for bookings, queries, or custom tour packages.
         </p>
-        <div className="mt-6"><BookingActions onDark /></div>
+        <div className="mt-6">
+          <BookingActions onDark />
+        </div>
       </div>
     </section>
 
@@ -175,7 +181,10 @@ const Contact = () => (
         </div>
       </div>
     </section>
-    <PageCta title="Prefer a quick chat?" text="Message us on WhatsApp or call — we reply 24/7." />
+    <PageCta
+      title="Prefer a quick chat?"
+      text="Message us on WhatsApp or call — we reply 24/7."
+    />
   </div>
 );
 

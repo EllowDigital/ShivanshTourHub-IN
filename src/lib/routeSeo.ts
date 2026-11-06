@@ -163,24 +163,39 @@ export function getRouteFAQs(route: RouteSEOData) {
 
 const cityBookingNotes: Record<string, string> = {
   agra: "For a Taj Mahal visit, share whether your drop is a hotel or a sightseeing stop, and ask the team to confirm the vehicle-access point before travelling.",
-  delhi: "Specify your Delhi locality rather than only the city name. If the journey connects with a flight or train, include the airport terminal or station and your reporting time.",
-  "delhi-airport": "Share the arrival flight number, terminal, expected landing time and luggage count. Agree on the meeting point and waiting charges before confirming the pickup.",
-  noida: "Include the sector, building name and entrance or gate for your Noida pickup or drop so the driver can identify the correct location.",
-  gurgaon: "Share the hotel, office or residential address and its entrance. Mention a meeting or flight deadline when discussing pickup timing.",
-  mathura: "If your Mathura journey includes temple visits, list the stops and time you want to spend at each, rather than requesting only a city drop.",
-  jaipur: "For Jaipur sightseeing, list the monuments you want to visit and ask for a separate quote for waiting time and additional stops.",
-  lucknow: "For a Lucknow station, airport or hotel transfer, provide the exact drop point and any onward departure time before agreeing on pickup timing.",
-  chandigarh: "Include the sector and exact address for Chandigarh. If your trip continues beyond the city, request that onward leg in the same enquiry.",
-  haridwar: "If your Haridwar visit includes an aarti or a temple stop, share your planned arrival time and ask where the car can wait or collect you afterwards.",
-  rishikesh: "Share the exact Rishikesh hotel, ashram or activity meeting point. Discuss any onward hill journey separately before confirming the itinerary.",
-  vrindavan: "List your Vrindavan temple stops and ask the team to confirm suitable drop and collection points, particularly when travelling with children or older relatives.",
+  delhi:
+    "Specify your Delhi locality rather than only the city name. If the journey connects with a flight or train, include the airport terminal or station and your reporting time.",
+  "delhi-airport":
+    "Share the arrival flight number, terminal, expected landing time and luggage count. Agree on the meeting point and waiting charges before confirming the pickup.",
+  noida:
+    "Include the sector, building name and entrance or gate for your Noida pickup or drop so the driver can identify the correct location.",
+  gurgaon:
+    "Share the hotel, office or residential address and its entrance. Mention a meeting or flight deadline when discussing pickup timing.",
+  mathura:
+    "If your Mathura journey includes temple visits, list the stops and time you want to spend at each, rather than requesting only a city drop.",
+  jaipur:
+    "For Jaipur sightseeing, list the monuments you want to visit and ask for a separate quote for waiting time and additional stops.",
+  lucknow:
+    "For a Lucknow station, airport or hotel transfer, provide the exact drop point and any onward departure time before agreeing on pickup timing.",
+  chandigarh:
+    "Include the sector and exact address for Chandigarh. If your trip continues beyond the city, request that onward leg in the same enquiry.",
+  haridwar:
+    "If your Haridwar visit includes an aarti or a temple stop, share your planned arrival time and ask where the car can wait or collect you afterwards.",
+  rishikesh:
+    "Share the exact Rishikesh hotel, ashram or activity meeting point. Discuss any onward hill journey separately before confirming the itinerary.",
+  vrindavan:
+    "List your Vrindavan temple stops and ask the team to confirm suitable drop and collection points, particularly when travelling with children or older relatives.",
 };
 
 export function getRouteWordySections(
   route: RouteSEOData,
 ): Array<{ heading: string; body: string }> {
-  const pickupNote = cityBookingNotes[route.from.slug] || "Share your full pickup address and a nearby landmark.";
-  const dropNote = cityBookingNotes[route.to.slug] || "Share your full destination address and any onward travel plans.";
+  const pickupNote =
+    cityBookingNotes[route.from.slug] ||
+    "Share your full pickup address and a nearby landmark.";
+  const dropNote =
+    cityBookingNotes[route.to.slug] ||
+    "Share your full destination address and any onward travel plans.";
   return [
     {
       heading: `Plan your pickup in ${route.from.name}`,

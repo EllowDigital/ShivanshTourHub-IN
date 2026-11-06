@@ -1,5 +1,8 @@
 # Website improvements
 
+- [x] Correct and validate the stored homepage metadata finding.
+- [ ] Improve shared-link metadata; page-specific initial HTML previews require an approved template upgrade.
+
 - [x] Redesign About, Tours, Contact, Reviews and Blog with shared booking actions.
 - [x] Verify business call destinations and page interactions across screen sizes.
 

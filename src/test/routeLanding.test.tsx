@@ -11,7 +11,7 @@ describe("canonical taxi pages", () => {
     async (path) => {
       render(<MemoryRouter initialEntries={[path]}><RouteLanding /></MemoryRouter>);
       expect(screen.getByRole("heading", { level: 1 }).textContent).toContain("Agra to Delhi Taxi Service");
-      await waitFor(() => expect(document.querySelector('link[rel="canonical"]')?.getAttribute("href")).toBe("https://shivansh-tour-hub.netlify.app/agra-to-delhi-taxi"));
+      await waitFor(() => expect(document.querySelector('link[rel="canonical"]')?.getAttribute("href")).toBe("https://shivansh-travel-trailblazers.lovable.app/agra-to-delhi-taxi"));
     },
   );
 

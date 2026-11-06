@@ -386,8 +386,8 @@ const Index = () => {
   return (
     <div className="homepage">
       <SEO
-        title="Shivansh Tour & Travels | Best Taxi Service in Agra | Book Cab Online"
-        description="Book affordable taxi & cab services from Agra to Delhi, Jaipur, Varanasi, Ayodhya & 50+ cities. Agra to Delhi one-way taxi service, airport pickup, outstation trips, and tour packages. ₹11/km onwards. Call +91 8865038345."
+        title="Shivansh Tour & Travels | Agra Taxi & Tour Booking"
+        description="Book taxis and tours from Agra with Shivansh Tour & Travels. Plan local rides, Agra–Delhi trips, airport transfers and pilgrimage tours. Call +91 88650 38345."
         keywords="taxi service agra, cab booking agra, agra to delhi taxi, agra to jaipur taxi, outstation taxi agra, airport taxi agra, tour packages from agra, agra to varanasi cab, agra to ayodhya taxi, cheap taxi agra, best taxi service agra, taxi near me agra, cab service uttar pradesh, book taxi online agra, agra to mathura taxi"
         canonical="https://shivansh-tour-hub.netlify.app"
         schema={homeSchema}

@@ -1,6 +1,6 @@
 # Website improvements
 
-- [ ] Replace search-focused route filler with useful pickup and destination planning information.
+- [x] Replace search-focused route filler with useful pickup and destination planning information.
 
 - [x] Correct and validate the stored homepage metadata finding.
 - [ ] Improve shared-link metadata; page-specific initial HTML previews require an approved template upgrade.

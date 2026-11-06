@@ -42,7 +42,7 @@ const About = () => (
     <section className="section-padding bg-background">
       <div className="container mx-auto grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
         <div className="overflow-hidden rounded-lg">
-          <img src="/hero/agra-taj-tablet.webp" alt="The Taj Mahal in Agra, our home city" width="1024" height="576" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
+          <img src="/hero/taj-mahal-tablet.webp" alt="The Taj Mahal in Agra, our home city" width="1024" height="576" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
         </div>
         <div className="min-w-0">
           <p className="travel-eyebrow flex items-center gap-2"><MapPin className="h-4 w-4" /> Agra, Uttar Pradesh</p>

@@ -9,7 +9,6 @@ import prayagrajTravel from "@/assets/prayagraj-travel.jpg?w=800&format=webp";
 import {
   MapPin,
   Clock,
-  Search,
   Calendar,
   CheckCircle,
   ArrowRight,
@@ -198,7 +197,7 @@ const Tours = () => {
                   ? prayagrajTravel
                   : i === 3
                     ? vrindavanTravel
-                    : `/hero/${["ayodhya-temple", "varanasi-ghats", "", "", "rishikesh-bridge", "agra-taj", "jaipur-hawa-mahal", "manali-mountains"][i]}-tablet.webp`
+                    : `/hero/${["ayodhya-temple", "varanasi-ghats", "", "", "rishikesh-bridge", "taj-mahal", "jaipur-hawa-mahal", "manali-mountains"][i]}-tablet.webp`
               }
               alt={t.name}
               width={1024}

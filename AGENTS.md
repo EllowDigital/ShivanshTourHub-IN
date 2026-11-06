@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Normalize route canonicals and Open Graph page URLs through `src/lib/seoUrl.ts` using the sitemap origin so legacy callers cannot point page identity at a different website.
+
 - Share primary call destinations through `src/lib/contact.ts` and paired booking controls through `BookingActions` so refreshed pages use consistent contact actions.
 
 - Keep WhatsApp URL construction and launch handling in `src/lib/whatsapp.ts`; all booking entry points share one handoff event so recovery is consistent.

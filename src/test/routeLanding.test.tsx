@@ -20,9 +20,7 @@ describe("canonical taxi pages", () => {
       await waitFor(() =>
         expect(
           document.querySelector('link[rel="canonical"]')?.getAttribute("href"),
-        ).toBe(
-          "https://shivansh-travel-trailblazers.lovable.app/agra-to-delhi-taxi",
-        ),
+        ).toBe("https://shivansh-tour-hub.netlify.app//agra-to-delhi-taxi"),
       );
     },
   );

@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Canonical sitemap; keep this origin until the public domain changes.
-Sitemap: https://shivansh-travel-trailblazers.lovable.app/sitemap.xml
+Sitemap: https://shivansh-tour-hub.netlify.app//sitemap.xml

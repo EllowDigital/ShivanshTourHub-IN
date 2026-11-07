@@ -1,7 +1,7 @@
 import { articleContent, blogPosts } from "./blogContent";
 import { getAirportToAgraRoute, routePages } from "./routeSeo";
 
-export const SITE_ORIGIN = "https://shivansh-travel-trailblazers.lovable.app";
+export const SITE_ORIGIN = "https://shivansh-tour-hub.netlify.app/";
 export const publicPagePaths = [
   "/",
   "/services",

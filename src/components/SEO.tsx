@@ -33,7 +33,12 @@ const SEO = ({ title, description, keywords, canonical, schema }: SEOProps) => {
     setMeta("og:description", description, true);
     setMeta("og:type", "website", true);
     setMeta("og:url", pageUrl, true);
+    const shareImageUrl = canonicalPageUrl("/og-image.jpg");
+    setMeta("og:image", shareImageUrl, true);
+    setMeta("og:image:width", "1200", true);
+    setMeta("og:image:height", "630", true);
     setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:image", shareImageUrl);
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);
     setMeta(

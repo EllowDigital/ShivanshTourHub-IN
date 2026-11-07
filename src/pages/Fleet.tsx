@@ -3,6 +3,9 @@ import SEO from "@/components/SEO";
 import { Users, Fuel, Gauge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import PageCta from "@/components/PageCta";
+import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import swiftDzire from "@/assets/swift-dzire.jpg?w=800&format=webp";
 import ertiga from "@/assets/ertiga.png?w=800&format=webp";
 import innova from "@/assets/innova.png?w=800&format=webp";
@@ -47,74 +50,120 @@ const cars = [
   },
 ];
 
-const Fleet = () => (
-  <div className="pt-14 sm:pt-16 lg:pt-[88px]">
-    <SEO
-      title="Our Fleet | Book Swift Dzire, Innova, Ertiga, Tempo Traveller in Agra"
-      description="Choose from our well-maintained fleet: Swift Dzire ₹11/km, Ertiga ₹14/km, Toyota Innova ₹16/km, Tempo Traveller ₹22/km. Book taxi in Agra for any trip."
-      keywords="swift dzire taxi agra, innova hire agra, ertiga cab booking, tempo traveller agra, taxi fleet agra, car rental agra, outstation car agra"
-      canonical="https://shivansh-tour-hub.netlify.app/fleet"
-    />
-    <section className="page-header">
-      <div className="container mx-auto text-center">
-        <h1 className="page-header-title">Our Fleet</h1>
-        <p className="page-header-subtitle">
-          Well-maintained vehicles for a safe and comfortable journey across
-          India.
-        </p>
-      </div>
-    </section>
-    <section className="section-padding bg-background">
-      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {cars.map((c, i) => (
-          <article
-            key={i}
-            className="bg-card rounded-lg overflow-hidden hover-lift border border-border flex flex-col"
-          >
-            <div className="bg-muted p-4 flex items-center justify-center h-48">
-              <img
-                src={c.img}
-                alt={`${c.name} for hire in Agra - ${c.type}`}
-                className="max-h-full object-contain"
-                loading="lazy"
-              />
-            </div>
-            <div className="p-5 flex flex-1 flex-col">
-              <span className="inline-block text-[10px] sm:text-xs font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
-                {c.type}
-              </span>
-              <h2 className="font-heading text-base sm:text-lg font-bold text-foreground mt-1.5">
-                {c.name}
-              </h2>
-              <div className="mt-2 space-y-1.5 text-xs sm:text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Users className="h-3.5 w-3.5 text-secondary" /> {c.seats}{" "}
-                  Passengers
+const filters = [
+  { label: "All cars", min: 0 },
+  { label: "4 seats", min: 4, max: 4 },
+  { label: "7 seats", min: 7, max: 7 },
+  { label: "Groups 8+", min: 8 },
+];
+
+const Fleet = () => {
+  const [active, setActive] = useState(0);
+  const f = filters[active];
+  const shown = cars.filter(
+    (c) => c.seats >= f.min && (f.max === undefined || c.seats <= f.max),
+  );
+  return (
+    <div className="pt-14 sm:pt-16 lg:pt-[88px]">
+      <SEO
+        title="Our Fleet | Book Swift Dzire, Innova, Ertiga, Tempo Traveller in Agra"
+        description="Choose from our well-maintained fleet: Swift Dzire ₹11/km, Ertiga ₹14/km, Toyota Innova ₹16/km, Tempo Traveller ₹22/km. Book taxi in Agra for any trip."
+        keywords="swift dzire taxi agra, innova hire agra, ertiga cab booking, tempo traveller agra, taxi fleet agra, car rental agra, outstation car agra"
+        canonical="https://shivansh-tour-hub.netlify.app/fleet"
+      />
+      <section className="page-header">
+        <div className="container mx-auto text-center">
+          <h1 className="page-header-title">Our Fleet</h1>
+          <p className="page-header-subtitle">
+            Well-maintained vehicles for a safe and comfortable journey across
+            India.
+          </p>
+        </div>
+      </section>
+      <section className="section-padding bg-background">
+        <div
+          className="container mx-auto mb-6 flex flex-wrap justify-center gap-2"
+          role="group"
+          aria-label="Filter cars by seats"
+        >
+          {filters.map((x, i) => (
+            <Button
+              key={x.label}
+              size="sm"
+              variant={i === active ? "default" : "outline"}
+              aria-pressed={i === active}
+              onClick={() => setActive(i)}
+              className="rounded-full"
+            >
+              {x.label}
+            </Button>
+          ))}
+        </div>
+        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {shown.map((c) => (
+            <article
+              key={c.name}
+              className="group animate-fade-in bg-card rounded-lg overflow-hidden hover-lift border border-border flex flex-col"
+            >
+              <div className="bg-muted p-4 flex items-center justify-center h-48">
+                <img
+                  src={c.img}
+                  alt={`${c.name} for hire in Agra - ${c.type}`}
+                  className="max-h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-5 flex flex-1 flex-col">
+                <span className="inline-block text-[10px] sm:text-xs font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
+                  {c.type}
+                </span>
+                <h2 className="font-heading text-base sm:text-lg font-bold text-foreground mt-1.5">
+                  {c.name}
+                </h2>
+                <div className="mt-2 space-y-1.5 text-xs sm:text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-3.5 w-3.5 text-secondary" /> {c.seats}{" "}
+                    Passengers
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Fuel className="h-3.5 w-3.5 text-secondary" /> {c.fuel}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Gauge className="h-3.5 w-3.5 text-secondary" /> Best for{" "}
+                    {c.best}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Fuel className="h-3.5 w-3.5 text-secondary" /> {c.fuel}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Gauge className="h-3.5 w-3.5 text-secondary" /> Best for{" "}
-                  {c.best}
+                <p className="mt-3 text-lg sm:text-xl font-bold text-secondary">
+                  {c.price}
+                </p>
+                <div className="mt-auto grid grid-cols-2 gap-2">
+                  <Button
+                    variant="hero"
+                    className="h-11 text-sm"
+                    onClick={() =>
+                      openWhatsAppMessage(
+                        WHATSAPP_NUMBER,
+                        `Namaste! I want to book a ${c.name} (${c.seats} seats, ${c.price}). Please share availability.`,
+                      )
+                    }
+                  >
+                    Book Now
+                  </Button>
+                  <Button asChild variant="outline" className="h-11 text-sm">
+                    <a href="tel:+918865038345">Call</a>
+                  </Button>
                 </div>
               </div>
-              <p className="mt-3 text-lg sm:text-xl font-bold text-secondary">
-                {c.price}
-              </p>
-              <Button
-                asChild
-                variant="hero"
-                className="w-full mt-auto h-11 text-sm"
-              >
-                <Link to="/contact">Book Now</Link>
-              </Button>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  </div>
-);
+            </article>
+          ))}
+        </div>
+      </section>
+      <PageCta
+        title="Not sure which car fits?"
+        text="Tell us your group size and trip — we'll suggest the best car and fare."
+      />
+    </div>
+  );
+};
 
 export default Fleet;

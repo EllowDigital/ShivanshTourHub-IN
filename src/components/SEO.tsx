@@ -1,4 +1,5 @@
 ﻿import { useEffect } from "react";
+import { canonicalPageUrl } from "@/lib/seoUrl";
 
 interface SEOProps {
   title: string;
@@ -8,12 +9,10 @@ interface SEOProps {
   schema?: object | object[];
 }
 
-const SITE_URL = "https://shivansh-tour-hub.netlify.app";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg?v=20260316`;
-
 const SEO = ({ title, description, keywords, canonical, schema }: SEOProps) => {
   useEffect(() => {
     document.title = title;
+    const pageUrl = canonicalPageUrl(canonical || window.location.pathname);
 
     const setMeta = (name: string, content: string, property = false) => {
       const attr = property ? "property" : "name";
@@ -33,12 +32,15 @@ const SEO = ({ title, description, keywords, canonical, schema }: SEOProps) => {
     setMeta("og:title", title, true);
     setMeta("og:description", description, true);
     setMeta("og:type", "website", true);
-    setMeta("og:url", canonical || window.location.href, true);
-    setMeta("og:image", DEFAULT_OG_IMAGE, true);
+    setMeta("og:url", pageUrl, true);
+    const shareImageUrl = canonicalPageUrl("/og-image.jpg");
+    setMeta("og:image", shareImageUrl, true);
+    setMeta("og:image:width", "1200", true);
+    setMeta("og:image:height", "630", true);
     setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:image", shareImageUrl);
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);
-    setMeta("twitter:image", DEFAULT_OG_IMAGE);
     setMeta(
       "robots",
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
@@ -52,13 +54,13 @@ const SEO = ({ title, description, keywords, canonical, schema }: SEOProps) => {
     let link = document.querySelector(
       'link[rel="canonical"]',
     ) as HTMLLinkElement | null;
-    if (canonical) {
+    if (pageUrl) {
       if (!link) {
         link = document.createElement("link");
         link.setAttribute("rel", "canonical");
         document.head.appendChild(link);
       }
-      link.setAttribute("href", canonical);
+      link.setAttribute("href", pageUrl);
     }
 
     // JSON-LD Schema

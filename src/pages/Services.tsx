@@ -2,6 +2,8 @@
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import PageCta from "@/components/PageCta";
+import { openWhatsAppMessage, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import { Plane, Car, MapPin, Briefcase, Users, ArrowRight } from "lucide-react";
 
 const services = [
@@ -64,9 +66,9 @@ const Services = () => (
           {services.map((s, i) => (
             <div
               key={i}
-              className="bg-card rounded-xl p-5 sm:p-6 hover-lift shadow-md border border-border/50 flex flex-col"
+              className="group bg-card rounded-xl p-5 sm:p-6 hover-lift shadow-md border border-border/50 border-t-4 border-t-secondary flex flex-col"
             >
-              <div className="mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-accent flex items-center justify-center">
+              <div className="mb-4 w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-accent flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
                 <s.icon className="h-6 w-6 sm:h-7 sm:w-7 text-secondary" />
               </div>
               <h2 className="font-heading text-base sm:text-lg font-semibold text-foreground">
@@ -86,20 +88,37 @@ const Services = () => (
                   </li>
                 ))}
               </ul>
-              <Link to="/contact" className="mt-4">
+              <div className="mt-5 grid grid-cols-2 gap-2">
                 <Button
+                  variant="hero"
+                  size="sm"
+                  className="text-xs sm:text-sm"
+                  onClick={() =>
+                    openWhatsAppMessage(
+                      WHATSAPP_NUMBER,
+                      `Namaste! I want to enquire about ${s.title}.`,
+                    )
+                  }
+                >
+                  WhatsApp
+                </Button>
+                <Button
+                  asChild
                   variant="outline"
                   size="sm"
-                  className="w-full gap-2 text-xs sm:text-sm"
+                  className="gap-1 text-xs sm:text-sm"
                 >
-                  Enquire Now <ArrowRight className="h-3.5 w-3.5" />
+                  <Link to="/contact">
+                    Details <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </Button>
-              </Link>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
+    <PageCta />
   </div>
 );
 

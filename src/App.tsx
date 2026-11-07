@@ -8,7 +8,9 @@ import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import Preloader, { LoadingJourney } from "./components/Preloader";
 import Index from "./pages/Index";
+import { routePages, getAirportToAgraRoute } from "./lib/routeSeo";
 const Services = lazy(() => import("./pages/Services"));
 const Fleet = lazy(() => import("./pages/Fleet"));
 const Tours = lazy(() => import("./pages/Tours"));
@@ -31,24 +33,14 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Preloader />
         <ScrollToTop />
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
         <Navbar />
         <main id="main-content" tabIndex={-1}>
-          <Suspense
-            fallback={
-              <div
-                className="page-loading"
-                role="status"
-                aria-label="Loading page"
-              >
-                <span className="page-loading-spinner" />
-                Loading…
-              </div>
-            }
-          >
+          <Suspense fallback={<LoadingJourney compact />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/services" element={<Services />} />
@@ -62,14 +54,18 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogArticle />} />
               <Route path="/service-areas" element={<ServiceAreas />} />
-              <Route
-                path="/:fromSlug-to-:toSlug-taxi"
-                element={<RouteLanding />}
-              />
-              <Route
-                path="/:fromSlug-to-:toSlug-cab-service"
-                element={<RouteLanding />}
-              />
+              {[...routePages, getAirportToAgraRoute()].flatMap((route) => [
+                <Route
+                  key={route.slug}
+                  path={`/${route.slug}`}
+                  element={<RouteLanding />}
+                />,
+                <Route
+                  key={`${route.slug}-alias`}
+                  path={`/${route.slug.replace(/-taxi$/, "-cab-service")}`}
+                  element={<RouteLanding />}
+                />,
+              ])}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

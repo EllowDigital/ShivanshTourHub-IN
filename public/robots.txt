@@ -1,5 +1,6 @@
+# Public pages and rendering assets are crawlable.
 User-agent: *
 Allow: /
 
-Sitemap: https://shivansh-tour-hub.netlify.app/sitemap.xml
-
+# Canonical sitemap; keep this origin until the public domain changes.
+Sitemap: https://shivansh-tour-hub.netlify.app//sitemap.xml

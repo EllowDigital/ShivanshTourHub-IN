@@ -1,7 +1,18 @@
 # Website improvements
 
-- [ ] Improve website loading, shared layouts, navigation, and responsive browsing.
-- [ ] Verify refreshed pages and booking on mobile, tablet, and desktop.
+- [x] Replace search-focused route filler with useful pickup and destination planning information.
+
+- [x] Correct and validate the stored homepage metadata finding.
+- [ ] Improve shared-link metadata; page-specific initial HTML previews require an approved template upgrade.
+
+- [x] Redesign About, Tours, Contact, Reviews and Blog with shared booking actions.
+- [x] Verify business call destinations and page interactions across screen sizes.
+
+- [x] Synchronize sitemap and robots rules and add URL integrity checks.
+- [x] Verify served crawler files and every sitemap page with matching canonical links.
+
+- [x] Improve website loading, shared layouts, navigation, and responsive browsing.
+- [x] Verify refreshed pages and booking on mobile, tablet, and desktop.
 
 - [x] Refresh shared styling, navigation, and homepage with an Indian travel character.
 - [x] Regenerate and validate sitemap coverage without invented modification dates.

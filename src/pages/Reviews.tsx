@@ -1,9 +1,11 @@
-import { WHATSAPP_CHAT_URL } from "@/lib/whatsapp";
-import { Link } from "react-router-dom";
+import PageCta from "@/components/PageCta";
+import BookingActions from "@/components/BookingActions";
+import { useState } from "react";
+
 import SectionHeading from "@/components/SectionHeading";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Star, Quote, Phone, MessageCircle } from "lucide-react";
+import { Star, Quote, MapPin } from "lucide-react";
 
 const allReviews = [
   {
@@ -126,130 +128,152 @@ const localBusinessSchema = {
   telephone: "+918865038345",
 };
 
-const Reviews = () => (
-  <div className="pt-14 sm:pt-16 lg:pt-[88px]">
-    <SEO
-      title="Customer Reviews | Shivansh Tour & Travels | Rated 4.9★ Taxi Service Agra"
-      description={`Read ${allReviews.length}+ genuine reviews from happy customers. Shivansh Tour & Travels rated ${avgRating}/5 for taxi service in Agra, outstation cabs, airport transfers & tour packages.`}
-      keywords="shivansh travels reviews, agra taxi reviews, best taxi service agra reviews, customer testimonials taxi agra, cab booking reviews agra"
-      canonical="https://shivansh-tour-hub.netlify.app/reviews"
-      schema={localBusinessSchema}
-    />
-
-    <section className="page-header">
-      <div className="container mx-auto text-center">
-        <h1 className="page-header-title">Customer Reviews</h1>
-        <p className="page-header-subtitle">
-          Don't just take our word for it — hear from our happy customers.
-        </p>
-      </div>
-    </section>
-
-    {/* Rating Summary */}
-    <section className="bg-accent py-8 sm:py-10">
-      <div className="container mx-auto text-center">
-        <div className="inline-flex flex-col items-center bg-card rounded-2xl px-8 py-6 shadow-md border border-border/50">
-          <p className="font-heading text-4xl sm:text-5xl font-extrabold text-foreground">
-            {avgRating}
+const Reviews = () => {
+  const [filter, setFilter] = useState("All trips");
+  const filters = ["All trips", "Taxi rides", "Tours"];
+  const isTour = (trip: string) => /tour|manali/i.test(trip);
+  const shown = allReviews.filter(
+    (r) =>
+      filter === "All trips" ||
+      (filter === "Tours" ? isTour(r.trip) : !isTour(r.trip)),
+  );
+  return (
+    <div>
+      <SEO
+        title="Customer Reviews | Shivansh Tour & Travels"
+        description="Read traveller feedback on taxi rides and tour packages with Shivansh Tour and Travels in Agra."
+        canonical="https://shivansh-tour-hub.netlify.app/reviews"
+        schema={localBusinessSchema}
+      />
+      <section className="page-header">
+        <div className="container mx-auto text-center">
+          <h1 className="page-header-title">Customer Reviews</h1>
+          <p className="page-header-subtitle">
+            Journeys to remember, in our travellers' own words.
           </p>
-          <div className="flex gap-0.5 mt-2">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Star
-                key={s}
-                className={`h-5 w-5 ${s <= Math.round(Number(avgRating)) ? "fill-secondary text-secondary" : "text-muted-foreground/30"}`}
-              />
-            ))}
+          <div className="mt-6">
+            <BookingActions onDark />
           </div>
-          <p className="text-sm text-muted-foreground mt-2">
-            Based on {allReviews.length}+ verified reviews
-          </p>
         </div>
-      </div>
-    </section>
-
-    {/* All Reviews */}
-    <section className="section-padding bg-background">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {allReviews.map((r, i) => (
-            <div
-              key={i}
-              className="bg-card rounded-xl p-5 sm:p-6 border border-border/50 shadow-sm hover-lift relative"
-            >
-              <Quote className="absolute top-4 right-4 h-6 w-6 text-secondary/15" />
-              <div className="flex gap-0.5 mb-3">
+      </section>
+      <section className="bg-muted px-4 py-8 sm:px-6">
+        <div className="container mx-auto flex flex-col items-center justify-center gap-5 sm:flex-row sm:gap-10">
+          <div className="flex items-center gap-4">
+            <p className="font-heading text-5xl font-bold">
+              {avgRating}
+              <span className="ml-1 text-lg text-muted-foreground">/5</span>
+            </p>
+            <div>
+              <div
+                className="flex gap-1"
+                aria-label={`${avgRating} out of 5 stars`}
+              >
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star
                     key={s}
-                    className={`h-3.5 w-3.5 ${s <= r.rating ? "fill-secondary text-secondary" : "text-muted-foreground/30"}`}
+                    className="h-5 w-5 fill-secondary text-secondary"
+                    aria-hidden="true"
                   />
                 ))}
               </div>
-              <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed italic">
-                "{r.text}"
+              <p className="mt-2 text-sm text-muted-foreground">
+                Across {allReviews.length} displayed reviews
               </p>
-              <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-secondary/15 flex items-center justify-center text-secondary font-bold text-xs">
-                    {r.name[0]}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground text-xs sm:text-sm">
-                      {r.name}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground">
-                      {r.city}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] bg-accent text-accent-foreground px-2 py-0.5 rounded-full">
-                    {r.trip}
-                  </span>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {r.date}
-                  </p>
-                </div>
-              </div>
             </div>
-          ))}
+          </div>
+          <div className="border-t border-border pt-4 text-center sm:border-l sm:border-t-0 sm:pl-10 sm:pt-0 sm:text-left">
+            <h2 className="text-lg font-semibold">Every trip has a story</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Family holidays, temple visits and everyday rides.
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
-
-    {/* CTA */}
-    <section className="section-padding bg-primary text-center">
-      <div className="container mx-auto">
-        <h2 className="font-heading text-2xl sm:text-3xl font-bold text-primary-foreground">
-          Join Our Happy Customers
-        </h2>
-        <p className="mt-2 text-primary-foreground/80 text-sm sm:text-base max-w-lg mx-auto">
-          Book your ride today and experience why thousands trust Shivansh
-          Travels.
-        </p>
-        <div className="mt-6 flex justify-center gap-3 flex-wrap">
-          <Link to="/contact">
-            <Button
-              variant="hero"
-              size="lg"
-              className="gap-2 text-sm sm:text-base"
+      </section>
+      <section className="section-padding bg-background">
+        <div className="container mx-auto">
+          <div
+            className="travel-toolbar"
+            role="group"
+            aria-label="Filter reviews by trip"
+          >
+            {filters.map((f) => (
+              <Button
+                key={f}
+                variant={filter === f ? "default" : "outline"}
+                className="h-11"
+                aria-pressed={filter === f}
+                onClick={() => setFilter(f)}
+              >
+                {f}
+              </Button>
+            ))}
+            <p
+              className="text-sm text-muted-foreground sm:ml-auto"
+              role="status"
             >
-              Book Now
-            </Button>
-          </Link>
-          <a href={WHATSAPP_CHAT_URL} target="_blank" rel="noopener noreferrer">
-            <Button
-              variant="hero-outline"
-              size="lg"
-              className="gap-2 text-sm sm:text-base"
-            >
-              <MessageCircle className="h-4 w-4" /> WhatsApp Us
-            </Button>
-          </a>
+              {shown.length} reviews
+            </p>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {shown.map((r) => (
+              <article
+                key={r.name}
+                className="travel-card flex flex-col p-5 sm:p-6"
+              >
+                <div className="flex items-center justify-between">
+                  <div
+                    className="flex gap-1"
+                    aria-label={`${r.rating} out of 5 stars`}
+                  >
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        aria-hidden="true"
+                        className={`h-4 w-4 ${s <= r.rating ? "fill-secondary text-secondary" : "text-muted-foreground/30"}`}
+                      />
+                    ))}
+                  </div>
+                  <Quote
+                    className="h-6 w-6 text-secondary/40"
+                    aria-hidden="true"
+                  />
+                </div>
+                <p className="mt-5 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  “{r.text}”
+                </p>
+                <div className="mt-6 border-t border-border pt-4">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground"
+                      aria-hidden="true"
+                    >
+                      {r.name[0]}
+                    </span>
+                    <div className="min-w-0">
+                      <h2 className="font-body text-sm font-semibold">
+                        {r.name}
+                      </h2>
+                      <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                        <MapPin className="h-3 w-3" />
+                        {r.city}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span className="font-medium text-primary">{r.trip}</span>
+                    <span className="text-muted-foreground">{r.date}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  </div>
-);
-
+      </section>
+      <PageCta
+        title="Your next travel story starts here"
+        text="Discuss your taxi or tour plans with our team."
+      />
+    </div>
+  );
+};
 export default Reviews;

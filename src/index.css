@@ -149,6 +149,36 @@ main > div:not(.homepage) {
 .booking-form {
   box-shadow: var(--shadow-booking);
 }
+.travel-card {
+  border: 1px solid hsl(var(--border));
+  border-top: 3px solid hsl(var(--secondary));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+@media (hover: hover) {
+  .travel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-booking);
+  }
+}
+.travel-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.travel-eyebrow {
+  color: hsl(var(--heritage));
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
 .page-loading {
   min-height: 70vh;
   padding-top: var(--navigation-height);
@@ -169,6 +199,154 @@ main > div:not(.homepage) {
 @keyframes loading-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+.site-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: hsl(var(--background));
+  transition:
+    opacity 0.26s ease,
+    visibility 0.26s ease;
+}
+.site-preloader::before,
+.site-preloader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.site-preloader::before {
+  top: 0;
+  background: hsl(var(--secondary));
+}
+.site-preloader::after {
+  bottom: 0;
+  background: hsl(var(--heritage));
+}
+.site-preloader-leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.journey-loader {
+  width: min(320px, calc(100vw - 48px));
+  text-align: center;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+.site-preloader {
+  min-height: 100dvh;
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      hsl(var(--secondary) / 0.1),
+      transparent 60%
+    ),
+    hsl(var(--background));
+}
+.site-preloader .journey-loader {
+  animation: journey-enter 0.4s ease-out both;
+}
+@keyframes journey-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.journey-loader-compact {
+  width: 100%;
+  min-height: 65vh;
+  padding: calc(var(--navigation-height) + 48px) 24px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.journey-scene {
+  position: relative;
+  width: clamp(128px, 40vw, 200px);
+  height: clamp(84px, 26vw, 130px);
+  margin: 0 auto clamp(14px, 4vw, 24px);
+}
+.journey-car {
+  position: absolute;
+  left: 28%;
+  bottom: 20%;
+  width: 44%;
+  height: auto;
+  aspect-ratio: 1;
+  color: hsl(var(--primary));
+  animation: journey-drive 1.1s ease-in-out infinite;
+}
+.journey-pin {
+  position: absolute;
+  right: 7px;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  color: hsl(var(--heritage));
+}
+.journey-road {
+  position: absolute;
+  bottom: 12px;
+  width: 100%;
+  height: 2px;
+  background: hsl(var(--border));
+  overflow: hidden;
+}
+.journey-road span {
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: hsl(var(--secondary));
+  animation: journey-road 1.25s linear infinite;
+}
+.journey-loading-line {
+  margin: clamp(16px, 5vw, 28px) auto 0;
+  width: 120px;
+  height: 3px;
+  overflow: hidden;
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+.journey-loading-line span {
+  display: block;
+  width: 48px;
+  height: 100%;
+  background: hsl(var(--heritage));
+  animation: journey-progress 1.3s ease-in-out infinite;
+}
+@keyframes journey-drive {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+@keyframes journey-road {
+  from {
+    transform: translateX(170px);
+  }
+  to {
+    transform: translateX(-40px);
+  }
+}
+@keyframes journey-progress {
+  0% {
+    transform: translateX(-48px);
+  }
+  100% {
+    transform: translateX(120px);
   }
 }
 @media (min-width: 640px) {
@@ -362,5 +540,24 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-height: 420px) {
+  .journey-scene {
+    height: 70px;
+    width: 120px;
+    margin-bottom: 8px;
+  }
+  .journey-loading-line {
+    margin-top: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey-car,
+  .journey-road span,
+  .journey-loading-line span,
+  .site-preloader .journey-loader {
+    animation: none;
   }
 }
